@@ -1,30 +1,45 @@
+package Customer;
+
 import User.User;
-import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Customer extends User {
-
-    private ArrayList<Integer> ids;
 
     public Customer(int id, String username, String email) {
         super(id, username, email);
     }
 
-    public static void register(String Username, String Email, String Password, String Address, String ContactNo) {
+    public boolean register(String Username, String Email, String Password, String Address, String ContactNo) {
+        boolean LoadingStatus = loadUserDB();
+        if (LoadingStatus == true){
+            LocalDate CurrentDate = LocalDate.now();
+            id = data.size();
+            String date = CurrentDate.toString();
 
-        loadDatabase();
+            try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
+                writer.write(id + "," + Username + "," + Email + "," + Password + "," + Address + "," + ContactNo + "," + date + ",Customer" + "\n");
 
-        try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
-            writer.write("\n");
-            System.out.println("Registration successful!");
-        } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
+                ArrayList<String> newRecord = new ArrayList<>();
+                newRecord.add(String.valueOf(id));
+                newRecord.add(Username);
+                newRecord.add(Email);
+                newRecord.add(Password);
+                newRecord.add(Address);
+                newRecord.add(ContactNo);
+                newRecord.add(date);
+                newRecord.add("Customer");
+                data.add(newRecord);
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
         }
-    }
-
-    private static void loadDatabase() {
-
+        else
+            return false;
     }
 
 }
