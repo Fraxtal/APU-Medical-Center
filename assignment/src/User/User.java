@@ -1,9 +1,9 @@
 package User;
 
 import Customer.Customer;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class User {
@@ -27,8 +27,8 @@ public class User {
             if (userRecord.size() < 8) continue; // Skip incomplete records
 
             boolean credentialMatches = isEmailLogin
-                ? userRecord.get(2).equalsIgnoreCase(input.trim()) // Email check
-                : userRecord.get(1).equalsIgnoreCase(input.trim()); // Username check
+                ? userRecord.get(2).equals(input.trim()) // Email check
+                : userRecord.get(1).equals(input.trim()); // Username check
 
             if (credentialMatches && userRecord.get(3).equals(password)) {
                 String role = userRecord.get(7); // Assuming role is at index 7
