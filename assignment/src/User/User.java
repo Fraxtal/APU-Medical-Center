@@ -6,12 +6,16 @@ import java.io.File;
 import java.util.Scanner;
 
 public class User {
+
     protected int id;
     protected String username;
     protected String email;
     protected ArrayList<ArrayList<String>> data;
 
-    public User(){};
+    public User() {
+    }
+
+    ;
     
     public User(int id, String username, String email) {
         this.id = id;
@@ -21,22 +25,24 @@ public class User {
     }
 
     public Object login(String input, String password) {
-        
+
         loadUserDB(); // Load user data
 
         for (ArrayList<String> userRecord : data) {
             // Verify record has all required fields (including role)
-            if (userRecord.size() < 8) continue; // Skip incomplete records
-
+            if (userRecord.size() < 8) {
+                continue; // Skip incomplete records
+            }
             // Check both username and email fields
-            boolean credentialMatches = userRecord.get(1).equals(input.trim()) ||  // Username check
-                                      userRecord.get(2).equals(input.trim());     // Email check
+            boolean credentialMatches = userRecord.get(1).equals(input.trim())
+                    || // Username check
+                    userRecord.get(2).equals(input.trim());     // Email check
 
             if (credentialMatches && userRecord.get(3).equals(password)) {
                 String role = userRecord.get(7); // Assuming role is at index 7
 
                 // Return appropriate class instance based on role
-                switch(role.toLowerCase()) {
+                switch (role.toLowerCase()) {
                     case "customer" -> {
                         return new Customer(
                                 Integer.parseInt(userRecord.get(0)),
@@ -65,21 +71,21 @@ public class User {
                                 userRecord.get(2)
                         );
                     }
-                    default -> throw new IllegalArgumentException("Unknown role: " + role);
+                    default ->
+                        throw new IllegalArgumentException("Unknown role: " + role);
                 }
             }
         }
         throw new SecurityException("Invalid credentials");
     }
 
-    public void updateUserInformation(){
+    public void updateUserInformation() {
 
     }
 
-
     protected void loadUserDB() {
         data.clear();
-        try{
+        try {
             File file = new File("assignment\\src\\database\\users.txt");
             try (Scanner reader = new Scanner(file)) {
                 while (reader.hasNextLine()) {
@@ -94,8 +100,7 @@ public class User {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
