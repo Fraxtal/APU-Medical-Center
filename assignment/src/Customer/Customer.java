@@ -2,7 +2,6 @@ package Customer;
 
 import User.User;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -11,51 +10,71 @@ import java.util.Scanner;
 
 public class Customer extends User {
 
-    private ArrayList<ArrayList<String>> appointmentData;
+    private static ArrayList<ArrayList<String>> appointmentData;
 
+    public Customer() {
+    }
 
     public Customer(int id, String username, String email) {
         super(id, username, email);
     }
 
     public boolean register(String Username, String Email, String Password, String Address, String ContactNo) {
-        boolean LoadingStatus = loadUserDB();
-        if (LoadingStatus == true){
-            LocalDate CurrentDate = LocalDate.now();
-            id = data.size();
-            String date = CurrentDate.toString();
+        loadUserDB();
+        id = data.size();
+        String date = LocalDate.now().toString();
 
-            try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
-                writer.write(id + "," + Username + "," + Email + "," + Password + "," + Address + "," + ContactNo + "," + date + ",Customer" + "\n");
+        try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
+            writer.write(id + "," + Username + "," + Email + "," + Password + "," + Address + "," + ContactNo + "," + date + ",Customer" + "\n");
 
-                ArrayList<String> newRecord = new ArrayList<>();
-                newRecord.add(String.valueOf(id));
-                newRecord.add(Username);
-                newRecord.add(Email);
-                newRecord.add(Password);
-                newRecord.add(Address);
-                newRecord.add(ContactNo);
-                newRecord.add(date);
-                newRecord.add("Customer");
-                data.add(newRecord);
+            ArrayList<String> newRecord = new ArrayList<>();
+            newRecord.add(String.valueOf(id));
+            newRecord.add(Username);
+            newRecord.add(Email);
+            newRecord.add(Password);
+            newRecord.add(Address);
+            newRecord.add(ContactNo);
+            newRecord.add(date);
+            newRecord.add("Customer");
+            data.add(newRecord);
 
-                return true;
-            } catch (IOException e) {
-                return false;
-            }
-        }
-        else
+            return true;
+        } catch (IOException e) {
             return false;
+        }
     }
 
-    public void requestAppointment(){
-        checkAppointmentID();
+    public boolean requestAppointment() {
+
+        try (FileWriter writer = new FileWriter("assignment\\src\\database\\appointments.txt", true)) {
+            // writer.write(id + "," + Username + "," + Email + "," + Password + "," + Address + "," + ContactNo + "," + date + ",Customer" + "\n");
+
+            // ArrayList<String> newRecord = new ArrayList<>();
+            // newRecord.add(String.valueOf(id));
+            // newRecord.add(Username);
+            // newRecord.add(Email);
+            // newRecord.add(Password);
+            // newRecord.add(Address);
+            // newRecord.add(ContactNo);
+            // newRecord.add(date);
+            // newRecord.add("Customer");
+            // data.add(newRecord);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
 
     }
 
-    private boolean checkAppointmentID(){
+    public void lookupAppointment() {
+        
+        loadAppointmentData();
+
+    }
+
+    private void loadAppointmentData() {
         appointmentData.clear();
-        try{
+        try {
             File file = new File("assignment\\src\\database\\appointments.txt");
             try (Scanner reader = new Scanner(file)) {
                 while (reader.hasNextLine()) {
@@ -70,10 +89,8 @@ public class Customer extends User {
                     }
                 }
             }
-            return true;
-        }
-        catch (FileNotFoundException e) {
-            return false;
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 

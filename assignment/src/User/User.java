@@ -3,15 +3,16 @@ package User;
 import Customer.Customer;
 import java.util.ArrayList;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class User {
     protected int id;
     protected String username;
     protected String email;
-    protected final ArrayList<ArrayList<String>> data;
+    protected ArrayList<ArrayList<String>> data;
 
+    public User(){};
+    
     public User(int id, String username, String email) {
         this.id = id;
         this.username = username;
@@ -19,20 +20,21 @@ public class User {
         this.data = new ArrayList<>();
     }
 
-    public Object login(String input, String password, boolean isEmailLogin) {
+    public Object login(String input, String password) {
+        
         loadUserDB(); // Load user data
-    
+
         for (ArrayList<String> userRecord : data) {
             // Verify record has all required fields (including role)
             if (userRecord.size() < 8) continue; // Skip incomplete records
 
-            boolean credentialMatches = isEmailLogin
-                ? userRecord.get(2).equals(input.trim()) // Email check
-                : userRecord.get(1).equals(input.trim()); // Username check
+            // Check both username and email fields
+            boolean credentialMatches = userRecord.get(1).equals(input.trim()) ||  // Username check
+                                      userRecord.get(2).equals(input.trim());     // Email check
 
             if (credentialMatches && userRecord.get(3).equals(password)) {
                 String role = userRecord.get(7); // Assuming role is at index 7
-                
+
                 // Return appropriate class instance based on role
                 switch(role.toLowerCase()) {
                     case "customer" -> {
@@ -70,7 +72,12 @@ public class User {
         throw new SecurityException("Invalid credentials");
     }
 
-    public boolean loadUserDB() {
+    public void updateUserInformation(){
+
+    }
+
+
+    protected void loadUserDB() {
         data.clear();
         try{
             File file = new File("assignment\\src\\database\\users.txt");
@@ -87,10 +94,9 @@ public class User {
                     }
                 }
             }
-            return true;
         }
-        catch (FileNotFoundException e) {
-            return false;
+        catch (Exception e) {
+            System.out.println(e);
         }
     }
 
