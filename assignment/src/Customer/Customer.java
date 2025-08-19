@@ -4,7 +4,6 @@ import User.User;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,55 +18,30 @@ public class Customer extends User {
         super(id, username, email);
     }
 
-    public boolean register(String Username, String Email, String Password, String Address, String ContactNo) {
-        loadUserDB();
-        id = data.size();
-        String date = LocalDate.now().toString();
-
-        try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
-            writer.write(id + "," + Username + "," + Email + "," + Password + "," + Address + "," + ContactNo + "," + date + ",Customer" + "\n");
-
-            ArrayList<String> newRecord = new ArrayList<>();
-            newRecord.add(String.valueOf(id));
-            newRecord.add(Username);
-            newRecord.add(Email);
-            newRecord.add(Password);
-            newRecord.add(Address);
-            newRecord.add(ContactNo);
-            newRecord.add(date);
-            newRecord.add("Customer");
-            data.add(newRecord);
-
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
     public boolean requestAppointment() {
 
-        try (FileWriter writer = new FileWriter("assignment\\src\\database\\appointments.txt", true)) {
-            // writer.write(id + "," + Username + "," + Email + "," + Password + "," + Address + "," + ContactNo + "," + date + ",Customer" + "\n");
+        // try (FileWriter writer = new FileWriter("assignment\\src\\database\\appointments.txt", true)) {
+        //     writer.write(id + ";" + Username + ";" + Email + ";" + Password + ";" + Address + ";" + ContactNo + ";" + date + ";Customer" + "\n");
 
-            // ArrayList<String> newRecord = new ArrayList<>();
-            // newRecord.add(String.valueOf(id));
-            // newRecord.add(Username);
-            // newRecord.add(Email);
-            // newRecord.add(Password);
-            // newRecord.add(Address);
-            // newRecord.add(ContactNo);
-            // newRecord.add(date);
-            // newRecord.add("Customer");
-            // data.add(newRecord);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+        //     ArrayList<String> newRecord = new ArrayList<>();
+        //     newRecord.add(String.valueOf(id));
+        //     newRecord.add(Username);
+        //     newRecord.add(Email);
+        //     newRecord.add(Password);
+        //     newRecord.add(Address);
+        //     newRecord.add(ContactNo);
+        //     newRecord.add(date);
+        //     newRecord.add("Customer");
+        //     appointmentData.add(newRecord);
+        //     return true;
+        // } catch (IOException e) {
+        //     return false;
+        // }
 
     }
 
     public void lookupAppointment() {
-        
+
         loadAppointmentData();
 
     }
@@ -80,7 +54,7 @@ public class Customer extends User {
                 while (reader.hasNextLine()) {
                     String line = reader.nextLine().trim();
                     if (!line.isEmpty()) {
-                        String[] values = line.split(",");
+                        String[] values = line.split(";");
                         ArrayList<String> record = new ArrayList<>();
                         for (String value : values) {
                             record.add(value.trim());

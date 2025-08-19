@@ -3,6 +3,9 @@ package User;
 import Customer.Customer;
 import java.util.ArrayList;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class User {
@@ -15,8 +18,6 @@ public class User {
     public User() {
     }
 
-    ;
-    
     public User(int id, String username, String email) {
         this.id = id;
         this.username = username;
@@ -24,15 +25,36 @@ public class User {
         this.data = new ArrayList<>();
     }
 
+    public boolean register(String Username, String Email, String Password, String Address, String ContactNo) {
+        loadUserDB();
+        id = data.size();
+        String date = LocalDate.now().toString();
+
+        try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
+            writer.write(id + ";" + Username + ";" + Email + ";" + Password + ";" + Address + ";" + ContactNo + ";" + date + ";Customer" + "\n");
+
+            ArrayList<String> newRecord = new ArrayList<>();
+            newRecord.add(String.valueOf(id));
+            newRecord.add(Username);
+            newRecord.add(Email);
+            newRecord.add(Password);
+            newRecord.add(Address);
+            newRecord.add(ContactNo);
+            newRecord.add(date);
+            newRecord.add("Customer");
+            data.add(newRecord);
+
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public Object login(String input, String password) {
 
         loadUserDB(); // Load user data
 
         for (ArrayList<String> userRecord : data) {
-            // Verify record has all required fields (including role)
-            if (userRecord.size() < 8) {
-                continue; // Skip incomplete records
-            }
             // Check both username and email fields
             boolean credentialMatches = userRecord.get(1).equals(input.trim())
                     || // Username check
@@ -91,7 +113,7 @@ public class User {
                 while (reader.hasNextLine()) {
                     String line = reader.nextLine().trim();
                     if (!line.isEmpty()) {
-                        String[] values = line.split(",");
+                        String[] values = line.split(";");
                         ArrayList<String> record = new ArrayList<>();
                         for (String value : values) {
                             record.add(value.trim());
