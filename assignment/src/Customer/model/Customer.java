@@ -1,4 +1,4 @@
-package Customer;
+package Customer.model;
 
 import User.User;
 import java.io.File;
@@ -9,13 +9,14 @@ import java.util.Scanner;
 
 public class Customer extends User {
 
-    private static ArrayList<ArrayList<String>> appointmentData;
+    private ArrayList<ArrayList<String>> appointmentData;
 
     public Customer() {
     }
 
-    public Customer(int id, String username, String email) {
+    protected Customer(int id, String username, String email) {
         super(id, username, email);
+        this.appointmentData = new ArrayList<>();
     }
 
 //    public boolean requestAppointment() {
