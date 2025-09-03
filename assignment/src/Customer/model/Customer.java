@@ -11,8 +11,8 @@ public class Customer extends User {
 
     private ArrayList<ArrayList<String>> appointmentData;
 
-    protected Customer(int id, String username, String email) {
-        super(id, username, email);
+    public Customer(int id, String username, String fullname, String email) {
+        super(id, username, fullname, email);
         this.appointmentData = new ArrayList<>();
     }
 
