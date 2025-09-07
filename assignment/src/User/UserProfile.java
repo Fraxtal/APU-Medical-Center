@@ -54,6 +54,8 @@ public class UserProfile extends javax.swing.JFrame {
         jLabel5.setText("Contact Number: ");
         jLabel5.setToolTipText("");
 
+        jTextField5.setEditable(false);
+
         jLabel1.setText("Username: ");
         jLabel1.setToolTipText("");
 
@@ -63,6 +65,9 @@ public class UserProfile extends javax.swing.JFrame {
 
         jLabel3.setText("Email: ");
         jLabel3.setToolTipText("");
+
+        jTextField7.setEditable(false);
+        jTextField7.setName(""); // NOI18N
 
         jLabel7.setText("Role: ");
 
