@@ -35,7 +35,7 @@ public class viewAppointmentHistory {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
-                String[] data = line.split(",", -1);
+                String[] data = line.split(";", -1);
             
             // Ensure there are enough data fields
                 if (data.length >= 7) { // Adjusted from 9 to 7

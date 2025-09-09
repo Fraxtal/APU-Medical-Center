@@ -31,7 +31,7 @@ public void loadFromTxt(String filePath) {
         String line;
         while ((line = br.readLine()) != null) {
             if (line.trim().isEmpty()) continue;
-            String[] data = line.split(",", -1);
+            String[] data = line.split(";", -1);
             
             // Ensure there are enough data fields
             if (data.length >= 7) { // Changed from 8 to 7

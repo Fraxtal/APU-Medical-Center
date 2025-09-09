@@ -28,55 +28,55 @@ public class DoctorMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Appointmentbtn = new javax.swing.JButton();
+        Chargesbtn = new javax.swing.JButton();
+        Historybtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        Exitbtn = new javax.swing.JButton();
+        Feedbackbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jButton1.setText("Appointment");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Appointmentbtn.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        Appointmentbtn.setText("Appointment");
+        Appointmentbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                AppointmentbtnActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jButton2.setText("Charges");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Chargesbtn.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        Chargesbtn.setText("Charges");
+        Chargesbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                ChargesbtnActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jButton3.setText("History");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        Historybtn.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        Historybtn.setText("History");
+        Historybtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                HistorybtnActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel1.setText("Welcome Doctor !");
 
-        jButton5.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jButton5.setText("Exit");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        Exitbtn.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        Exitbtn.setText("Exit");
+        Exitbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                ExitbtnActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jButton4.setText("Feedback");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        Feedbackbtn.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        Feedbackbtn.setText("Feedback");
+        Feedbackbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                FeedbackbtnActionPerformed(evt);
             }
         });
 
@@ -87,12 +87,12 @@ public class DoctorMenu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(269, 269, 269)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Appointmentbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Chargesbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Historybtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Exitbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Feedbackbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(279, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -101,48 +101,48 @@ public class DoctorMenu extends javax.swing.JFrame {
                 .addGap(51, 51, 51)
                 .addComponent(jLabel1)
                 .addGap(34, 34, 34)
-                .addComponent(jButton1)
+                .addComponent(Appointmentbtn)
                 .addGap(32, 32, 32)
-                .addComponent(jButton2)
+                .addComponent(Chargesbtn)
                 .addGap(37, 37, 37)
-                .addComponent(jButton4)
+                .addComponent(Feedbackbtn)
                 .addGap(30, 30, 30)
-                .addComponent(jButton3)
+                .addComponent(Historybtn)
                 .addGap(37, 37, 37)
-                .addComponent(jButton5)
+                .addComponent(Exitbtn)
                 .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void AppointmentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AppointmentbtnActionPerformed
         this.setVisible(false);
         DoctorAppointment obj = new DoctorAppointment();
         obj.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_AppointmentbtnActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void ChargesbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChargesbtnActionPerformed
         this.setVisible(false);
         DoctorCharges obj1 = new DoctorCharges();
         obj1.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_ChargesbtnActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void HistorybtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistorybtnActionPerformed
         this.setVisible(false);
         DoctorAppointmentHistory obj2 = new DoctorAppointmentHistory();
         obj2.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_HistorybtnActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void ExitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitbtnActionPerformed
         System.exit(0);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_ExitbtnActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void FeedbackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FeedbackbtnActionPerformed
         this.setVisible(false);
         DoctorFeedback obj3 = new DoctorFeedback();
         obj3.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_FeedbackbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,11 +170,11 @@ public class DoctorMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton Appointmentbtn;
+    private javax.swing.JButton Chargesbtn;
+    private javax.swing.JButton Exitbtn;
+    private javax.swing.JButton Feedbackbtn;
+    private javax.swing.JButton Historybtn;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

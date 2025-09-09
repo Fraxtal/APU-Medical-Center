@@ -38,7 +38,7 @@ public class viewFeedback {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
-                String[] data = line.split(",", -1);
+                String[] data = line.split(";", -1);
 
             // feedbacks.txt has 7 fields
                 if (data.length >= 7) {

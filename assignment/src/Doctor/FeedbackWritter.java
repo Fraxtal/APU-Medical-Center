@@ -16,8 +16,8 @@ import java.io.IOException;
  */
 public class FeedbackWritter {
         public static void main(String[] args) {
-        String appointmentsFile = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\appointments.txt";
-        String feedbacksFile = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\feedbacks.txt";
+        String appointmentsFile = "src\\database\\appointments.txt";
+        String feedbacksFile = "src\\database\\feedbacks.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(appointmentsFile));
              BufferedWriter bw = new BufferedWriter(new FileWriter(feedbacksFile, true))) { // append mode
@@ -27,7 +27,7 @@ public class FeedbackWritter {
 
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(";");
 
                 if (parts.length >= 7) {
                     String appointmentId = parts[0].trim();
@@ -43,12 +43,12 @@ public class FeedbackWritter {
                         // Placeholder feedback message (can be replaced by user input)
                         String feedbackMessage = "No feedback yet.";
 
-                        String feedbackEntry = lastId + "," +
-                                               appointmentId + "," +
-                                               doctorId + "," +
-                                               doctorName + "," +
-                                               customerId + "," +
-                                               customerName + "," +
+                        String feedbackEntry = lastId + ";" +
+                                               appointmentId + ";" +
+                                               doctorId + ";" +
+                                               doctorName + ";" +
+                                               customerId + ";" +
+                                               customerName + ";" +
                                                feedbackMessage;
 
                         bw.write(feedbackEntry);
@@ -56,7 +56,7 @@ public class FeedbackWritter {
                     }
                 }
             }
-            System.out.println("✅ Feedback entries added to " + feedbacksFile);
+            System.out.println(" Feedback entries added to " + feedbacksFile);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class FeedbackWritter {
         try (BufferedReader br = new BufferedReader(new FileReader(feedbacksFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(";");
                 if (parts.length > 0) {
                     try {
                         lastId = Integer.parseInt(parts[0].trim());

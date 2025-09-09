@@ -31,7 +31,7 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         initComponents();
         setupTable();
         loadAppointments();
-        searchHandler = new TableSearchHandler(jTable2);
+        searchHandler = new TableSearchHandler(AppointmentHistoryTable);
     }
     private void setupTable() {
            
@@ -42,14 +42,14 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
             public boolean isCellEditable(int r, int c) { return c != 0; }
         };
     
-        jTable2.setModel(model);
-        jTable2.setAutoCreateRowSorter(true);
+        AppointmentHistoryTable.setModel(model);
+        AppointmentHistoryTable.setAutoCreateRowSorter(true);
     
         viewappointmenthistory = new viewAppointmentHistory(model);
         sorter = viewappointmenthistory.getSorter();
-        jTable2.setRowSorter(sorter);
+        AppointmentHistoryTable.setRowSorter(sorter);
     
-        TableColumnModel cm = jTable2.getColumnModel();
+        TableColumnModel cm = AppointmentHistoryTable.getColumnModel();
         for (int i = 0; i < w.length; i++) {
             cm.getColumn(i).setPreferredWidth(w[i]);
         }
@@ -58,13 +58,13 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         center.setHorizontalAlignment(SwingConstants.CENTER);
         cm.getColumn(6).setCellRenderer(center);
     
-        jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        AppointmentHistoryTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 
         }
     
     private void loadAppointments()
     {
-        String filePath ="C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\appointments.txt";
+        String filePath ="src\\database\\appointments.txt";
         viewappointmenthistory.loadFromTxt(filePath);
     }
 
@@ -79,15 +79,15 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
 
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        AppointmentHistoryTable = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        AppointmentSearchtxt = new javax.swing.JTextField();
+        backbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        AppointmentHistoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -98,7 +98,7 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
                 "Appointment ID", "Status", "Customer ID", "Customer Name", "Doctor ID", "Doctor Name", "Feedback", "Comment"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(AppointmentHistoryTable);
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Appointment History");
@@ -106,22 +106,22 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel1.setText("Search:");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        AppointmentSearchtxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                AppointmentSearchtxtActionPerformed(evt);
             }
         });
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        AppointmentSearchtxt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField1KeyReleased(evt);
+                AppointmentSearchtxtKeyReleased(evt);
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        jButton1.setText("back");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        backbtn.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        backbtn.setText("back");
+        backbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                backbtnActionPerformed(evt);
             }
         });
 
@@ -135,13 +135,13 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
                         .addGap(127, 127, 127)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(AppointmentSearchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(66, 66, 66)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 866, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(backbtn)
                                 .addGap(226, 226, 226)
                                 .addComponent(jLabel3)))))
                 .addContainerGap(63, Short.MAX_VALUE))
@@ -152,12 +152,12 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jButton1))
+                    .addComponent(backbtn))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(AppointmentSearchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(1, 1, 1)))
                 .addGap(31, 31, 31)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -178,20 +178,20 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
         this.dispose(); // Close current frame
         DoctorMenu obj = new DoctorMenu();
         obj.setVisible(true);      // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backbtnActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void AppointmentSearchtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AppointmentSearchtxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_AppointmentSearchtxtActionPerformed
 
-    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        String query = jTextField1.getText();
+    private void AppointmentSearchtxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AppointmentSearchtxtKeyReleased
+        String query = AppointmentSearchtxt.getText();
         searchHandler.filterTable(query);       // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1KeyReleased
+    }//GEN-LAST:event_AppointmentSearchtxtKeyReleased
 
     /**
      * @param args the command line arguments
@@ -219,12 +219,12 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTable AppointmentHistoryTable;
+    private javax.swing.JTextField AppointmentSearchtxt;
+    private javax.swing.JButton backbtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

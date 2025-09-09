@@ -27,8 +27,8 @@ public class ChargesController {
 
     public ChargesController(DefaultTableModel model) {
         this.model = model;
-        this.invoicesFilePath = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\invoices.txt";
-        this.invoiceDetailsFilePath = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\InvoiceDetails.txt";
+        this.invoicesFilePath = "src\\database\\invoices.txt";
+        this.invoiceDetailsFilePath = "src\\database\\InvoiceDetails.txt";
         loadItemPrices();
     }
 
@@ -39,7 +39,7 @@ public class ChargesController {
         try (BufferedReader br = new BufferedReader(new FileReader(invoiceDetailsFilePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
+                String[] data = line.split(";");
                 if (data.length >= 4) {
                     String item = data[1].trim();
                     double price = Double.parseDouble(data[3].trim());
@@ -81,35 +81,80 @@ public class ChargesController {
         return quantity * pricePer;
     }
 
-    public void addCharge(String invoiceId, String item, int quantity, double pricePer, double total) {
+
+    public void addCharge(String invoiceId, String item, int quantity, double pricePer, double total, String appointmentId) {
         String detailId = generateInvoiceDetailId();
-        String appointmentId = getAppointmentIdForInvoice(invoiceId);
-        
-        model.addRow(new Object[]{
-            detailId, item, quantity, pricePer, total, invoiceId, appointmentId
-        });
+    
+    // Add to table
+//      model.addRow(new Object[]{
+//            detailId, item, quantity, pricePer, total, invoiceId, appointmentId
+//        });  
+    
+    // Also save to invoiceDetails.txt
+        saveToInvoiceDetailsFile(detailId, item, quantity, pricePer, total, invoiceId, appointmentId);
+     
     }
+
+    private void saveToInvoiceDetailsFile(String detailId, String item, int quantity, double pricePer, 
+                                            double total, String invoiceId, String appointmentId) {
+        String filePath = "src\\database\\InvoiceDetails.txt";
+    
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            String line = detailId + ";" +
+                        item + ";" +
+                        quantity + ";" +
+                        String.format("%.2f", pricePer) + ";" +
+                         String.format("%.2f", total) + ";" +
+                        invoiceId + ";" +
+                        appointmentId;
+            writer.write(line);
+            writer.newLine();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error saving to InvoiceDetails.txt: " + e.getMessage());
+        }
+}
 
     public void deleteCharge(int selectedRow) {
         if (selectedRow != -1) {
+            // Get the detail ID before deleting for file removal
+            String detailId = model.getValueAt(selectedRow, 0).toString();
+            
+            // Remove from table
             model.removeRow(selectedRow);
+            
+            // Also remove from invoiceDetails.txt
+            removeFromInvoiceDetailsFile(detailId);
         }
     }
 
-    public void editCharge(int selectedRow, String invoiceId, String item, int quantity, double pricePer, double total) {
-        if (selectedRow != -1) {
-            String detailId = model.getValueAt(selectedRow, 0).toString();
-            String appointmentId = model.getValueAt(selectedRow, 6).toString();
-            
-            model.setValueAt(detailId, selectedRow, 0);
-            model.setValueAt(item, selectedRow, 1);
-            model.setValueAt(quantity, selectedRow, 2);
-            model.setValueAt(pricePer, selectedRow, 3);
-            model.setValueAt(total, selectedRow, 4);
-            model.setValueAt(invoiceId, selectedRow, 5);
-            model.setValueAt(appointmentId, selectedRow, 6);
+    private void removeFromInvoiceDetailsFile(String detailId) {
+        // Read all lines, exclude the one with the matching detailId, then rewrite the file
+        List<String> lines = new ArrayList<>();
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(invoiceDetailsFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(";");
+                if (data.length > 0 && !data[0].equals(detailId)) {
+                    lines.add(line);
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error reading InvoiceDetails.txt: " + e.getMessage());
+            return;
+        }
+        
+        // Write back all lines except the deleted one
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(invoiceDetailsFilePath))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error saving to InvoiceDetails.txt: " + e.getMessage());
         }
     }
+
 
     public double sendInvoice(String invoiceId) {
         double totalAmount = calculateTotalForInvoice(invoiceId);
@@ -133,7 +178,7 @@ public class ChargesController {
         String paymentMethod = "Cash";
         
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(invoicesFilePath, true))) {
-            String line = invoiceId + "," + totalAmount + "," + paymentMethod + "," + getAppointmentIdForInvoice(invoiceId);
+            String line = invoiceId + ";" + totalAmount + ";" + paymentMethod + ";" + getAppointmentIdForInvoice(invoiceId);
             bw.write(line);
             bw.newLine();
         } catch (IOException ex) {
@@ -144,12 +189,12 @@ public class ChargesController {
     private void saveInvoiceDetailsToTxt() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(invoiceDetailsFilePath))) {
             for (int i = 0; i < model.getRowCount(); i++) {
-                String line = model.getValueAt(i, 0) + "," +
-                             model.getValueAt(i, 1) + "," +
-                             model.getValueAt(i, 2) + "," +
-                             model.getValueAt(i, 3) + "," +
-                             model.getValueAt(i, 4) + "," +
-                             model.getValueAt(i, 5) + "," +
+                String line = model.getValueAt(i, 0) + ";" +
+                             model.getValueAt(i, 1) + ";" +
+                             model.getValueAt(i, 2) + ";" +
+                             model.getValueAt(i, 3) + ";" +
+                             model.getValueAt(i, 4) + ";" +
+                             model.getValueAt(i, 5) + ";" +
                              model.getValueAt(i, 6);
                 bw.write(line);
                 bw.newLine();

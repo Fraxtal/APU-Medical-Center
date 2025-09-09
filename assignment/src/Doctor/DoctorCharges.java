@@ -33,7 +33,6 @@ public class DoctorCharges extends javax.swing.JFrame {
      */
     public DoctorCharges() {
         initComponents();
-        // NOW setup the table and controller
         setupTable();
         controller = new ChargesController(model);
         setupItemComboBox();
@@ -41,9 +40,9 @@ public class DoctorCharges extends javax.swing.JFrame {
     }
     private void setupItemComboBox() {
         String[] items = controller.getItems();
-        jComboBox3.removeAllItems(); // Use jComboBox3 instead of itemComboBox
+        Itemcmb.removeAllItems(); 
         for (String item : items) {
-            jComboBox3.addItem(item);
+            Itemcmb.addItem(item);
         }
     }
     private void setupTable() {
@@ -53,29 +52,33 @@ public class DoctorCharges extends javax.swing.JFrame {
                 return false;
             }
         };
-        jTable4.setModel(model); // Use jTable4 instead of jTable1
+        ChargesTable.setModel(model); 
     }
     private void loadCharges() {
-        String filePath = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\InvoiceDetails.txt";
+        String filePath = "src\\database\\InvoiceDetails.txt";
         viewDoctorCharges viewCharges = new viewDoctorCharges(model);
         viewCharges.loadCharges(filePath);
     }
     private boolean validateInput() {
-        if (jTextField3.getText().trim().isEmpty()) { // Invoice ID field
-        JOptionPane.showMessageDialog(this, "Please enter Invoice ID.");
-        return false;
+        if (AppointmentIDtxt.getText().trim().isEmpty()) { // Appointment ID field
+            JOptionPane.showMessageDialog(this, "Please enter Appointment ID.");
+            return false;
         }
-        if (jTextField1.getText().trim().isEmpty()) { // Quantity field (jTextField1)
+        if (InvoiceIDtxt.getText().trim().isEmpty()) { // Invoice ID field
+            JOptionPane.showMessageDialog(this, "Please enter Invoice ID.");
+            return false;
+        }
+        if (Quantitytxt.getText().trim().isEmpty()) { // Quantity field
             JOptionPane.showMessageDialog(this, "Please enter Quantity.");
             return false;
         }
         try {
-            Integer.parseInt(jTextField1.getText()); // Quantity field (jTextField1)
-            Double.parseDouble(jTextField4.getText()); // Price field (jTextField4)
-            Double.parseDouble(jTextField2.getText()); // Total field (jTextField2)
+            Integer.parseInt(Quantitytxt.getText()); // Quantity field
+            Double.parseDouble(PricePerItemtxt.getText()); // Price field
+            Double.parseDouble(Totaltxt.getText()); // Total field
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, 
-             "Please enter valid numbers for quantity and price.");
+                "Please enter valid numbers for quantity and price.");
             return false;
         }
         return true;
@@ -83,18 +86,18 @@ public class DoctorCharges extends javax.swing.JFrame {
     
         private void clearFields() 
         {
-            jTextField1.setText(""); // Quantity field (jTextField1)
-            jTextField4.setText(""); // Price Per Item field (jTextField4)
-            jTextField2.setText(""); // Total field (jTextField2)
-            // Keep Invoice ID field (jTextField3) if you want to reuse it
+            AppointmentIDtxt.setText(""); // Appointment ID field
+            Quantitytxt.setText(""); // Quantity field
+            PricePerItemtxt.setText(""); // Price Per Item field  
+            Totaltxt.setText(""); // Total field
         }
         
         private void saveToInvoicesFile(String invoiceId, double totalAmount, String appointmentId) {
-            String filePath = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\invoices.txt";
+            String filePath = "src\\database\\invoices.txt";
     
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                String line = invoiceId + "," + 
-                            String.format("%.2f", totalAmount) + ",," +
+                String line = invoiceId + ";" + 
+                            String.format("%.2f", totalAmount) + ";;" +
                             appointmentId;
                             writer.write(line);
                             writer.newLine();
@@ -112,47 +115,49 @@ public class DoctorCharges extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Sendbtn = new javax.swing.JButton();
+        Backbtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        ChargesTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        Totaltxt = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        PricePerItemtxt = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jButton5 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        Itemcmb = new javax.swing.JComboBox<>();
+        Calculatebtn = new javax.swing.JButton();
+        Quantitytxt = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        InvoiceIDtxt = new javax.swing.JTextField();
+        Addbtn = new javax.swing.JButton();
+        Deletebtn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        SendInvoiceIDtxt = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        AppointmentIDtxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Charges"));
 
-        jButton1.setText("Send");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Sendbtn.setText("Send");
+        Sendbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                SendbtnActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Back");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        Backbtn.setText("Back");
+        Backbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                BackbtnActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Item:");
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        ChargesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -163,7 +168,7 @@ public class DoctorCharges extends javax.swing.JFrame {
                 "Invoice Details ID", "Item", "Quantity", "Price Per", "Total", "Invoice ID", "Appointment ID"
             }
         ));
-        jScrollPane5.setViewportView(jTable4);
+        jScrollPane5.setViewportView(ChargesTable);
 
         jLabel1.setText("Total:");
 
@@ -171,122 +176,136 @@ public class DoctorCharges extends javax.swing.JFrame {
 
         jLabel6.setText("Quantity:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Paracetamol", "Vitamin C", "Blood Test", "Consultation", "X-ray", "Antibiotics", "Blood Pressure Test" }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+        Itemcmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Paracetamol", "Vitamin C", "Blood Test", "Consultation", "X-ray", "Antibiotics", "Blood Pressure Test" }));
+        Itemcmb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
+                ItemcmbActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Calculate");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        Calculatebtn.setText("Calculate");
+        Calculatebtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                CalculatebtnActionPerformed(evt);
             }
         });
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        Quantitytxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                QuantitytxtActionPerformed(evt);
             }
         });
 
         jLabel2.setText("Invoice ID:");
 
-        jButton4.setText("Add");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        InvoiceIDtxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                InvoiceIDtxtActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Delete");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        Addbtn.setText("Add");
+        Addbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                AddbtnActionPerformed(evt);
+            }
+        });
+
+        Deletebtn.setText("Delete");
+        Deletebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeletebtnActionPerformed(evt);
             }
         });
 
         jLabel3.setText("Send Invoice ID:");
+
+        jLabel7.setText("Appointment ID:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Backbtn)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(19, 19, 19)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(Sendbtn))
+                            .addComponent(jLabel7))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel2)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jButton1)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jComboBox3, 0, 147, Short.MAX_VALUE)
-                                        .addComponent(jTextField1)
-                                        .addComponent(jTextField3))
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(PricePerItemtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Totaltxt, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jButton4)
+                                        .addComponent(Addbtn)
                                         .addGap(28, 28, 28)
-                                        .addComponent(jButton6)
+                                        .addComponent(Deletebtn)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jButton5))))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(120, 120, 120)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                                        .addComponent(Calculatebtn))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(AppointmentIDtxt, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(Itemcmb, javax.swing.GroupLayout.Alignment.LEADING, 0, 147, Short.MAX_VALUE)
+                                        .addComponent(Quantitytxt, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(InvoiceIDtxt, javax.swing.GroupLayout.Alignment.LEADING))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(SendInvoiceIDtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 654, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(148, 148, 148))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(AppointmentIDtxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(InvoiceIDtxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Itemcmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Quantitytxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(PricePerItemtxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Totaltxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton6)
-                    .addComponent(jButton5))
+                    .addComponent(Addbtn)
+                    .addComponent(Deletebtn)
+                    .addComponent(Calculatebtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(SendInvoiceIDtxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
-                .addComponent(jButton1)
+                .addComponent(Sendbtn)
                 .addGap(88, 88, 88)
-                .addComponent(jButton3)
+                .addComponent(Backbtn)
                 .addGap(18, 18, 18))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
@@ -310,17 +329,17 @@ public class DoctorCharges extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
         this.setVisible(false); // Close current frame
         DoctorMenu obj = new DoctorMenu();
         obj.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_BackbtnActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void CalculatebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CalculatebtnActionPerformed
         try {
         // Get values from the correct text fields
-        String quantityText = jTextField1.getText().trim();    // Quantity from jTextField1
-        String priceText = jTextField4.getText().trim();       // Price from jTextField4
+        String quantityText = Quantitytxt.getText().trim();    // Quantity from jTextField1
+        String priceText = PricePerItemtxt.getText().trim();       // Price from jTextField4
         
         // Check if fields are empty
         if (quantityText.isEmpty() || priceText.isEmpty()) {
@@ -337,7 +356,7 @@ public class DoctorCharges extends javax.swing.JFrame {
         double total = quantity * pricePer;
         
         // Display the total in jTextField2
-        jTextField2.setText(String.format("%.2f", total));
+        Totaltxt.setText(String.format("%.2f", total));
         
             } catch (NumberFormatException ex) {
         JOptionPane.showMessageDialog(this, 
@@ -345,42 +364,44 @@ public class DoctorCharges extends javax.swing.JFrame {
             "Quantity must be a whole number (e.g., 1, 2, 3).\n" +
             "Price must be a decimal number (e.g., 15.00, 20.50).");
         }     // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_CalculatebtnActionPerformed
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        String selectedItem = (String) jComboBox3.getSelectedItem();
+    private void ItemcmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemcmbActionPerformed
+        String selectedItem = (String) Itemcmb.getSelectedItem();
         if (selectedItem != null) {
             double price = controller.getItemPrice(selectedItem);
-            jTextField4.setText(String.format("%.2f", price)); // CORRECT: Setting to jTextField4 (Price Per Item)
+            PricePerItemtxt.setText(String.format("%.2f", price)); // CORRECT: Setting to jTextField4 (Price Per Item)
         }
                 // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
+    }//GEN-LAST:event_ItemcmbActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void AddbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddbtnActionPerformed
         if (validateInput()) {
-            String invoiceId = jTextField3.getText().trim(); // Invoice ID field (jTextField3)
-            String item = (String) jComboBox3.getSelectedItem();
-            int quantity = Integer.parseInt(jTextField1.getText()); // Quantity field (jTextField1)
-            double pricePer = Double.parseDouble(jTextField4.getText()); // Price Per Item field (jTextField4)
-            double total = Double.parseDouble(jTextField2.getText()); // Total field (jTextField2)
+            String appointmentId = AppointmentIDtxt.getText().trim(); // New Appointment ID field
+            String invoiceId = InvoiceIDtxt.getText().trim(); // Invoice ID field
+            String item = (String) Itemcmb.getSelectedItem();
+            int quantity = Integer.parseInt(Quantitytxt.getText()); // Quantity field
+            double pricePer = Double.parseDouble(PricePerItemtxt.getText()); // Price Per Item field
+            double total = Double.parseDouble(Totaltxt.getText()); // Total field
     
-            controller.addCharge(invoiceId, item, quantity, pricePer, total);
+            controller.addCharge(invoiceId, item, quantity, pricePer, total, appointmentId);
             clearFields();
-        }     // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+            loadCharges();
+        }   // TODO add your handling code here:
+    }//GEN-LAST:event_AddbtnActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        int selectedRow = jTable4.getSelectedRow(); // Use jTable4
+    private void DeletebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeletebtnActionPerformed
+        int selectedRow = ChargesTable.getSelectedRow(); // Use jTable4
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, 
                 "Please select an item to delete.");
             return;
         }
         controller.deleteCharge(selectedRow);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_DeletebtnActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            String invoiceId = jTextField5.getText().trim();
+    private void SendbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendbtnActionPerformed
+            String invoiceId = SendInvoiceIDtxt.getText().trim();
     
     if (invoiceId.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Please enter Invoice ID to send.");
@@ -417,11 +438,15 @@ public class DoctorCharges extends javax.swing.JFrame {
         "Total Amount: $" + String.format("%.2f", totalAmount) +
         "\nAppointment ID: " + appointmentId);
          
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_SendbtnActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void QuantitytxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuantitytxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_QuantitytxtActionPerformed
+
+    private void InvoiceIDtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InvoiceIDtxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_InvoiceIDtxtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -449,25 +474,27 @@ public class DoctorCharges extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JButton Addbtn;
+    private javax.swing.JTextField AppointmentIDtxt;
+    private javax.swing.JButton Backbtn;
+    private javax.swing.JButton Calculatebtn;
+    private javax.swing.JTable ChargesTable;
+    private javax.swing.JButton Deletebtn;
+    private javax.swing.JTextField InvoiceIDtxt;
+    private javax.swing.JComboBox<String> Itemcmb;
+    private javax.swing.JTextField PricePerItemtxt;
+    private javax.swing.JTextField Quantitytxt;
+    private javax.swing.JTextField SendInvoiceIDtxt;
+    private javax.swing.JButton Sendbtn;
+    private javax.swing.JTextField Totaltxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 }

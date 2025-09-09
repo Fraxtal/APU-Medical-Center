@@ -28,6 +28,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
     private viewFeedback viewfeedback; // Instance of viewFeedback
     private DefaultTableModel model;
     private TableRowSorter<DefaultTableModel> sorter;
+    private TableSearchHandler searchHandler;
 
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorFeedback.class.getName());
@@ -38,9 +39,10 @@ public class DoctorFeedback extends javax.swing.JFrame {
     public DoctorFeedback() {
         initComponents();
         setupTable();
-        String filePath = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\feedbacks.txt";
+        String filePath = "src\\database\\feedbacks.txt";
         feedbackDoctor = new FeedbackDoctor(model, filePath);
         loadFeedbacks();
+        searchHandler = new TableSearchHandler(FeedbackTable);
      
 
     }
@@ -54,13 +56,13 @@ public class DoctorFeedback extends javax.swing.JFrame {
             }
         };
     
-        jTable2.setModel(model); // Set the model for the table
-        jTable2.setAutoCreateRowSorter(true);
+        FeedbackTable.setModel(model); // Set the model for the table
+        FeedbackTable.setAutoCreateRowSorter(true);
         viewfeedback = new viewFeedback(model);
         sorter = viewfeedback.getSorter();
-        jTable2.setRowSorter(sorter);
+        FeedbackTable.setRowSorter(sorter);
     
-        TableColumnModel cm = jTable2.getColumnModel();
+        TableColumnModel cm = FeedbackTable.getColumnModel();
         for (int i = 0; i < w.length; i++) {
             cm.getColumn(i).setPreferredWidth(w[i]);
         }
@@ -69,7 +71,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
         c.setHorizontalAlignment(SwingConstants.CENTER);
         cm.getColumn(6).setCellRenderer(c);
     
-        jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        FeedbackTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 
     }
     private void saveFeedbacks(String filePath) {
@@ -83,8 +85,8 @@ public class DoctorFeedback extends javax.swing.JFrame {
                 String customerName = model.getValueAt(i, 5).toString();
                 String feedback = model.getValueAt(i, 6).toString();
             
-                String row = feedbackId + "," + appointmentId + "," + doctorId + "," +
-                            doctorName + "," + customerId + "," + customerName + "," +
+                String row = feedbackId + ";" + appointmentId + ";" + doctorId + ";" +
+                            doctorName + ";" + customerId + ";" + customerName + ";" +
                             feedback;
 
                 bw.write(row);
@@ -99,7 +101,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
     
     private void loadFeedbacks()
     {
-        String filePath ="C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\feedbacks.txt";
+        String filePath ="src\\database\\feedbacks.txt";
         viewfeedback.loadFeedbacks(filePath);
     }
     
@@ -114,17 +116,20 @@ public class DoctorFeedback extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        FeedbackTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        Feedbacktxt = new javax.swing.JTextArea();
+        backbtn = new javax.swing.JButton();
+        Editbtn = new javax.swing.JButton();
+        Savebtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        FeedbackSearchtxt = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        FeedbackTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -135,85 +140,125 @@ public class DoctorFeedback extends javax.swing.JFrame {
                 "Feedback ID", "Appointment ID", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name", "Feedback"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(FeedbackTable);
 
+        jLabel2.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel2.setText("Feedback:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        Feedbacktxt.setColumns(20);
+        Feedbacktxt.setRows(5);
+        jScrollPane3.setViewportView(Feedbacktxt);
 
-        jButton3.setText("back");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        backbtn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        backbtn.setText("back");
+        backbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                backbtnActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Edit");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        Editbtn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        Editbtn.setText("Edit");
+        Editbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                EditbtnActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Savebtn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        Savebtn.setText("Save");
+        Savebtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                SavebtnActionPerformed(evt);
             }
         });
+
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
+        jLabel1.setText("Feedback");
+
+        FeedbackSearchtxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FeedbackSearchtxtActionPerformed(evt);
+            }
+        });
+        FeedbackSearchtxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                FeedbackSearchtxtKeyReleased(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
+        jLabel3.setText("Search:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(jLabel2))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(73, 73, 73)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(backbtn)))
+                        .addGap(48, 48, 48)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(Editbtn)
+                                .addGap(39, 39, 39)
+                                .addComponent(Savebtn))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jButton3)))
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(41, 41, 41)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 806, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addGap(39, 39, 39)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(72, Short.MAX_VALUE))
+                        .addGap(77, 77, 77)
+                        .addComponent(jLabel3)
+                        .addGap(51, 51, 51)
+                        .addComponent(FeedbackSearchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(369, 369, 369)
+                        .addComponent(jLabel1)))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FeedbackSearchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton1))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(backbtn)
+                    .addComponent(Editbtn)
+                    .addComponent(Savebtn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
         this.setVisible(false); // Close current frame
         DoctorMenu obj = new DoctorMenu();
         obj.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_backbtnActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        int row = jTable2.getSelectedRow(); // Get selected row
-        String feedback = jTextArea1.getText(); // Get feedback from JTextArea
+    private void EditbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditbtnActionPerformed
+        int row = FeedbackTable.getSelectedRow(); // Get selected row
+        String feedback = Feedbacktxt.getText(); // Get feedback from JTextArea
 
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Please select a row to edit feedback.");
@@ -226,18 +271,27 @@ public class DoctorFeedback extends javax.swing.JFrame {
             feedbackDoctor.editFeedback(row, feedback); // Call method to update feedback
         
             // Optionally refresh the table
-            jTable2.revalidate();
-            jTable2.repaint();
+            FeedbackTable.revalidate();
+            FeedbackTable.repaint();
         
-            jTextArea1.setText(""); // Clear the text area
+            Feedbacktxt.setText(""); // Clear the text area
             JOptionPane.showMessageDialog(this, "Feedback updated successfully.");
         }     
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_EditbtnActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String filePath = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\feedbacks.txt";
+    private void SavebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavebtnActionPerformed
+        String filePath = "src\\database\\feedbacks.txt";
         saveFeedbacks(filePath);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_SavebtnActionPerformed
+
+    private void FeedbackSearchtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FeedbackSearchtxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FeedbackSearchtxtActionPerformed
+
+    private void FeedbackSearchtxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FeedbackSearchtxtKeyReleased
+        String query = FeedbackSearchtxt.getText();
+        searchHandler.filterTable(query);        // TODO add your handling code here:
+    }//GEN-LAST:event_FeedbackSearchtxtKeyReleased
 
     /**
      * @param args the command line arguments
@@ -265,13 +319,16 @@ public class DoctorFeedback extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton Editbtn;
+    private javax.swing.JTextField FeedbackSearchtxt;
+    private javax.swing.JTable FeedbackTable;
+    private javax.swing.JTextArea Feedbacktxt;
+    private javax.swing.JButton Savebtn;
+    private javax.swing.JButton backbtn;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

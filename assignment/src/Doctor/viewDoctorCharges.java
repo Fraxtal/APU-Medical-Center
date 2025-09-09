@@ -30,14 +30,14 @@ public class viewDoctorCharges {
      * Load all appointment data from appointments.txt
      */
     private void loadAppointmentStatuses() {
-        String appointmentsFile = "C:\\Users\\Kingston Teoh\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\appointments.txt";
+        String appointmentsFile = "src\\database\\appointments.txt";
         
         try (BufferedReader br = new BufferedReader(new FileReader(appointmentsFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 
-                String[] data = line.split(",");
+                String[] data = line.split(";");
                 if (data.length >= 7) {
                     // Trim all values and store the appointment data
                     for (int i = 0; i < data.length; i++) {
@@ -75,7 +75,7 @@ public class viewDoctorCharges {
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 
-                String[] data = line.split(",", -1);
+                String[] data = line.split(";", -1);
                 
                 // invoiceDetails.txt has 7 fields: InvoiceDetailsID, Item, Quantity, PricePer, Total, InvoiceID, AppointmentID
                 if (data.length >= 7) {
