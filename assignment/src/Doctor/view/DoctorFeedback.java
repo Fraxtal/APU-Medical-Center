@@ -2,8 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package Doctor;
+package Doctor.view;
 
+import Doctor.controller.FeedbackDoctor;
+import Doctor.controller.TableSearchHandler;
+import Doctor.view.DoctorMenu;
+import Doctor.model.viewFeedback;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;

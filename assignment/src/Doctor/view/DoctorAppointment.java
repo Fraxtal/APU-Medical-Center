@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package Doctor;
+package Doctor.view;
 
+import Doctor.controller.TableSearchHandler;
+import Doctor.view.DoctorMenu;
+import Doctor.model.viewAppointment;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
