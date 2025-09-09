@@ -190,4 +190,8 @@ public class Customer extends User implements Serializable {
     public int hashCode() {
         return Integer.hashCode(id);
     }
+
+    public String getFullname() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

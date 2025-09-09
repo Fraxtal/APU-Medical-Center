@@ -34,9 +34,11 @@ public class CustomerDashboard extends javax.swing.JFrame {
         btnAptHistory = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnInvoice = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        btnUserProfile.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnUserProfile.setText("My Profile");
         btnUserProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -44,6 +46,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
+        btnBookApt.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnBookApt.setText("Book Appointment");
         btnBookApt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -51,6 +54,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
+        btnAptHistory.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnAptHistory.setText("My Appointments");
         btnAptHistory.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAptHistory.setHideActionText(true);
@@ -60,6 +64,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
+        btnLogout.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnLogout.setText("Logout");
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,8 +72,11 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
         jLabel1.setText("Customer Dashboard");
+
+        btnInvoice.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnInvoice.setText("Invoice History");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,15 +89,20 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addComponent(btnLogout)
                 .addGap(87, 87, 87))
             .addGroup(layout.createSequentialGroup()
-                .addGap(188, 188, 188)
-                .addComponent(jLabel1)
-                .addContainerGap(212, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(149, Short.MAX_VALUE)
                 .addComponent(btnBookApt)
                 .addGap(68, 68, 68)
                 .addComponent(btnAptHistory)
                 .addGap(176, 176, 176))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(188, 188, 188)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(251, 251, 251)
+                        .addComponent(btnInvoice)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,7 +113,9 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAptHistory)
                     .addComponent(btnBookApt))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
+                .addComponent(btnInvoice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUserProfile)
                     .addComponent(btnLogout))
@@ -164,6 +179,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAptHistory;
     private javax.swing.JButton btnBookApt;
+    private javax.swing.JButton btnInvoice;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnUserProfile;
     private javax.swing.JLabel jLabel1;
