@@ -22,6 +22,8 @@ public class Customer extends User implements Serializable {
     /**
      * Constructor for creating a new Customer
      */
+    public Customer(){}
+    
     public Customer(int id, String username, String fullname, String email) {
         super(id, username, fullname, email);
         this.role = "Customer";
@@ -186,12 +188,24 @@ public class Customer extends User implements Serializable {
         return id == customer.id;
     }
     
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(id);
-    }
 
     public String getFullname() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setUsername(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setFullname(String fullname) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setEmail(String email) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setContactNo(String contactNo) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

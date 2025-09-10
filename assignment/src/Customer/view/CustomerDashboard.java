@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Customer.view;
+import Customer.controller.CustomerController;
 import User.*;
 
 /**
@@ -12,7 +13,12 @@ import User.*;
 public class CustomerDashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CustomerDashboard.class.getName());
+    
+    private CustomerController controller;
 
+    public void setController(CustomerController controller) {
+        this.controller = controller;
+    }
     /**
      * Creates new form CustomerDashboard
      */
@@ -97,19 +103,19 @@ public class CustomerDashboard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(251, 251, 251)
-                        .addComponent(btnInvoice)))
+                        .addComponent(btnInvoice))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(195, 195, 195)
+                        .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(93, 93, 93)
+                .addGap(92, 92, 92)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAptHistory)
                     .addComponent(btnBookApt))
@@ -129,20 +135,17 @@ public class CustomerDashboard extends javax.swing.JFrame {
 
     private void btnAptHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAptHistoryActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        new AppointmentHistory().setVisible(true);
+        controller.showAppointmentHistory();
     }//GEN-LAST:event_btnAptHistoryActionPerformed
 
     private void btnBookAptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookAptActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        new AppointmentBooking().setVisible(true);
+        controller.showAppointmentBooking();
     }//GEN-LAST:event_btnBookAptActionPerformed
 
     private void btnUserProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfileActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        new UserProfile().setVisible(true);
+        controller.showUserProfile();
     }//GEN-LAST:event_btnUserProfileActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed

@@ -4,6 +4,8 @@
  */
 package User;
 
+import Customer.controller.CustomerController;
+
 /**
  *
  * @author Nicholas
@@ -11,6 +13,11 @@ package User;
 public class UserProfile extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserProfile.class.getName());
+    private CustomerController controller;
+
+    public void setController(CustomerController controller) {
+        this.controller = controller;
+    }
 
     /**
      * Creates new form UserProfile
@@ -214,4 +221,4 @@ public class UserProfile extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
-}
+}  
