@@ -10,9 +10,9 @@ import Customer.ctrl.CustomerController;
  *
  * @author Nicholas
  */
-public class AppoinmentDetails extends javax.swing.JFrame {
+public class AppointmentDetails extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppoinmentDetails.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentDetails.class.getName());
 
     private CustomerController controller;
 
@@ -20,7 +20,7 @@ public class AppoinmentDetails extends javax.swing.JFrame {
         this.controller = controller;
     }
     
-    public AppoinmentDetails() {
+    public AppointmentDetails() {
         initComponents();
     }
 
@@ -183,7 +183,7 @@ public class AppoinmentDetails extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new AppoinmentDetails().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new AppointmentDetails().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
