@@ -22,7 +22,6 @@ import java.util.logging.Logger;
  * Provides input validation and business logic coordination
  */
 public class CustomerController {
-    
     private static final Logger logger = Logger.getLogger(CustomerController.class.getName());
     
     private Customer currentCustomer;
