@@ -25,14 +25,25 @@ public class User {
         this.email = email;
     }
     
-    public boolean register(String Username,String Fullname, String Email, String Password, String Address, String ContactNo) {
+    public boolean register(String Username, String Fullname, String Email, String Password, String Address, String ContactNo) {
+        // Load existing user data
         loadUserDB();
-        id = data.size();
+        
+        // Check if username or email already exists
+        if (isUserExists(Username, Email)) {
+            System.out.println("Username or email already exists!");
+            return false;
+        }
+        
+        // Get next available customer ID starting from 10000
+        id = getNextCustomerId();
         String date = LocalDate.now().toString();
 
         try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
+            // Write new customer record to database
             writer.write(id + ";" + Username + ";" + Fullname + ";" + Email + ";" + Password + ";" + Address + ";" + ContactNo + ";" + date + ";Customer" + "\n");
 
+            // Add to in-memory data structure
             ArrayList<String> newRecord = new ArrayList<>();
             newRecord.add(String.valueOf(id));
             newRecord.add(Username);
@@ -45,8 +56,10 @@ public class User {
             newRecord.add("Customer");
             data.add(newRecord);
 
+            System.out.println("Customer registered successfully with ID: " + id);
             return true;
         } catch (IOException e) {
+            System.out.println("Error writing to database: " + e.getMessage());
             return false;
         }
     }
@@ -103,6 +116,49 @@ public class User {
             System.out.println(e);
         }
         return data;
+    }
+    
+    /**
+     * Check if username or email already exists in the database
+     */
+    private boolean isUserExists(String username, String email) {
+        for (ArrayList<String> record : data) {
+            if (record.size() >= 9) { // Ensure record has enough fields
+                String existingUsername = record.get(1);
+                String existingEmail = record.get(3);
+                
+                if (existingUsername.equalsIgnoreCase(username) || existingEmail.equalsIgnoreCase(email)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Get the next available customer ID starting from 10000
+     */
+    private int getNextCustomerId() {
+        int maxId = 9999; // Start from 10000, so max is 9999 initially
+        
+        for (ArrayList<String> record : data) {
+            if (record.size() >= 9) { // Ensure record has enough fields
+                try {
+                    int recordId = Integer.parseInt(record.get(0));
+                    String recordRole = record.get(8);
+                    
+                    // Check if this record is a customer and has ID >= 10000
+                    if (recordRole.equalsIgnoreCase("Customer") && recordId >= 10000) {
+                        maxId = Math.max(maxId, recordId);
+                    }
+                } catch (NumberFormatException e) {
+                    // Skip invalid ID records
+                    continue;
+                }
+            }
+        }
+        
+        return maxId + 1;
     }
    
     
