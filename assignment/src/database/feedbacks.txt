@@ -1,0 +1,2 @@
+1;10002;20001;Dr.Kim;20001;Alice;eat medicine on time
+2;10004;20000;Dr.Sophia;20000;Chase;exercise more

@@ -1,6 +1,6 @@
 package User;
 
-import Customer.Customer;
+import Customer.model.Customer;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,29 +13,41 @@ public class User {
     protected int id;
     protected String username;
     protected String email;
+    protected String fullname;
     protected ArrayList<ArrayList<String>> data;
 
-    public User() {
-    }
-
-    public User(int id, String username, String email) {
+    public User(){}
+    
+    public User(int id, String username, String fullname, String email) {
         this.id = id;
         this.username = username;
+        this.fullname = fullname;
         this.email = email;
-        this.data = new ArrayList<>();
     }
-
-    public boolean register(String Username, String Email, String Password, String Address, String ContactNo) {
+    
+    public boolean register(String Username, String Fullname, String Email, String Password, String Address, String ContactNo) {
+        // Load existing user data
         loadUserDB();
-        id = data.size();
+        
+        // Check if username or email already exists
+        if (isUserExists(Username, Email)) {
+            System.out.println("Username or email already exists!");
+            return false;
+        }
+        
+        // Get next available customer ID starting from 10000
+        id = getNextCustomerId();
         String date = LocalDate.now().toString();
 
         try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
-            writer.write(id + ";" + Username + ";" + Email + ";" + Password + ";" + Address + ";" + ContactNo + ";" + date + ";Customer" + "\n");
+            // Write new customer record to database
+            writer.write(id + ";" + Username + ";" + Fullname + ";" + Email + ";" + Password + ";" + Address + ";" + ContactNo + ";" + date + ";Customer" + "\n");
 
+            // Add to in-memory data structure
             ArrayList<String> newRecord = new ArrayList<>();
             newRecord.add(String.valueOf(id));
             newRecord.add(Username);
+            newRecord.add(Fullname);
             newRecord.add(Email);
             newRecord.add(Password);
             newRecord.add(Address);
@@ -44,69 +56,47 @@ public class User {
             newRecord.add("Customer");
             data.add(newRecord);
 
+            System.out.println("Customer registered successfully with ID: " + id);
             return true;
         } catch (IOException e) {
+            System.out.println("Error writing to database: " + e.getMessage());
             return false;
         }
     }
 
-    public Object login(String input, String password) {
+    public static User login(String input, String password) {
 
-        loadUserDB(); // Load user data
+        ArrayList<ArrayList<String>> data = loadUserDB(); // Load data
 
         for (ArrayList<String> userRecord : data) {
-            // Check both username and email fields
-            boolean credentialMatches = userRecord.get(1).equals(input.trim())
-                    || // Username check
-                    userRecord.get(2).equals(input.trim());     // Email check
+            boolean credentialMatches = userRecord.get(1).equals(input.trim()) // username
+                    || userRecord.get(3).equals(input.trim()); // email (assuming index 3)
 
-            if (credentialMatches && userRecord.get(3).equals(password)) {
-                String role = userRecord.get(7); // Assuming role is at index 7
+            if (credentialMatches && userRecord.get(4).equals(password)) { // assuming password at index 4
+                String role = userRecord.get(8); // Assuming role is at index 8
 
-                // Return appropriate class instance based on role
-                switch (role.toLowerCase()) {
-                    case "customer" -> {
-                        return new Customer(
-                                Integer.parseInt(userRecord.get(0)),
-                                userRecord.get(1),
-                                userRecord.get(2)
-                        );
-                    }
-                    case "staff" -> {
-                        return new Staff(
-                                Integer.parseInt(userRecord.get(0)),
-                                userRecord.get(1),
-                                userRecord.get(2)
-                        );
-                    }
-                    case "doctor" -> {
-                        return new Doctor(
-                                Integer.parseInt(userRecord.get(0)),
-                                userRecord.get(1),
-                                userRecord.get(2)
-                        );
-                    }
-                    case "manager" -> {
-                        return new Manager(
-                                Integer.parseInt(userRecord.get(0)),
-                                userRecord.get(1),
-                                userRecord.get(2)
-                        );
-                    }
-                    default ->
-                        throw new IllegalArgumentException("Unknown role: " + role);
-                }
+                int userId = Integer.parseInt(userRecord.get(0));
+                String userUsername = userRecord.get(1);
+                String userFullName = userRecord.get(2);
+                String userEmail = userRecord.get(3);
+
+                // 3. Return a specific User subclass based on the role.
+                // This switch statement is the ONLY place where the protected
+                // constructors of the subclasses are called.
+                return switch (role.toLowerCase()) {
+                    case "customer" -> new Customer(userId, userUsername, userFullName, userEmail);
+//                    case "staff" -> new Staff(userId, userUsername, userFullname, userEmail);
+//                    case "doctor" -> new Doctor(userId, userUsername, userFullname, userEmail);
+//                    case "manager" -> new Manager(userId, userUsername, userFullname, userEmail);
+                    default -> throw new IllegalArgumentException("Unknown role: " + role);
+                };
             }
         }
         throw new SecurityException("Invalid credentials");
     }
 
-    public void updateUserInformation() {
-
-    }
-
-    protected void loadUserDB() {
-        data.clear();
+    private static ArrayList<ArrayList<String>> loadUserDB() {
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
         try {
             File file = new File("assignment\\src\\database\\users.txt");
             try (Scanner reader = new Scanner(file)) {
@@ -125,6 +115,59 @@ public class User {
         } catch (Exception e) {
             System.out.println(e);
         }
+        return data;
     }
+    
+    /**
+     * Check if username or email already exists in the database
+     */
+    private boolean isUserExists(String username, String email) {
+        for (ArrayList<String> record : data) {
+            if (record.size() >= 9) { // Ensure record has enough fields
+                String existingUsername = record.get(1);
+                String existingEmail = record.get(3);
+                
+                if (existingUsername.equalsIgnoreCase(username) || existingEmail.equalsIgnoreCase(email)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Get the next available customer ID starting from 10000
+     */
+    private int getNextCustomerId() {
+        int maxId = 9999; // Start from 10000, so max is 9999 initially
+        
+        for (ArrayList<String> record : data) {
+            if (record.size() >= 9) { // Ensure record has enough fields
+                try {
+                    int recordId = Integer.parseInt(record.get(0));
+                    String recordRole = record.get(8);
+                    
+                    // Check if this record is a customer and has ID >= 10000
+                    if (recordRole.equalsIgnoreCase("Customer") && recordId >= 10000) {
+                        maxId = Math.max(maxId, recordId);
+                    }
+                } catch (NumberFormatException e) {
+                    // Skip invalid ID records
+                    continue;
+                }
+            }
+        }
+        
+        return maxId + 1;
+    }
+   
+    
+    public void updateUserInformation() {
 
+    }
+    
+    public int getId() { return id; }
+    public String getUsername() { return username; }
+    public String getEmail() { return email; }
 }
+
