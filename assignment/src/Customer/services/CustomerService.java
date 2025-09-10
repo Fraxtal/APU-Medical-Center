@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 public class CustomerService implements FileService {
     
     private static final Logger logger = Logger.getLogger(CustomerService.class.getName());
-    private static final String APPOINTMENTS_FILE = "assignment\\src\\database\\appointments.txt";
-    private static final String USERS_FILE = "assignment\\src\\database\\users.txt";
-    private static final String INVOICES_FILE = "assignment\\src\\database\\invoices.txt";
+    private static final String APPOINTMENTS_FILE = "src\\database\\appointments.txt";
+    private static final String USERS_FILE = "src\\database\\users.txt";
+    private static final String INVOICES_FILE = "src\\database\\invoices.txt";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     /**
@@ -47,8 +47,9 @@ public class CustomerService implements FileService {
                     String line = scanner.nextLine().trim();
                     if (!line.isEmpty()) {
                         String[] values = line.split(";");
-                        if (values.length >= 9) {
-                            int appointmentCustomerId = Integer.parseInt(values[5]); // CustomerID is at index 5
+                        if (values.length >= 7) {
+                            // Current DB order: id;date;status;doctorId;doctorName;customerId;customerName
+                            int appointmentCustomerId = Integer.parseInt(values[5]); // CustomerID at index 5
                             if (appointmentCustomerId == customerId) {
                                 Appointment appointment = parseAppointmentFromLine(values);
                                 appointments.add(appointment);
@@ -82,7 +83,7 @@ public class CustomerService implements FileService {
         
         try {
             // Generate appointment ID
-            int appointmentId = generateAppointmentId();
+            String appointmentId = generateAppointmentId();
             appointment.setAppointmentId(appointmentId);
             
             // Write to text file - coursework requirement
@@ -103,10 +104,12 @@ public class CustomerService implements FileService {
     
     /**
      * Cancel an appointment - demonstrates business logic and file operations
+     * @param appointmentId
+     * @return 
      */
-    public boolean cancelAppointment(int appointmentId) {
+    public boolean cancelAppointment(String appointmentId) {
         // Input validation
-        if (appointmentId <= 0) {
+        if (appointmentId == null || appointmentId.trim().isEmpty()) {
             logger.warning("Invalid appointment ID provided");
             return false;
         }
@@ -123,9 +126,9 @@ public class CustomerService implements FileService {
                         String line = scanner.nextLine().trim();
                         if (!line.isEmpty()) {
                         String[] values = line.split(";");
-                        if (values.length >= 9) {
-                            int currentAppointmentId = Integer.parseInt(values[0]);
-                            if (currentAppointmentId == appointmentId) {
+                        if (values.length >= 7) {
+                            String currentAppointmentId = values[0];
+                            if (currentAppointmentId.equals(appointmentId)) {
                                 // Business rule: Check if appointment can be cancelled
                                 String currentStatus = values[2]; // status is at index 2
                                 if ("CANCELLED".equalsIgnoreCase(currentStatus)) {
@@ -260,6 +263,25 @@ public class CustomerService implements FileService {
     }
     
     /**
+     * Get appointments for JTable display - returns data in format suitable for JTable
+     * Format: [ID, DOA, Status, Doctor Name]
+     */
+    public Object[][] getAppointmentsForTable(int customerId) {
+        List<Appointment> appointments = getCustomerAppointments(customerId);
+        Object[][] tableData = new Object[appointments.size()][4];
+        
+        for (int i = 0; i < appointments.size(); i++) {
+            Appointment appointment = appointments.get(i);
+            tableData[i][0] = appointment.getAppointmentId(); // ID
+            tableData[i][1] = appointment.getDateOfAppointment().format(DATE_FORMATTER); // DOA
+            tableData[i][2] = appointment.getStatus(); // Status
+            tableData[i][3] = appointment.getDoctorName(); // Doctor Name
+        }
+        
+        return tableData;
+    }
+    
+    /**
      * Create an invoice for an appointment
      */
     public boolean createInvoice(Invoice invoice) {
@@ -362,7 +384,7 @@ public class CustomerService implements FileService {
     
     // Private helper methods
     
-    private int generateAppointmentId() {
+    private String generateAppointmentId() {
         int maxId = 0;
         try {
             File file = new File(APPOINTMENTS_FILE);
@@ -373,11 +395,14 @@ public class CustomerService implements FileService {
                         if (!line.isEmpty()) {
                             String[] values = line.split(";");
                             if (values.length > 0) {
-                                try {
-                                    int id = Integer.parseInt(values[0]);
-                                    maxId = Math.max(maxId, id);
-                                } catch (NumberFormatException e) {
-                                    // Skip invalid lines
+                                String idStr = values[0];
+                                if (idStr.startsWith("A")) {
+                                    try {
+                                        int id = Integer.parseInt(idStr.substring(1));
+                                        maxId = Math.max(maxId, id);
+                                    } catch (NumberFormatException e) {
+                                        // Skip invalid lines
+                                    }
                                 }
                             }
                         }
@@ -387,35 +412,31 @@ public class CustomerService implements FileService {
         } catch (Exception e) {
             logger.log(Level.WARNING, "Error generating appointment ID", e);
         }
-        return maxId + 1;
+        return String.format("A%04d", maxId + 1);
     }
     
     private Appointment parseAppointmentFromLine(String[] values) {
-        int appointmentId = Integer.parseInt(values[0]); // AppointmentID
+        String appointmentId = values[0]; // AppointmentID (A0001)
         LocalDate dateOfAppointment = LocalDate.parse(values[1], DATE_FORMATTER); // DOA
         String status = values[2]; // status
-        String feedback = values[3]; // feedback
-        String comment = values[4]; // comment
+        int doctorId = Integer.parseInt(values[3]); // DoctorID
+        String doctorName = values[4]; // Doctor Name
         int customerId = Integer.parseInt(values[5]); // CustomerID
-        int doctorId = Integer.parseInt(values[6]); // DoctorID
-        String customerName = values[7]; // Customer Name
-        String doctorName = values[8]; // Doctor Name
+        String customerName = values[6]; // Customer Name
         
-        return new Appointment(appointmentId, dateOfAppointment, status, feedback, comment,
-                             customerId, doctorId, customerName, doctorName);
+        return new Appointment(appointmentId, dateOfAppointment, status, customerId, doctorId, customerName, doctorName);
     }
     
     private String formatAppointmentForFile(Appointment appointment) {
-        return String.format("%d;%s;%s;%s;%s;%d;%d;%s;%s",
+        // Match current DB order: id;date;status;doctorId;doctorName;customerId;customerName
+        return String.format("%s;%s;%s;%d;%s;%d;%s",
                            appointment.getAppointmentId(),
                            appointment.getDateOfAppointment().format(DATE_FORMATTER),
                            appointment.getStatus(),
-                           appointment.getFeedback(),
-                           appointment.getComment(),
-                           appointment.getCustomerId(),
                            appointment.getDoctorId(),
-                           appointment.getCustomerName(),
-                           appointment.getDoctorName());
+                           appointment.getDoctorName(),
+                           appointment.getCustomerId(),
+                           appointment.getCustomerName());
     }
     
     private int generateInvoiceId() {

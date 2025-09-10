@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Implements Serializable for data persistence
  */
 public class Appointment extends BaseEntity {
-    private int appointmentId;
+    private String appointmentId; // Changed to String to support A0001 format
     private LocalDate dateOfAppointment; // DOA - Date of appointment
     private String status; // PENDING, CONFIRMED, CANCELLED, COMPLETED
     private String feedback; // Feedback from doctor
@@ -39,15 +39,14 @@ public class Appointment extends BaseEntity {
     }
     
     // Constructor for loading from database
-    public Appointment(int appointmentId, LocalDate dateOfAppointment, String status, 
-                      String feedback, String comment, int customerId, int doctorId, 
-                      String customerName, String doctorName) {
-        super(appointmentId); // Call parent constructor with ID
+    public Appointment(String appointmentId, LocalDate dateOfAppointment, String status, 
+                      int customerId, int doctorId, String customerName, String doctorName) {
+        super(); // Call parent constructor
         this.appointmentId = appointmentId;
         this.dateOfAppointment = dateOfAppointment;
         this.status = status;
-        this.feedback = feedback;
-        this.comment = comment;
+        this.feedback = ""; // Empty initially
+        this.comment = ""; // Empty initially
         this.customerId = customerId;
         this.doctorId = doctorId;
         this.customerName = customerName;
@@ -55,8 +54,8 @@ public class Appointment extends BaseEntity {
     }
     
     // Getters and Setters
-    public int getAppointmentId() { return appointmentId; }
-    public void setAppointmentId(int appointmentId) { this.appointmentId = appointmentId; }
+    public String getAppointmentId() { return appointmentId; }
+    public void setAppointmentId(String appointmentId) { this.appointmentId = appointmentId; }
     
     public LocalDate getDateOfAppointment() { return dateOfAppointment; }
     public void setDateOfAppointment(LocalDate dateOfAppointment) { this.dateOfAppointment = dateOfAppointment; }
@@ -88,7 +87,7 @@ public class Appointment extends BaseEntity {
      */
     @Override
     public boolean isValid() {
-        return appointmentId > 0 && 
+        return appointmentId != null && !appointmentId.trim().isEmpty() && 
                customerId > 0 && 
                doctorId > 0 &&
                customerName != null && !customerName.trim().isEmpty() &&
@@ -132,7 +131,7 @@ public class Appointment extends BaseEntity {
     
     @Override
     public String toString() {
-        return String.format("Appointment{id=%d, customer=%s, doctor=%s, date=%s, status=%s}", 
+        return String.format("Appointment{id=%s, customer=%s, doctor=%s, date=%s, status=%s}", 
                            appointmentId, customerName, doctorName, dateOfAppointment, status);
     }
     
@@ -141,11 +140,11 @@ public class Appointment extends BaseEntity {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Appointment that = (Appointment) obj;
-        return appointmentId == that.appointmentId;
+        return appointmentId != null && appointmentId.equals(that.appointmentId);
     }
     
     @Override
     public int hashCode() {
-        return Integer.hashCode(appointmentId);
+        return appointmentId != null ? appointmentId.hashCode() : 0;
     }
 }

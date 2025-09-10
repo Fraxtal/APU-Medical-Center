@@ -39,7 +39,7 @@ public class User {
         id = getNextCustomerId();
         String date = LocalDate.now().toString();
 
-        try (FileWriter writer = new FileWriter("assignment\\src\\database\\users.txt", true)) {
+        try (FileWriter writer = new FileWriter("src\\database\\users.txt", true)) {
             // Write new customer record to database
             writer.write(id + ";" + Username + ";" + Fullname + ";" + Email + ";" + Password + ";" + Address + ";" + ContactNo + ";" + date + ";Customer" + "\n");
 
@@ -73,18 +73,9 @@ public class User {
                     || userRecord.get(3).equals(input.trim()); // email (assuming index 3)
 
             if (credentialMatches && userRecord.get(4).equals(password)) { // assuming password at index 4
-                String role = userRecord.get(8); // Assuming role is at index 8
-
-                int userId = Integer.parseInt(userRecord.get(0));
-                String userUsername = userRecord.get(1);
-                String userFullName = userRecord.get(2);
-                String userEmail = userRecord.get(3);
-
-                // 3. Return a specific User subclass based on the role.
-                // This switch statement is the ONLY place where the protected
-                // constructors of the subclasses are called.
+                String role = userRecord.get(8);
                 return switch (role.toLowerCase()) {
-                    case "customer" -> new Customer(userId, userUsername, userFullName, userEmail);
+                    case "customer" -> new Customer(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
 //                    case "staff" -> new Staff(userId, userUsername, userFullname, userEmail);
 //                    case "doctor" -> new Doctor(userId, userUsername, userFullname, userEmail);
 //                    case "manager" -> new Manager(userId, userUsername, userFullname, userEmail);
@@ -98,7 +89,7 @@ public class User {
     private static ArrayList<ArrayList<String>> loadUserDB() {
         ArrayList<ArrayList<String>> data = new ArrayList<>();
         try {
-            File file = new File("assignment\\src\\database\\users.txt");
+            File file = new File("src\\database\\users.txt");
             try (Scanner reader = new Scanner(file)) {
                 while (reader.hasNextLine()) {
                     String line = reader.nextLine().trim();

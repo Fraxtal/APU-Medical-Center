@@ -4,6 +4,13 @@
  */
 package Customer.view;
 import Customer.ctrl.CustomerController;
+import Customer.services.CustomerService;
+import Customer.model.Customer;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author Nicholas
@@ -13,13 +20,85 @@ public class AppointmentHistory extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentHistory.class.getName());
     
     private CustomerController controller;
+    private CustomerService customerService;
+    private Customer currentCustomer;
+    private TableRowSorter<DefaultTableModel> sorter;
 
     public void setController(CustomerController controller) {
         this.controller = controller;
     }
+    
+    public void setCurrentCustomer(Customer customer) {
+        this.currentCustomer = customer;
+        this.customerService = new CustomerService();
+        loadAppointmentsToTable();
+        setupSearchFilter();
+    }
 
     public AppointmentHistory() {
         initComponents();
+    }
+    
+    private void loadAppointmentsToTable() {
+        if (currentCustomer != null && customerService != null) {
+            try {
+                // Get appointments for the current customer
+                Object[][] appointmentsData = customerService.getAppointmentsForTable(currentCustomer.getId());
+                
+                // Create column names
+                String[] columnNames = {"Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"};
+                
+                // Create table model
+                DefaultTableModel model = new DefaultTableModel(appointmentsData, columnNames) {};
+                
+                // Set the model to the table
+                tbleAppointments.setModel(model);
+                
+                // Auto-resize columns
+                tbleAppointments.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                // Enable sorting/filtering
+                sorter = new TableRowSorter<>(model);
+                tbleAppointments.setRowSorter(sorter);
+                applySearchFilter(tbSearch.getText());
+                
+            } catch (Exception e) {
+                logger.severe(() -> "Error loading appointments: " + e.getMessage());
+                // Show empty table if error occurs
+                String[] columnNames = {"Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"};
+                DefaultTableModel model = new DefaultTableModel(new Object[0][4], columnNames);
+                tbleAppointments.setModel(model);
+                sorter = new TableRowSorter<>(model);
+                tbleAppointments.setRowSorter(sorter);
+            }
+        }
+    }
+
+    private void setupSearchFilter() {
+        tbSearch.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { applySearchFilter(tbSearch.getText()); }
+            public void removeUpdate(DocumentEvent e) { applySearchFilter(tbSearch.getText()); }
+            public void changedUpdate(DocumentEvent e) { applySearchFilter(tbSearch.getText()); }
+        });
+    }
+
+    private void applySearchFilter(String query) {
+        if (sorter == null) return;
+        String q = query == null ? "" : query.trim().toLowerCase();
+        if (q.isEmpty()) {
+            sorter.setRowFilter(null);
+            return;
+        }
+        sorter.setRowFilter(new RowFilter<DefaultTableModel, Integer>() {
+            public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
+                int colCount = entry.getValueCount();
+                for (int i = 0; i < colCount; i++) {
+                    String value = String.valueOf(entry.getStringValue(i)).toLowerCase();
+                    if (value.contains(q)) return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -33,7 +112,7 @@ public class AppointmentHistory extends javax.swing.JFrame {
 
         tbSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbleAppointments = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnReturn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -41,18 +120,38 @@ public class AppointmentHistory extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbleAppointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbleAppointments.getTableHeader().setReorderingAllowed(false);
+        tbleAppointments.setUpdateSelectionOnSort(false);
+        jScrollPane1.setViewportView(tbleAppointments);
+        if (tbleAppointments.getColumnModel().getColumnCount() > 0) {
+            tbleAppointments.getColumnModel().getColumn(0).setResizable(false);
+            tbleAppointments.getColumnModel().getColumn(1).setResizable(false);
+            tbleAppointments.getColumnModel().getColumn(2).setResizable(false);
+            tbleAppointments.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jLabel1.setText("Search: ");
 
@@ -75,19 +174,19 @@ public class AppointmentHistory extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(53, 53, 53)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(tbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(289, 289, 289)
                                 .addComponent(btnReturn))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jLabel2)))
+                            .addComponent(jButton2))))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -100,9 +199,9 @@ public class AppointmentHistory extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(tbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReturn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
@@ -146,8 +245,8 @@ public class AppointmentHistory extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField tbSearch;
+    private javax.swing.JTable tbleAppointments;
     // End of variables declaration//GEN-END:variables
 
 }

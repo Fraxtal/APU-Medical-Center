@@ -30,7 +30,7 @@ public interface FileService {
      * @param appointmentId The ID of the appointment to cancel
      * @return true if successful, false otherwise
      */
-    boolean cancelAppointment(int appointmentId);
+    boolean cancelAppointment(String appointmentId);
     
     /**
      * Update customer information

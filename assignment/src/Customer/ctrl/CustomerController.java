@@ -26,14 +26,12 @@ public class CustomerController {
     private static final Logger logger = Logger.getLogger(CustomerController.class.getName());
     
     private Customer currentCustomer;
-    private CustomerService customerService;
+    private CustomerService customerService = new CustomerService(); 
     
     /**
      * Constructor
      */
-    public CustomerController() {
-        this.customerService = new CustomerService();
-    }
+    public CustomerController(){}
     
     /**
      * Set the current logged-in customer
@@ -93,6 +91,7 @@ public class CustomerController {
         
         AppointmentHistory history = new AppointmentHistory();
         history.setController(this);
+        history.setCurrentCustomer(currentCustomer);
         history.setVisible(true);
     }
     
@@ -195,34 +194,34 @@ public class CustomerController {
     /**
      * Cancel an appointment
      */
-    public boolean cancelAppointment(int appointmentId) {
-        if (currentCustomer == null) {
-            logger.warning("No customer logged in");
-            return false;
-        }
-        
-        // Find the appointment in customer's list
-        Appointment appointmentToCancel = currentCustomer.getAppointments().stream()
-            .filter(appointment -> appointment.getAppointmentId() == appointmentId)
-            .findFirst()
-            .orElse(null);
-        
-        if (appointmentToCancel == null) {
-            logger.warning("Appointment not found for customer");
-            return false;
-        }
-        
-        // Cancel through service
-        boolean success = customerService.cancelAppointment(appointmentId);
-        
-        if (success) {
-            // Update appointment status in customer's list
-            appointmentToCancel.setStatus("CANCELLED");
-            logger.info("Appointment cancelled successfully: " + appointmentId);
-        }
-        
-        return success;
-    }
+//    public boolean cancelAppointment(int appointmentId) {
+//        if (currentCustomer == null) {
+//            logger.warning("No customer logged in");
+//            return false;
+//        }
+//        
+//        // Find the appointment in customer's list
+//        Appointment appointmentToCancel = currentCustomer.getAppointments().stream()
+//            .filter(appointment -> appointment.getAppointmentId() == appointmentId)
+//            .findFirst()
+//            .orElse(null);
+//        
+//        if (appointmentToCancel == null) {
+//            logger.warning("Appointment not found for customer");
+//            return false;
+//        }
+//        
+//        // Cancel through service
+//        boolean success = customerService.cancelAppointment(appointmentId);
+//        
+//        if (success) {
+//            // Update appointment status in customer's list
+//            appointmentToCancel.setStatus("CANCELLED");
+//            logger.info("Appointment cancelled successfully: " + appointmentId);
+//        }
+//        
+//        return success;
+//    }
     
     /**
      * Get customer's appointments
