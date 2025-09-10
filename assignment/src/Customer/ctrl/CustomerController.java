@@ -122,30 +122,20 @@ public class CustomerController {
      * Book a new appointment - demonstrates input validation and business logic coordination
      */
     public boolean bookAppointment(int doctorId, String doctorName, LocalDate date, String comment) {
-        // Authentication check
         if (currentCustomer == null) {
             logger.warning("No customer logged in");
             return false;
         }
         
-        // Business rule: Check if customer can book more appointments
         if (!currentCustomer.canBookAppointment()) {
             logger.warning("Customer has reached maximum pending appointments limit");
             return false;
         }
         
-        // Input validation - demonstrates encapsulation
         if (!validateAppointmentInput(doctorId, doctorName, date, comment)) {
             return false;
         }
         
-        // Check if time slot is available
-        if (!customerService.isTimeSlotAvailable(date, null, doctorName)) {
-            logger.warning("Time slot is not available");
-            return false;
-        }
-        
-        // Create appointment object - demonstrates object creation
         Appointment appointment = new Appointment(
             currentCustomer.getId(),
             doctorId,
@@ -154,12 +144,9 @@ public class CustomerController {
             date,
             comment
         );
-        
-        // Book appointment through service layer
         boolean success = customerService.bookAppointment(appointment);
         
         if (success) {
-            // Update customer's appointment list - demonstrates data consistency
             currentCustomer.addAppointment(appointment);
             logger.info("Appointment booked successfully for customer: " + currentCustomer.getId());
         }
@@ -167,9 +154,6 @@ public class CustomerController {
         return success;
     }
     
-    /**
-     * Validate appointment input - demonstrates encapsulation and input validation
-     */
     private boolean validateAppointmentInput(int doctorId, String doctorName, LocalDate date, String comment) {
         if (doctorId <= 0) {
             logger.warning("Valid doctor ID is required");
@@ -185,47 +169,9 @@ public class CustomerController {
             logger.warning("Invalid appointment date - cannot book in the past");
             return false;
         }
-        
-        // Comment is optional, so no validation needed
-        
         return true;
     }
-    
-    /**
-     * Cancel an appointment
-     */
-//    public boolean cancelAppointment(int appointmentId) {
-//        if (currentCustomer == null) {
-//            logger.warning("No customer logged in");
-//            return false;
-//        }
-//        
-//        // Find the appointment in customer's list
-//        Appointment appointmentToCancel = currentCustomer.getAppointments().stream()
-//            .filter(appointment -> appointment.getAppointmentId() == appointmentId)
-//            .findFirst()
-//            .orElse(null);
-//        
-//        if (appointmentToCancel == null) {
-//            logger.warning("Appointment not found for customer");
-//            return false;
-//        }
-//        
-//        // Cancel through service
-//        boolean success = customerService.cancelAppointment(appointmentId);
-//        
-//        if (success) {
-//            // Update appointment status in customer's list
-//            appointmentToCancel.setStatus("CANCELLED");
-//            logger.info("Appointment cancelled successfully: " + appointmentId);
-//        }
-//        
-//        return success;
-//    }
-    
-    /**
-     * Get customer's appointments
-     */
+   
     public List<Appointment> getCustomerAppointments() {
         if (currentCustomer == null) {
             logger.warning("No customer logged in");
@@ -235,9 +181,6 @@ public class CustomerController {
         return currentCustomer.getAppointments();
     }
     
-    /**
-     * Get customer's appointments by status
-     */
     public List<Appointment> getCustomerAppointmentsByStatus(String status) {
         if (currentCustomer == null) {
             logger.warning("No customer logged in");
@@ -247,9 +190,6 @@ public class CustomerController {
         return currentCustomer.getAppointmentsByStatus(status);
     }
     
-    /**
-     * Update customer information - demonstrates input validation and data consistency
-     */
     public boolean updateCustomerInfo(String username, String fullname, String email, 
                                     String address, String contactNo) {
         // Authentication check
@@ -274,7 +214,7 @@ public class CustomerController {
         boolean success = customerService.updateCustomerInfo(currentCustomer);
         
         if (success) {
-            logger.info("Customer information updated successfully: " + currentCustomer.getId());
+            logger.info(() -> "Customer information updated successfully: " + currentCustomer.getId());
         }
         
         return success;
@@ -313,47 +253,6 @@ public class CustomerController {
         return true;
     }
     
-    /**
-     * Create an invoice for an appointment
-     */
-    public boolean createInvoice(int appointmentId, double total, String paymentMethod) {
-        if (currentCustomer == null) {
-            logger.warning("No customer logged in");
-            return false;
-        }
-        
-        // Input validation
-        if (appointmentId <= 0) {
-            logger.warning("Valid appointment ID is required");
-            return false;
-        }
-        
-        if (total <= 0) {
-            logger.warning("Total amount must be greater than 0");
-            return false;
-        }
-        
-        if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
-            logger.warning("Payment method is required");
-            return false;
-        }
-        
-        // Create invoice object
-        Invoice invoice = new Invoice(total, paymentMethod, appointmentId);
-        
-        // Create invoice through service
-        boolean success = customerService.createInvoice(invoice);
-        
-        if (success) {
-            logger.info("Invoice created successfully for appointment: " + appointmentId);
-        }
-        
-        return success;
-    }
-    
-    /**
-     * Get invoices for an appointment
-     */
     public List<Invoice> getInvoicesForAppointment(int appointmentId) {
         if (currentCustomer == null) {
             logger.warning("No customer logged in");
@@ -363,30 +262,6 @@ public class CustomerController {
         return customerService.getInvoicesForAppointment(appointmentId);
     }
     
-    /**
-     * Get available doctors
-     */
-    public List<String> getAvailableDoctors() {
-        return customerService.getAvailableDoctors();
-    }
-    
-    /**
-     * Get available appointment types
-     */
-    public List<String> getAppointmentTypes() {
-        return customerService.getAppointmentTypes();
-    }
-    
-    /**
-     * Check if time slot is available
-     */
-    public boolean isTimeSlotAvailable(LocalDate date, LocalTime time, String doctorName) {
-        return customerService.isTimeSlotAvailable(date, time, doctorName);
-    }
-    
-    /**
-     * Refresh customer data from database
-     */
     public void refreshCustomerData() {
         if (currentCustomer != null) {
             List<Appointment> appointments = customerService.getCustomerAppointments(currentCustomer.getId());

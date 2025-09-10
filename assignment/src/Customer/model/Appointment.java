@@ -1,15 +1,7 @@
 package Customer.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.io.Serializable;
 
-/**
- * Appointment model representing an appointment entity
- * Demonstrates OOP concepts: Encapsulation, Inheritance, Polymorphism
- * Extends BaseEntity to demonstrate inheritance
- * Implements Serializable for data persistence
- */
 public class Appointment extends BaseEntity {
     private String appointmentId; // Changed to String to support A0001 format
     private LocalDate dateOfAppointment; // DOA - Date of appointment
@@ -33,7 +25,7 @@ public class Appointment extends BaseEntity {
         this.customerName = customerName;
         this.doctorName = doctorName;
         this.dateOfAppointment = dateOfAppointment;
-        this.status = "PENDING";
+        this.status = "PENDING"; // Default status - staff will update to SCHEDULED/CONFIRMED
         this.comment = comment;
         this.feedback = ""; // Empty initially
     }
@@ -141,10 +133,5 @@ public class Appointment extends BaseEntity {
         if (obj == null || getClass() != obj.getClass()) return false;
         Appointment that = (Appointment) obj;
         return appointmentId != null && appointmentId.equals(that.appointmentId);
-    }
-    
-    @Override
-    public int hashCode() {
-        return appointmentId != null ? appointmentId.hashCode() : 0;
     }
 }

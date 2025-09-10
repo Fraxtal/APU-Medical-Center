@@ -24,9 +24,9 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="234" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="209" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="280" max="32767" attributes="0"/>
+              <EmptySpace pref="236" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -35,7 +35,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" pref="55" max="-2" attributes="0"/>
-              <EmptySpace pref="358" max="32767" attributes="0"/>
+              <EmptySpace pref="382" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -44,9 +44,9 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="1"/>
+          <Font name="Serif" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Feedback History"/>
+        <Property name="text" type="java.lang.String" value="Comment Center"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
     </Component>

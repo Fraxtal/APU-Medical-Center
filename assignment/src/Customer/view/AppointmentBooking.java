@@ -5,6 +5,12 @@
 package Customer.view;
 
 import Customer.ctrl.CustomerController;
+import Customer.model.Customer;
+import Customer.services.CustomerService;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,14 +19,21 @@ import Customer.ctrl.CustomerController;
 public class AppointmentBooking extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentBooking.class.getName());
-    
+
     private CustomerController controller;
+    private CustomerService customerService;
+    private Customer currentCustomer;
 
     public void setController(CustomerController controller) {
         this.controller = controller;
+        this.currentCustomer = controller.getCurrentCustomer();
+        this.customerService = new CustomerService();
+        loadDoctors();
     }
+    
+    
     /**
-     * Creates new form AppointmentBooking
+     * Creates new form BookApt
      */
     public AppointmentBooking() {
         initComponents();
@@ -36,32 +49,52 @@ public class AppointmentBooking extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        btnReturn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel1.setText("Appointment Booking");
         jLabel1.setToolTipText("");
+
+        btnReturn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        btnReturn.setText("Return");
+        btnReturn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addContainerGap(430, Short.MAX_VALUE))
+                .addContainerGap(466, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnReturn)
+                .addGap(49, 49, 49))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 345, Short.MAX_VALUE)
+                .addComponent(btnReturn)
+                .addGap(29, 29, 29))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        this.setVisible(false);
+        controller.showCustomerDashboard();
+    }//GEN-LAST:event_btnReturnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -85,10 +118,11 @@ public class AppointmentBooking extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new AppointmentBooking().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReturn;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
-
 }

@@ -6,11 +6,7 @@ package Customer.view;
 import Customer.ctrl.CustomerController;
 import Customer.services.CustomerService;
 import Customer.model.Customer;
-import javax.swing.RowFilter;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 /**
  *
  * @author Nicholas
@@ -22,8 +18,6 @@ public class AppointmentHistory extends javax.swing.JFrame {
     private CustomerController controller;
     private CustomerService customerService;
     private Customer currentCustomer;
-    private TableRowSorter<DefaultTableModel> sorter;
-
     public void setController(CustomerController controller) {
         this.controller = controller;
     }
@@ -32,7 +26,6 @@ public class AppointmentHistory extends javax.swing.JFrame {
         this.currentCustomer = customer;
         this.customerService = new CustomerService();
         loadAppointmentsToTable();
-        setupSearchFilter();
     }
 
     public AppointmentHistory() {
@@ -49,7 +42,10 @@ public class AppointmentHistory extends javax.swing.JFrame {
                 String[] columnNames = {"Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"};
                 
                 // Create table model
-                DefaultTableModel model = new DefaultTableModel(appointmentsData, columnNames) {};
+                DefaultTableModel model = new DefaultTableModel(appointmentsData, columnNames) {
+                    @Override
+                    public boolean isCellEditable(int row, int column){return false;}
+                };
                 
                 // Set the model to the table
                 tbleAppointments.setModel(model);
@@ -57,48 +53,14 @@ public class AppointmentHistory extends javax.swing.JFrame {
                 // Auto-resize columns
                 tbleAppointments.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
                 
-                // Enable sorting/filtering
-                sorter = new TableRowSorter<>(model);
-                tbleAppointments.setRowSorter(sorter);
-                applySearchFilter(tbSearch.getText());
-                
             } catch (Exception e) {
                 logger.severe(() -> "Error loading appointments: " + e.getMessage());
                 // Show empty table if error occurs
                 String[] columnNames = {"Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"};
                 DefaultTableModel model = new DefaultTableModel(new Object[0][4], columnNames);
                 tbleAppointments.setModel(model);
-                sorter = new TableRowSorter<>(model);
-                tbleAppointments.setRowSorter(sorter);
             }
         }
-    }
-
-    private void setupSearchFilter() {
-        tbSearch.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { applySearchFilter(tbSearch.getText()); }
-            public void removeUpdate(DocumentEvent e) { applySearchFilter(tbSearch.getText()); }
-            public void changedUpdate(DocumentEvent e) { applySearchFilter(tbSearch.getText()); }
-        });
-    }
-
-    private void applySearchFilter(String query) {
-        if (sorter == null) return;
-        String q = query == null ? "" : query.trim().toLowerCase();
-        if (q.isEmpty()) {
-            sorter.setRowFilter(null);
-            return;
-        }
-        sorter.setRowFilter(new RowFilter<DefaultTableModel, Integer>() {
-            public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
-                int colCount = entry.getValueCount();
-                for (int i = 0; i < colCount; i++) {
-                    String value = String.valueOf(entry.getStringValue(i)).toLowerCase();
-                    if (value.contains(q)) return true;
-                }
-                return false;
-            }
-        });
     }
 
     /**
