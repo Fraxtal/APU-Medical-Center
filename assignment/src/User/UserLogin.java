@@ -4,6 +4,9 @@
  */
 package User;
 
+import Customer.ctrl.CustomerController;
+import Customer.model.Customer;
+
 
 /**
  *
@@ -48,6 +51,11 @@ public class UserLogin extends javax.swing.JFrame {
 
         btnLogin.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel3.setText("User Login");
@@ -115,6 +123,24 @@ public class UserLogin extends javax.swing.JFrame {
         this.setVisible(false);
         new UserRegister().setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        User loggedInUser = User.login(tbInput.getText(), tbPassword.getText());
+        
+        if (loggedInUser instanceof Customer) {
+            Customer d = (Customer) loggedInUser;
+            
+            CustomerController controller = new CustomerController();
+            controller.setCurrentCustomer(d);
+            
+            this.setVisible(false);
+            controller.showCustomerDashboard();
+            } else {
+                System.err.println("Login failed or user is not a Customer");
+            }
+        
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
