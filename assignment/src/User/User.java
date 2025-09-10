@@ -13,11 +13,15 @@ public class User {
     protected int id;
     protected String username;
     protected String email;
+    protected String fullname;
     protected ArrayList<ArrayList<String>> data;
 
-    protected User(int id, String username, String email) {
+    public User(){}
+    
+    public User(int id, String username, String fullname, String email) {
         this.id = id;
         this.username = username;
+        this.fullname = fullname;
         this.email = email;
     }
     
@@ -67,10 +71,10 @@ public class User {
                 // This switch statement is the ONLY place where the protected
                 // constructors of the subclasses are called.
                 return switch (role.toLowerCase()) {
-                    case "customer" -> new Customer(userId, userUsername, userEmail);
-                    case "staff" -> new Staff(userId, userUsername, userEmail);
-                    case "doctor" -> new Doctor(userId, userUsername, userEmail);
-                    case "manager" -> new Manager(userId, userUsername, userEmail);
+                    case "customer" -> new Customer(userId, userUsername, userFullName, userEmail);
+//                    case "staff" -> new Staff(userId, userUsername, userFullname, userEmail);
+//                    case "doctor" -> new Doctor(userId, userUsername, userFullname, userEmail);
+//                    case "manager" -> new Manager(userId, userUsername, userFullname, userEmail);
                     default -> throw new IllegalArgumentException("Unknown role: " + role);
                 };
             }

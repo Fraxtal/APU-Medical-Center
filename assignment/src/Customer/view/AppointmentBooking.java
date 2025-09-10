@@ -4,6 +4,8 @@
  */
 package Customer.view;
 
+import Customer.controller.CustomerController;
+
 /**
  *
  * @author Nicholas
@@ -11,7 +13,12 @@ package Customer.view;
 public class AppointmentBooking extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentBooking.class.getName());
+    
+    private CustomerController controller;
 
+    public void setController(CustomerController controller) {
+        this.controller = controller;
+    }
     /**
      * Creates new form AppointmentBooking
      */
@@ -32,7 +39,7 @@ public class AppointmentBooking extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
         jLabel1.setText("Appointment Booking");
         jLabel1.setToolTipText("");
 
@@ -41,16 +48,16 @@ public class AppointmentBooking extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(223, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addGap(208, 208, 208))
+                .addContainerGap(430, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(433, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addContainerGap(457, Short.MAX_VALUE))
         );
 
         pack();
@@ -78,10 +85,10 @@ public class AppointmentBooking extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new AppointmentBooking().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
+
 }

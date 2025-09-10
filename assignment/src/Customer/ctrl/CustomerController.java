@@ -1,4 +1,4 @@
-package Customer.controller;
+package Customer.ctrl;
 
 import Customer.model.Appointment;
 import Customer.model.Customer;
