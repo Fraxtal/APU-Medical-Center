@@ -4,7 +4,7 @@
  */
 package Customer.view;
 
-import Customer.controller.CustomerController;
+import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
 
 public class CustomerTest {

@@ -4,7 +4,7 @@
  */
 package User;
 
-import Customer.controller.CustomerController;
+import Customer.ctrl.CustomerController;
 
 /**
  *

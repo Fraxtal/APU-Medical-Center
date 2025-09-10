@@ -4,7 +4,7 @@
  */
 package Customer.view;
 
-import Customer.controller.CustomerController;
+import Customer.ctrl.CustomerController;
 
 /**
  *

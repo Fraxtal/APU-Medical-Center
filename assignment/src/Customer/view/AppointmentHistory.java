@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Customer.view;
-import Customer.controller.CustomerController;
+import Customer.ctrl.CustomerController;
 /**
  *
  * @author Nicholas
@@ -112,6 +112,7 @@ public class AppointmentHistory extends javax.swing.JFrame {
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
         controller.showCustomerDashboard();
     }//GEN-LAST:event_btnReturnActionPerformed
 

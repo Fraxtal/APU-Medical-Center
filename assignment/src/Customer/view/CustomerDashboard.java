@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Customer.view;
-import Customer.controller.CustomerController;
+import Customer.ctrl.CustomerController;
 import User.*;
 
 /**
@@ -135,16 +135,19 @@ public class CustomerDashboard extends javax.swing.JFrame {
 
     private void btnAptHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAptHistoryActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
         controller.showAppointmentHistory();
     }//GEN-LAST:event_btnAptHistoryActionPerformed
 
     private void btnBookAptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookAptActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
         controller.showAppointmentBooking();
     }//GEN-LAST:event_btnBookAptActionPerformed
 
     private void btnUserProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfileActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
         controller.showUserProfile();
     }//GEN-LAST:event_btnUserProfileActionPerformed
 
