@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Customer.view;
+import Customer.controller.CustomerController;
+import User.*;
 
 /**
  *
@@ -11,7 +13,12 @@ package Customer.view;
 public class CustomerDashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CustomerDashboard.class.getName());
+    
+    private CustomerController controller;
 
+    public void setController(CustomerController controller) {
+        this.controller = controller;
+    }
     /**
      * Creates new form CustomerDashboard
      */
@@ -28,24 +35,54 @@ public class CustomerDashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnUserProfile = new javax.swing.JButton();
+        btnBookApt = new javax.swing.JButton();
+        btnAptHistory = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnInvoice = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("My Profile");
+        btnUserProfile.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnUserProfile.setText("My Profile");
+        btnUserProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUserProfileActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Book Appointment");
+        btnBookApt.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnBookApt.setText("Book Appointment");
+        btnBookApt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBookAptActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("My Appointments");
+        btnAptHistory.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnAptHistory.setText("My Appointments");
+        btnAptHistory.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnAptHistory.setHideActionText(true);
+        btnAptHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAptHistoryActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Logout");
+        btnLogout.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
         jLabel1.setText("Customer Dashboard");
+
+        btnInvoice.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnInvoice.setText("Invoice History");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -53,39 +90,69 @@ public class CustomerDashboard extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jButton1)
+                .addComponent(btnUserProfile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(btnLogout)
                 .addGap(87, 87, 87))
             .addGroup(layout.createSequentialGroup()
-                .addGap(188, 188, 188)
-                .addComponent(jLabel1)
-                .addContainerGap(212, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addContainerGap(149, Short.MAX_VALUE)
+                .addComponent(btnBookApt)
                 .addGap(68, 68, 68)
-                .addComponent(jButton4)
+                .addComponent(btnAptHistory)
                 .addGap(176, 176, 176))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(251, 251, 251)
+                        .addComponent(btnInvoice))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(195, 195, 195)
+                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(93, 93, 93)
+                .addGap(92, 92, 92)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+                    .addComponent(btnAptHistory)
+                    .addComponent(btnBookApt))
+                .addGap(42, 42, 42)
+                .addComponent(btnInvoice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
+                    .addComponent(btnUserProfile)
+                    .addComponent(btnLogout))
                 .addGap(54, 54, 54))
         );
 
+        btnAptHistory.getAccessibleContext().setAccessibleDescription("");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAptHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAptHistoryActionPerformed
+        // TODO add your handling code here:
+        controller.showAppointmentHistory();
+    }//GEN-LAST:event_btnAptHistoryActionPerformed
+
+    private void btnBookAptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookAptActionPerformed
+        // TODO add your handling code here:
+        controller.showAppointmentBooking();
+    }//GEN-LAST:event_btnBookAptActionPerformed
+
+    private void btnUserProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfileActionPerformed
+        // TODO add your handling code here:
+        controller.showUserProfile();
+    }//GEN-LAST:event_btnUserProfileActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new Homepage().setVisible(true);
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -113,10 +180,11 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnAptHistory;
+    private javax.swing.JButton btnBookApt;
+    private javax.swing.JButton btnInvoice;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnUserProfile;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
