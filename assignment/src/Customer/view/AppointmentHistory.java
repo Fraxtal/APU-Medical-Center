@@ -72,16 +72,14 @@ public class AppointmentHistory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tbSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbleAppointments = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         btnReturn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        tbleAppointments.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         tbleAppointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -106,7 +104,11 @@ public class AppointmentHistory extends javax.swing.JFrame {
             }
         });
         tbleAppointments.getTableHeader().setReorderingAllowed(false);
-        tbleAppointments.setUpdateSelectionOnSort(false);
+        tbleAppointments.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbleAppointmentsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbleAppointments);
         if (tbleAppointments.getColumnModel().getColumnCount() > 0) {
             tbleAppointments.getColumnModel().getColumn(0).setResizable(false);
@@ -114,8 +116,6 @@ public class AppointmentHistory extends javax.swing.JFrame {
             tbleAppointments.getColumnModel().getColumn(2).setResizable(false);
             tbleAppointments.getColumnModel().getColumn(3).setResizable(false);
         }
-
-        jLabel1.setText("Search: ");
 
         btnReturn.setText("Return");
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
@@ -127,45 +127,32 @@ public class AppointmentHistory extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel2.setText("My Appointments");
 
-        jButton2.setText("Export as PDF");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(289, 289, 289)
-                                .addComponent(btnReturn))
-                            .addComponent(jButton2))))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnReturn)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(19, 19, 19)
+                            .addComponent(jLabel2))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(43, 43, 43)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(tbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReturn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnReturn)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -176,6 +163,11 @@ public class AppointmentHistory extends javax.swing.JFrame {
         this.setVisible(false);
         controller.showCustomerDashboard();
     }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void tbleAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbleAppointmentsMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tbleAppointmentsMouseClicked
 
     /**
      * @param args the command line arguments
@@ -203,11 +195,8 @@ public class AppointmentHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReturn;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField tbSearch;
     private javax.swing.JTable tbleAppointments;
     // End of variables declaration//GEN-END:variables
 

@@ -3,17 +3,11 @@ package Customer.services;
 import Customer.model.Appointment;
 import Customer.model.Customer;
 import Customer.model.Invoice;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
+import java.util.logging.*;
 
 public class CustomerService implements FileService {
     
@@ -21,7 +15,7 @@ public class CustomerService implements FileService {
     private static final String APPOINTMENTS_FILE = "src\\database\\appointments.txt";
     private static final String USERS_FILE = "src\\database\\users.txt";
     private static final String INVOICES_FILE = "src\\database\\invoices.txt";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DTFORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     /**
      * Load all appointments for a specific customer
@@ -62,24 +56,27 @@ public class CustomerService implements FileService {
      * Book a new appointment - demonstrates business logic and validation
      */
     public boolean bookAppointment(Appointment appointment) {
-        // Input validation - demonstrates encapsulation
-        if (appointment == null || !appointment.isValid()) {
+        if (appointment == null) {
             logger.warning("Invalid appointment data provided");
             return false;
         }
         
-        // Business rule validation
-        if (appointment.isPastAppointment()) {
-            logger.warning("Cannot book appointment in the past");
-            return false;
-        }
-        
         try {
-            // Generate appointment ID
+            // Generate appointment ID first so validation that requires it can pass
             String appointmentId = generateAppointmentId();
             appointment.setAppointmentId(appointmentId);
             
-            // Write to text file - coursework requirement
+            // Input validation - demonstrates encapsulation
+            if (!appointment.isValid()) {
+                logger.warning("Invalid appointment data provided");
+                return false;
+            }
+            
+            // Business rule validation
+            if (appointment.isPastAppointment()) {
+                logger.warning("Cannot book appointment in the past");
+                return false;
+            }
             try (FileWriter writer = new FileWriter(APPOINTMENTS_FILE, true)) {
                 String line = formatAppointmentForFile(appointment);
                 writer.write(line + "\n");
@@ -165,7 +162,7 @@ public class CustomerService implements FileService {
         for (int i = 0; i < appointments.size(); i++) {
             Appointment appointment = appointments.get(i);
             tableData[i][0] = appointment.getAppointmentId(); // ID
-            tableData[i][1] = appointment.getDateOfAppointment().format(DATE_FORMATTER); // DOA
+            tableData[i][1] = appointment.getDateOfAppointment(); // DOA
             tableData[i][2] = appointment.getStatus(); // Status
             tableData[i][3] = appointment.getDoctorName(); // Doctor Name
         }
@@ -205,6 +202,73 @@ public class CustomerService implements FileService {
         }
         
         return invoices;
+    }
+    
+    public List<String> getDoctors() {
+        List<String> doctorNames = new ArrayList<>();
+        try {
+            File file = new File(USERS_FILE);
+            if (!file.exists()) {
+                return doctorNames;
+            }
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine().trim();
+                    if (line.isEmpty()) continue;
+                    String[] values = line.split(";");
+                    // Expected format:
+                    // 0:id;1:username;2:fullname;3:email;4:password;5:address;6:contact;7:dateCreated;8:role
+                    if (values.length >= 9) {
+                        String role = values[8];
+                        if ("Doctor".equalsIgnoreCase(role)) {
+                            String fullName = values[2];
+                            doctorNames.add(fullName);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error loading doctors list", e);
+        }
+        return doctorNames;
+    }
+
+    /**
+     * Get a doctor's ID by their full name from users database.
+     * Returns -1 if not found.
+     */
+    public int getDoctorIdByName(String doctorFullName) {
+        if (doctorFullName == null) return -1;
+        String target = doctorFullName.trim();
+        try {
+            File file = new File(USERS_FILE);
+            if (!file.exists()) {
+                return -1;
+            }
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine().trim();
+                    if (line.isEmpty()) continue;
+                    String[] values = line.split(";");
+                    if (values.length >= 9) {
+                        String role = values[8];
+                        if ("Doctor".equalsIgnoreCase(role)) {
+                            String fullName = values[2];
+                            if (fullName != null && fullName.trim().equalsIgnoreCase(target)) {
+                                try {
+                                    return Integer.parseInt(values[0]);
+                                } catch (NumberFormatException ignore) {
+                                    return -1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error resolving doctor ID by name", e);
+        }
+        return -1;
     }
     
     // Private helper methods
@@ -252,38 +316,17 @@ public class CustomerService implements FileService {
         return new Appointment(appointmentId, dateOfAppointment, status, customerId, doctorId, customerName, doctorName);
     }
     
-    private LocalDate parseDate(String raw) {
-        String trimmed = raw.trim();
-        try {
-            // Try pure date first
-            return LocalDate.parse(trimmed, DATE_FORMATTER);
-        } catch (Exception ignore) {
-            // Then try date-time and return just the date portion
-            try {
-                return java.time.LocalDateTime.parse(trimmed, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toLocalDate();
-            } catch (Exception ex) {
-                // As a fallback, if there's a space, take the date portion before space
-                int idx = trimmed.indexOf(' ');
-                if (idx > 0) {
-                    return LocalDate.parse(trimmed.substring(0, idx), DATE_FORMATTER);
-                }
-                // Re-throw the last exception if all parsing attempts fail
-                throw ex;
-            }
-        }
-    }
-    
     private String formatAppointmentForFile(Appointment appointment) {
-        // Match current DB order: id;date;status;doctorId;doctorName;customerId;customerName
         return String.format("%s;%s;%s;%d;%s;%d;%s",
                            appointment.getAppointmentId(),
-                           appointment.getDateOfAppointment().format(DATE_FORMATTER),
+                           appointment.getDateOfAppointment().format(DTFORMATTER), // force date only
                            appointment.getStatus(),
                            appointment.getDoctorId(),
                            appointment.getDoctorName(),
                            appointment.getCustomerId(),
                            appointment.getCustomerName());
     }
+
     
     private int generateInvoiceId() {
         int maxId = 0;
@@ -329,4 +372,9 @@ public class CustomerService implements FileService {
                            invoice.getPaymentMethod(),
                            invoice.getAppointmentId());
     }
+    
+    private LocalDate parseDate(String raw) {
+        return LocalDate.parse(raw.trim(), DTFORMATTER);
+    }
+
 }

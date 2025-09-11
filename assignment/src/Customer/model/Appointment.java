@@ -6,8 +6,6 @@ public class Appointment extends BaseEntity {
     private String appointmentId; // Changed to String to support A0001 format
     private LocalDate dateOfAppointment; // DOA - Date of appointment
     private String status; // PENDING, CONFIRMED, CANCELLED, COMPLETED
-    private String feedback; // Feedback from doctor
-    private String comment; // Comment (to be decided)
     private int customerId;
     private int doctorId;
     private String customerName;
@@ -18,16 +16,14 @@ public class Appointment extends BaseEntity {
     
     // Constructor for creating new appointments
     public Appointment(int customerId, int doctorId, String customerName, String doctorName, 
-                      LocalDate dateOfAppointment, String comment) {
+                      LocalDate dateOfAppointment) {
         super(); // Call parent constructor
         this.customerId = customerId;
         this.doctorId = doctorId;
         this.customerName = customerName;
         this.doctorName = doctorName;
         this.dateOfAppointment = dateOfAppointment;
-        this.status = "PENDING"; // Default status - staff will update to SCHEDULED/CONFIRMED
-        this.comment = comment;
-        this.feedback = ""; // Empty initially
+        this.status = "PENDING";
     }
     
     // Constructor for loading from database
@@ -37,8 +33,6 @@ public class Appointment extends BaseEntity {
         this.appointmentId = appointmentId;
         this.dateOfAppointment = dateOfAppointment;
         this.status = status;
-        this.feedback = ""; // Empty initially
-        this.comment = ""; // Empty initially
         this.customerId = customerId;
         this.doctorId = doctorId;
         this.customerName = customerName;
@@ -54,12 +48,6 @@ public class Appointment extends BaseEntity {
     
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-    
-    public String getFeedback() { return feedback; }
-    public void setFeedback(String feedback) { this.feedback = feedback; }
-    
-    public String getComment() { return comment; }
-    public void setComment(String comment) { this.comment = comment; }
     
     public int getCustomerId() { return customerId; }
     public void setCustomerId(int customerId) { this.customerId = customerId; }
@@ -96,17 +84,6 @@ public class Appointment extends BaseEntity {
         return dateOfAppointment.isBefore(LocalDate.now());
     }
     
-    /**
-     * Method to check if appointment can be cancelled - demonstrates business rules
-     */
-    public boolean canBeCancelled() {
-        return "PENDING".equalsIgnoreCase(status) || "CONFIRMED".equalsIgnoreCase(status);
-    }
-    
-    /**
-     * Method to format appointment for display - demonstrates polymorphism
-     * Implements abstract method from BaseEntity
-     */
     @Override
     public String getSummary() {
         return String.format("Appointment #%d - %s with %s on %s (%s)", 
@@ -114,9 +91,6 @@ public class Appointment extends BaseEntity {
                            dateOfAppointment, status);
     }
     
-    /**
-     * Method to format appointment for display - demonstrates polymorphism
-     */
     public String getDisplayString() {
         return getSummary(); // Reuse the summary method
     }

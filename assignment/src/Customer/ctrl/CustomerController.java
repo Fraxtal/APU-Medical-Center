@@ -6,11 +6,11 @@ import Customer.model.Invoice;
 import Customer.services.CustomerService;
 import Customer.view.AppointmentBooking;
 import Customer.view.AppointmentHistory;
+import Customer.view.CustomerComment;
 import Customer.view.CustomerDashboard;
 import User.UserProfile;
 import User.Homepage;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -53,7 +53,7 @@ public class CustomerController {
     }
     
     /**
-     * Navigate to Customer Dashboard
+     * Navigation
      */
     public void showCustomerDashboard() {
         if (currentCustomer == null) {
@@ -64,6 +64,17 @@ public class CustomerController {
         CustomerDashboard dashboard = new CustomerDashboard();
         dashboard.setController(this);
         dashboard.setVisible(true);
+    }
+    
+    public void showCustomerComment() {
+        if (currentCustomer == null) {
+            logger.warning("No customer logged in");
+            return;
+        }
+        
+        CustomerComment cc = new CustomerComment();
+        cc.setController(this);
+        cc.setVisible(true);
     }
     
     /**
@@ -121,7 +132,7 @@ public class CustomerController {
     /**
      * Book a new appointment - demonstrates input validation and business logic coordination
      */
-    public boolean bookAppointment(int doctorId, String doctorName, LocalDate date, String comment) {
+    public boolean bookAppointment(int doctorId, String doctorName, LocalDate date) {
         if (currentCustomer == null) {
             logger.warning("No customer logged in");
             return false;
@@ -132,7 +143,7 @@ public class CustomerController {
             return false;
         }
         
-        if (!validateAppointmentInput(doctorId, doctorName, date, comment)) {
+        if (!validateAppointmentInput(doctorId, doctorName, date)) {
             return false;
         }
         
@@ -141,8 +152,7 @@ public class CustomerController {
             doctorId,
             currentCustomer.getFullname(),
             doctorName,
-            date,
-            comment
+            date
         );
         boolean success = customerService.bookAppointment(appointment);
         
@@ -154,7 +164,7 @@ public class CustomerController {
         return success;
     }
     
-    private boolean validateAppointmentInput(int doctorId, String doctorName, LocalDate date, String comment) {
+    private boolean validateAppointmentInput(int doctorId, String doctorName, LocalDate date) {
         if (doctorId <= 0) {
             logger.warning("Valid doctor ID is required");
             return false;

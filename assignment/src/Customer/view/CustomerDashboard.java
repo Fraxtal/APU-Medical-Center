@@ -40,7 +40,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
         btnAptHistory = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        btnInvoice = new javax.swing.JButton();
+        btnComment = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,8 +81,13 @@ public class CustomerDashboard extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
         jLabel1.setText("Customer Dashboard");
 
-        btnInvoice.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        btnInvoice.setText("Invoice History");
+        btnComment.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnComment.setText("Comment Centre");
+        btnComment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCommentActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -103,11 +108,11 @@ public class CustomerDashboard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(251, 251, 251)
-                        .addComponent(btnInvoice))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(195, 195, 195)
-                        .addComponent(jLabel1)))
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(249, 249, 249)
+                        .addComponent(btnComment)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -119,9 +124,9 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAptHistory)
                     .addComponent(btnBookApt))
-                .addGap(42, 42, 42)
-                .addComponent(btnInvoice)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addGap(44, 44, 44)
+                .addComponent(btnComment)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUserProfile)
                     .addComponent(btnLogout))
@@ -157,6 +162,12 @@ public class CustomerDashboard extends javax.swing.JFrame {
         new Homepage().setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
+    private void btnCommentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCommentActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        controller.showCustomerComment();
+    }//GEN-LAST:event_btnCommentActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -185,7 +196,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAptHistory;
     private javax.swing.JButton btnBookApt;
-    private javax.swing.JButton btnInvoice;
+    private javax.swing.JButton btnComment;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnUserProfile;
     private javax.swing.JLabel jLabel1;
