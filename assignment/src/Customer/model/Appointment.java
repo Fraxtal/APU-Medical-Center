@@ -1,21 +1,11 @@
 package Customer.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.io.Serializable;
 
-/**
- * Appointment model representing an appointment entity
- * Demonstrates OOP concepts: Encapsulation, Inheritance, Polymorphism
- * Extends BaseEntity to demonstrate inheritance
- * Implements Serializable for data persistence
- */
 public class Appointment extends BaseEntity {
-    private int appointmentId;
+    private String appointmentId; // Changed to String to support A0001 format
     private LocalDate dateOfAppointment; // DOA - Date of appointment
     private String status; // PENDING, CONFIRMED, CANCELLED, COMPLETED
-    private String feedback; // Feedback from doctor
-    private String comment; // Comment (to be decided)
     private int customerId;
     private int doctorId;
     private String customerName;
@@ -26,7 +16,7 @@ public class Appointment extends BaseEntity {
     
     // Constructor for creating new appointments
     public Appointment(int customerId, int doctorId, String customerName, String doctorName, 
-                      LocalDate dateOfAppointment, String comment) {
+                      LocalDate dateOfAppointment) {
         super(); // Call parent constructor
         this.customerId = customerId;
         this.doctorId = doctorId;
@@ -34,20 +24,15 @@ public class Appointment extends BaseEntity {
         this.doctorName = doctorName;
         this.dateOfAppointment = dateOfAppointment;
         this.status = "PENDING";
-        this.comment = comment;
-        this.feedback = ""; // Empty initially
     }
     
     // Constructor for loading from database
-    public Appointment(int appointmentId, LocalDate dateOfAppointment, String status, 
-                      String feedback, String comment, int customerId, int doctorId, 
-                      String customerName, String doctorName) {
-        super(appointmentId); // Call parent constructor with ID
+    public Appointment(String appointmentId, LocalDate dateOfAppointment, String status, 
+                      int customerId, int doctorId, String customerName, String doctorName) {
+        super(); // Call parent constructor
         this.appointmentId = appointmentId;
         this.dateOfAppointment = dateOfAppointment;
         this.status = status;
-        this.feedback = feedback;
-        this.comment = comment;
         this.customerId = customerId;
         this.doctorId = doctorId;
         this.customerName = customerName;
@@ -55,20 +40,14 @@ public class Appointment extends BaseEntity {
     }
     
     // Getters and Setters
-    public int getAppointmentId() { return appointmentId; }
-    public void setAppointmentId(int appointmentId) { this.appointmentId = appointmentId; }
+    public String getAppointmentId() { return appointmentId; }
+    public void setAppointmentId(String appointmentId) { this.appointmentId = appointmentId; }
     
     public LocalDate getDateOfAppointment() { return dateOfAppointment; }
     public void setDateOfAppointment(LocalDate dateOfAppointment) { this.dateOfAppointment = dateOfAppointment; }
     
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-    
-    public String getFeedback() { return feedback; }
-    public void setFeedback(String feedback) { this.feedback = feedback; }
-    
-    public String getComment() { return comment; }
-    public void setComment(String comment) { this.comment = comment; }
     
     public int getCustomerId() { return customerId; }
     public void setCustomerId(int customerId) { this.customerId = customerId; }
@@ -88,7 +67,7 @@ public class Appointment extends BaseEntity {
      */
     @Override
     public boolean isValid() {
-        return appointmentId > 0 && 
+        return appointmentId != null && !appointmentId.trim().isEmpty() && 
                customerId > 0 && 
                doctorId > 0 &&
                customerName != null && !customerName.trim().isEmpty() &&
@@ -105,17 +84,6 @@ public class Appointment extends BaseEntity {
         return dateOfAppointment.isBefore(LocalDate.now());
     }
     
-    /**
-     * Method to check if appointment can be cancelled - demonstrates business rules
-     */
-    public boolean canBeCancelled() {
-        return "PENDING".equalsIgnoreCase(status) || "CONFIRMED".equalsIgnoreCase(status);
-    }
-    
-    /**
-     * Method to format appointment for display - demonstrates polymorphism
-     * Implements abstract method from BaseEntity
-     */
     @Override
     public String getSummary() {
         return String.format("Appointment #%d - %s with %s on %s (%s)", 
@@ -123,16 +91,13 @@ public class Appointment extends BaseEntity {
                            dateOfAppointment, status);
     }
     
-    /**
-     * Method to format appointment for display - demonstrates polymorphism
-     */
     public String getDisplayString() {
         return getSummary(); // Reuse the summary method
     }
     
     @Override
     public String toString() {
-        return String.format("Appointment{id=%d, customer=%s, doctor=%s, date=%s, status=%s}", 
+        return String.format("Appointment{id=%s, customer=%s, doctor=%s, date=%s, status=%s}", 
                            appointmentId, customerName, doctorName, dateOfAppointment, status);
     }
     
@@ -141,11 +106,6 @@ public class Appointment extends BaseEntity {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Appointment that = (Appointment) obj;
-        return appointmentId == that.appointmentId;
-    }
-    
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(appointmentId);
+        return appointmentId != null && appointmentId.equals(that.appointmentId);
     }
 }

@@ -24,15 +24,7 @@ public class Customer extends User implements Serializable {
      */
     public Customer(){}
     
-    public Customer(int id, String username, String fullname, String email) {
-        super(id, username, fullname, email);
-        this.role = "Customer";
-        this.appointments = new ArrayList<>();
-    }
     
-    /**
-     * Constructor for creating a Customer with complete information
-     */
     public Customer(int id, String username, String fullname, String email, 
                    String password, String address, String contactNumber, String dateCreated) {
         super(id, username, fullname, email);
@@ -190,22 +182,22 @@ public class Customer extends User implements Serializable {
     
 
     public String getFullname() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.fullname;
     }
 
     public void setUsername(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.username = username;
     }
 
     public void setFullname(String fullname) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.fullname = fullname;
     }
 
     public void setEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.email = email;
     }
 
     public void setContactNo(String contactNo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.contactNumber = contactNo;
     }
 }

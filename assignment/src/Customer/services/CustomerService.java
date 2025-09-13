@@ -3,32 +3,19 @@ package Customer.services;
 import Customer.model.Appointment;
 import Customer.model.Customer;
 import Customer.model.Invoice;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
+import java.util.logging.*;
 
-/**
- * Service layer for Customer business logic and data access
- * Demonstrates OOP concepts: Encapsulation, Abstraction, Polymorphism
- * Implements IService interface to demonstrate interface implementation
- * Handles all customer-related operations including appointment management
- * Uses text files for data persistence as per coursework requirements
- */
 public class CustomerService implements FileService {
     
     private static final Logger logger = Logger.getLogger(CustomerService.class.getName());
-    private static final String APPOINTMENTS_FILE = "assignment\\src\\database\\appointments.txt";
-    private static final String USERS_FILE = "assignment\\src\\database\\users.txt";
-    private static final String INVOICES_FILE = "assignment\\src\\database\\invoices.txt";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String APPOINTMENTS_FILE = "src\\database\\appointments.txt";
+    private static final String USERS_FILE = "src\\database\\users.txt";
+    private static final String INVOICES_FILE = "src\\database\\invoices.txt";
+    private static final DateTimeFormatter DTFORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     /**
      * Load all appointments for a specific customer
@@ -47,8 +34,9 @@ public class CustomerService implements FileService {
                     String line = scanner.nextLine().trim();
                     if (!line.isEmpty()) {
                         String[] values = line.split(";");
-                        if (values.length >= 9) {
-                            int appointmentCustomerId = Integer.parseInt(values[5]); // CustomerID is at index 5
+                        if (values.length >= 7) {
+                            // Current DB order: id;date;status;doctorId;doctorName;customerId;customerName
+                            int appointmentCustomerId = Integer.parseInt(values[5]); // CustomerID at index 5
                             if (appointmentCustomerId == customerId) {
                                 Appointment appointment = parseAppointmentFromLine(values);
                                 appointments.add(appointment);
@@ -68,24 +56,27 @@ public class CustomerService implements FileService {
      * Book a new appointment - demonstrates business logic and validation
      */
     public boolean bookAppointment(Appointment appointment) {
-        // Input validation - demonstrates encapsulation
-        if (appointment == null || !appointment.isValid()) {
+        if (appointment == null) {
             logger.warning("Invalid appointment data provided");
             return false;
         }
         
-        // Business rule validation
-        if (appointment.isPastAppointment()) {
-            logger.warning("Cannot book appointment in the past");
-            return false;
-        }
-        
         try {
-            // Generate appointment ID
-            int appointmentId = generateAppointmentId();
+            // Generate appointment ID first so validation that requires it can pass
+            String appointmentId = generateAppointmentId();
             appointment.setAppointmentId(appointmentId);
             
-            // Write to text file - coursework requirement
+            // Input validation - demonstrates encapsulation
+            if (!appointment.isValid()) {
+                logger.warning("Invalid appointment data provided");
+                return false;
+            }
+            
+            // Business rule validation
+            if (appointment.isPastAppointment()) {
+                logger.warning("Cannot book appointment in the past");
+                return false;
+            }
             try (FileWriter writer = new FileWriter(APPOINTMENTS_FILE, true)) {
                 String line = formatAppointmentForFile(appointment);
                 writer.write(line + "\n");
@@ -100,75 +91,6 @@ public class CustomerService implements FileService {
             return false;
         }
     }
-    
-    /**
-     * Cancel an appointment - demonstrates business logic and file operations
-     */
-    public boolean cancelAppointment(int appointmentId) {
-        // Input validation
-        if (appointmentId <= 0) {
-            logger.warning("Invalid appointment ID provided");
-            return false;
-        }
-        
-        try {
-            List<String> lines = new ArrayList<>();
-            boolean found = false;
-            
-            // Read all lines and update the specific appointment
-            File file = new File(APPOINTMENTS_FILE);
-            if (file.exists()) {
-                try (Scanner scanner = new Scanner(file)) {
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine().trim();
-                        if (!line.isEmpty()) {
-                        String[] values = line.split(";");
-                        if (values.length >= 9) {
-                            int currentAppointmentId = Integer.parseInt(values[0]);
-                            if (currentAppointmentId == appointmentId) {
-                                // Business rule: Check if appointment can be cancelled
-                                String currentStatus = values[2]; // status is at index 2
-                                if ("CANCELLED".equalsIgnoreCase(currentStatus)) {
-                                    logger.warning("Appointment already cancelled: " + appointmentId);
-                                    return false;
-                                }
-                                if ("COMPLETED".equalsIgnoreCase(currentStatus)) {
-                                    logger.warning("Cannot cancel completed appointment: " + appointmentId);
-                                    return false;
-                                }
-                                
-                                // Update status to CANCELLED
-                                values[2] = "CANCELLED";
-                                line = String.join(";", values);
-                                found = true;
-                            }
-                        }
-                        }
-                        lines.add(line);
-                    }
-                }
-            }
-            
-            if (found) {
-                // Write back to text file - coursework requirement
-                try (FileWriter writer = new FileWriter(APPOINTMENTS_FILE)) {
-                    for (String line : lines) {
-                        writer.write(line + "\n");
-                    }
-                }
-                logger.info("Appointment cancelled successfully: " + appointmentId);
-                return true;
-            } else {
-                logger.warning("Appointment not found: " + appointmentId);
-            }
-            
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error cancelling appointment", e);
-        }
-        
-        return false;
-    }
-    
     /**
      * Update customer information - demonstrates validation and file operations
      */
@@ -232,62 +154,20 @@ public class CustomerService implements FileService {
         
         return false;
     }
-    
-    /**
-     * Get available doctors (placeholder - would typically come from a doctor service)
-     */
-    public List<String> getAvailableDoctors() {
-        List<String> doctors = new ArrayList<>();
-        doctors.add("Dr. Smith");
-        doctors.add("Dr. Johnson");
-        doctors.add("Dr. Williams");
-        doctors.add("Dr. Brown");
-        doctors.add("Dr. Davis");
-        return doctors;
-    }
-    
-    /**
-     * Get available appointment types
-     */
-    public List<String> getAppointmentTypes() {
-        List<String> types = new ArrayList<>();
-        types.add("General Consultation");
-        types.add("Follow-up");
-        types.add("Emergency");
-        types.add("Specialist Consultation");
-        types.add("Health Check-up");
-        return types;
-    }
-    
-    /**
-     * Create an invoice for an appointment
-     */
-    public boolean createInvoice(Invoice invoice) {
-        // Input validation
-        if (invoice == null || !invoice.isValid()) {
-            logger.warning("Invalid invoice data provided");
-            return false;
+
+    public Object[][] getAppointmentsForTable(int customerId) {
+        List<Appointment> appointments = getCustomerAppointments(customerId);
+        Object[][] tableData = new Object[appointments.size()][4];
+        
+        for (int i = 0; i < appointments.size(); i++) {
+            Appointment appointment = appointments.get(i);
+            tableData[i][0] = appointment.getAppointmentId(); // ID
+            tableData[i][1] = appointment.getDateOfAppointment(); // DOA
+            tableData[i][2] = appointment.getStatus(); // Status
+            tableData[i][3] = appointment.getDoctorName(); // Doctor Name
         }
         
-        try {
-            // Generate invoice ID
-            int invoiceId = generateInvoiceId();
-            invoice.setInvoiceId(invoiceId);
-            
-            // Write to text file - coursework requirement
-            try (FileWriter writer = new FileWriter(INVOICES_FILE, true)) {
-                String line = formatInvoiceForFile(invoice);
-                writer.write(line + "\n");
-                writer.flush();
-            }
-            
-            logger.info("Invoice created successfully: " + invoiceId);
-            return true;
-            
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error creating invoice", e);
-            return false;
-        }
+        return tableData;
     }
     
     /**
@@ -324,45 +204,76 @@ public class CustomerService implements FileService {
         return invoices;
     }
     
-    /**
-     * Check if appointment time slot is available
-     */
-    public boolean isTimeSlotAvailable(LocalDate date, LocalTime time, String doctorName) {
+    public List<String> getDoctors() {
+        List<String> doctorNames = new ArrayList<>();
         try {
-            File file = new File(APPOINTMENTS_FILE);
+            File file = new File(USERS_FILE);
             if (!file.exists()) {
-                return true; // No appointments exist, so slot is available
+                return doctorNames;
             }
-            
             try (Scanner scanner = new Scanner(file)) {
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine().trim();
-                    if (!line.isEmpty()) {
-                        String[] values = line.split(";");
-                        if (values.length >= 9) {
-                            LocalDate appointmentDate = LocalDate.parse(values[1], DATE_FORMATTER); // DOA at index 1
-                            String appointmentDoctor = values[8]; // Doctor Name at index 8
-                            String status = values[2]; // status at index 2
-                            
-                            if (appointmentDate.equals(date) && 
-                                appointmentDoctor.equals(doctorName) &&
-                                !"CANCELLED".equalsIgnoreCase(status)) {
-                                return false; // Slot is taken
+                    if (line.isEmpty()) continue;
+                    String[] values = line.split(";");
+                    // Expected format:
+                    // 0:id;1:username;2:fullname;3:email;4:password;5:address;6:contact;7:dateCreated;8:role
+                    if (values.length >= 9) {
+                        String role = values[8];
+                        if ("Doctor".equalsIgnoreCase(role)) {
+                            String fullName = values[2];
+                            doctorNames.add(fullName);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error loading doctors list", e);
+        }
+        return doctorNames;
+    }
+
+    /**
+     * Get a doctor's ID by their full name from users database.
+     * Returns -1 if not found.
+     */
+    public int getDoctorIdByName(String doctorFullName) {
+        if (doctorFullName == null) return -1;
+        String target = doctorFullName.trim();
+        try {
+            File file = new File(USERS_FILE);
+            if (!file.exists()) {
+                return -1;
+            }
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine().trim();
+                    if (line.isEmpty()) continue;
+                    String[] values = line.split(";");
+                    if (values.length >= 9) {
+                        String role = values[8];
+                        if ("Doctor".equalsIgnoreCase(role)) {
+                            String fullName = values[2];
+                            if (fullName != null && fullName.trim().equalsIgnoreCase(target)) {
+                                try {
+                                    return Integer.parseInt(values[0]);
+                                } catch (NumberFormatException ignore) {
+                                    return -1;
+                                }
                             }
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error checking time slot availability", e);
+            logger.log(Level.SEVERE, "Error resolving doctor ID by name", e);
         }
-        
-        return true; // Slot is available
+        return -1;
     }
     
     // Private helper methods
     
-    private int generateAppointmentId() {
+    private String generateAppointmentId() {
         int maxId = 0;
         try {
             File file = new File(APPOINTMENTS_FILE);
@@ -373,11 +284,14 @@ public class CustomerService implements FileService {
                         if (!line.isEmpty()) {
                             String[] values = line.split(";");
                             if (values.length > 0) {
-                                try {
-                                    int id = Integer.parseInt(values[0]);
-                                    maxId = Math.max(maxId, id);
-                                } catch (NumberFormatException e) {
-                                    // Skip invalid lines
+                                String idStr = values[0];
+                                if (idStr.startsWith("A")) {
+                                    try {
+                                        int id = Integer.parseInt(idStr.substring(1));
+                                        maxId = Math.max(maxId, id);
+                                    } catch (NumberFormatException e) {
+                                        // Skip invalid lines
+                                    }
                                 }
                             }
                         }
@@ -387,36 +301,32 @@ public class CustomerService implements FileService {
         } catch (Exception e) {
             logger.log(Level.WARNING, "Error generating appointment ID", e);
         }
-        return maxId + 1;
+        return String.format("A%04d", maxId + 1);
     }
     
     private Appointment parseAppointmentFromLine(String[] values) {
-        int appointmentId = Integer.parseInt(values[0]); // AppointmentID
-        LocalDate dateOfAppointment = LocalDate.parse(values[1], DATE_FORMATTER); // DOA
+        String appointmentId = values[0]; // AppointmentID (A0001)
+        LocalDate dateOfAppointment = parseDate(values[1]); // DOA - handle both date and datetime formats
         String status = values[2]; // status
-        String feedback = values[3]; // feedback
-        String comment = values[4]; // comment
+        int doctorId = Integer.parseInt(values[3]); // DoctorID
+        String doctorName = values[4]; // Doctor Name
         int customerId = Integer.parseInt(values[5]); // CustomerID
-        int doctorId = Integer.parseInt(values[6]); // DoctorID
-        String customerName = values[7]; // Customer Name
-        String doctorName = values[8]; // Doctor Name
+        String customerName = values[6]; // Customer Name
         
-        return new Appointment(appointmentId, dateOfAppointment, status, feedback, comment,
-                             customerId, doctorId, customerName, doctorName);
+        return new Appointment(appointmentId, dateOfAppointment, status, customerId, doctorId, customerName, doctorName);
     }
     
     private String formatAppointmentForFile(Appointment appointment) {
-        return String.format("%d;%s;%s;%s;%s;%d;%d;%s;%s",
+        return String.format("%s;%s;%s;%d;%s;%d;%s",
                            appointment.getAppointmentId(),
-                           appointment.getDateOfAppointment().format(DATE_FORMATTER),
+                           appointment.getDateOfAppointment().format(DTFORMATTER), // force date only
                            appointment.getStatus(),
-                           appointment.getFeedback(),
-                           appointment.getComment(),
-                           appointment.getCustomerId(),
                            appointment.getDoctorId(),
-                           appointment.getCustomerName(),
-                           appointment.getDoctorName());
+                           appointment.getDoctorName(),
+                           appointment.getCustomerId(),
+                           appointment.getCustomerName());
     }
+
     
     private int generateInvoiceId() {
         int maxId = 0;
@@ -462,4 +372,9 @@ public class CustomerService implements FileService {
                            invoice.getPaymentMethod(),
                            invoice.getAppointmentId());
     }
+    
+    private LocalDate parseDate(String raw) {
+        return LocalDate.parse(raw.trim(), DTFORMATTER);
+    }
+
 }

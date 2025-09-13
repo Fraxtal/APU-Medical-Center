@@ -6,22 +6,33 @@ package Customer.view;
 
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
+import User.User;
 
 public class CustomerTest {
     public static void main(String[] args) {
-        // Create dummy customer
-        Customer dummyCustomer = new Customer(
-            1, "john_doe", "John Doe", "john.doe@email.com",
-            "password123", "123 Main St", "0123456789", "2024-01-15"
-        );
+            // Login as John Doe using the actual database
+            User loggedInUser = User.login("john_doe", "password123");
+            
+            if (loggedInUser instanceof Customer) {
+                Customer johnDoe = (Customer) loggedInUser;
 
-        // Create controller and set customer
-        CustomerController controller = new CustomerController();
-        controller.setCurrentCustomer(dummyCustomer);
+                System.out.println("Successfully logged in as: " + johnDoe.getFullname());
+                System.out.println("Customer ID: " + johnDoe.getId());
+                System.out.println("Email: " + johnDoe.getEmail());
 
-        // Create and show dashboard
-        CustomerDashboard dashboard = new CustomerDashboard();
-        dashboard.setController(controller);
-        dashboard.setVisible(true);
+                // Create controller and set customer
+                CustomerController controller = new CustomerController();
+                controller.setCurrentCustomer(johnDoe);
+
+                // Create and show dashboard
+                CustomerDashboard dashboard = new CustomerDashboard();
+                dashboard.setController(controller);
+                dashboard.setVisible(true);
+
+
+            } else {
+                System.err.println("Login failed or user is not a Customer");
+            }
+            
     }
 }

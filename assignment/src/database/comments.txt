@@ -1,4 +1,12 @@
-1;10002;20001;Dr.Kim;20001;Alice;eat medicine on time
-2;10004;20000;Dr.Sophia;20000;Chase;exercise more
-3;10001;20000;Dr.Sophia;20000;Chris;follow up in 2 weeks
-4;10003;20001;Dr.Kim;20001;Alice;continue current treatment
+1;10000;20000;Very helpful during consultation, explained clearly.
+2;10001;20001;Appreciated the thorough check-up and friendly attitude.
+3;10001;20001;Wait time was a bit long but overall good.
+4;10000;20000;Follow-up instructions were easy to understand.
+5;10002;40000;Reception was efficient and polite.
+6;10003;40001;Nurse was caring and professional.
+7;10004;40003;Helped quickly with the kiosk issue.
+8;10002;40004;System update caused slight delay.
+9;10000;30000;Billing process was handled smoothly.
+10;10001;30001;Appreciate the quick response to my feedback.
+11;10003;30001;Would like extended clinic hours.
+12;10004;20003;Great bedside manner and timely diagnosis.

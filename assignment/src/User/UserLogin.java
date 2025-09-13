@@ -4,6 +4,9 @@
  */
 package User;
 
+import Customer.ctrl.CustomerController;
+import Customer.model.Customer;
+
 
 /**
  *
@@ -39,15 +42,25 @@ public class UserLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jLabel1.setText("Username/Email: ");
         jLabel1.setToolTipText("");
 
+        jLabel2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jLabel2.setText("Password: ");
 
+        btnLogin.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
+        jLabel3.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel3.setText("User Login");
 
+        btnRegister.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnRegister.setText("Register");
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -55,12 +68,14 @@ public class UserLogin extends javax.swing.JFrame {
             }
         });
 
-        tbPassword.setText("jPasswordField1");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 314, Short.MAX_VALUE)
+                .addComponent(btnRegister)
+                .addGap(14, 14, 14))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -74,17 +89,11 @@ public class UserLogin extends javax.swing.JFrame {
                             .addComponent(tbPassword)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(163, 163, 163)
-                        .addComponent(btnLogin)))
-                .addContainerGap(95, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnRegister)
-                        .addGap(14, 14, 14))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(170, 170, 170))))
+                        .addComponent(btnLogin))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(jLabel3)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,7 +110,7 @@ public class UserLogin extends javax.swing.JFrame {
                     .addComponent(tbPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addComponent(btnLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(btnRegister)
                 .addGap(14, 14, 14))
         );
@@ -114,6 +123,24 @@ public class UserLogin extends javax.swing.JFrame {
         this.setVisible(false);
         new UserRegister().setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        User loggedInUser = User.login(tbInput.getText(), tbPassword.getText());
+        
+        if (loggedInUser instanceof Customer) {
+            Customer d = (Customer) loggedInUser;
+            
+            CustomerController controller = new CustomerController();
+            controller.setCurrentCustomer(d);
+            
+            this.setVisible(false);
+            controller.showCustomerDashboard();
+            } else {
+                System.err.println("Login failed or user is not a Customer");
+            }
+        
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
