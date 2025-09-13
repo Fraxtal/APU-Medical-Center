@@ -49,7 +49,6 @@ public class AppointmentBooking extends javax.swing.JFrame {
         btnReturn = new javax.swing.JButton();
         cmbDoctor = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jDoa = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         btnBook = new javax.swing.JButton();
 
@@ -100,9 +99,7 @@ public class AppointmentBooking extends javax.swing.JFrame {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbDoctor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jDoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(cmbDoctor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(76, 76, 76)
                                 .addComponent(jLabel1)))))
@@ -119,8 +116,7 @@ public class AppointmentBooking extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cmbDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addComponent(jDoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(36, 36, 36))
                     .addComponent(jLabel3))
                 .addGap(34, 34, 34)
                 .addComponent(btnBook)
@@ -235,7 +231,6 @@ public class AppointmentBooking extends javax.swing.JFrame {
     private javax.swing.JButton btnBook;
     private javax.swing.JButton btnReturn;
     private javax.swing.JComboBox<String> cmbDoctor;
-    private com.toedter.calendar.JDateChooser jDoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

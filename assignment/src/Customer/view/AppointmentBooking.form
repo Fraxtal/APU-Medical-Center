@@ -43,10 +43,7 @@
                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cmbDoctor" max="32767" attributes="0"/>
-                                  <Component id="jDoa" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="cmbDoctor" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
@@ -71,8 +68,7 @@
                           <Component id="cmbDoctor" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jDoa" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -120,8 +116,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Doctor: "/>
       </Properties>
-    </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="jDoa">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
