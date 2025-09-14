@@ -1,16 +1,19 @@
-
 package Staff.service;
 
 import java.io.*;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *
  * @author Admin
  */
 public class ManageCustomerAccount {
-    private String usersFile = "C:\\Users\\Admin\\Documents\\NetBeansProjects\\APU-Medical-Center\\assignment\\src\\database\\users.txt";
+    private static final String usersFile = "src/database/users.txt";
+    public List<String[]> cust;
     
     public List<String[]> loadUsers() {
         List<String[]> userdata = new ArrayList<>();
@@ -43,7 +46,8 @@ public class ManageCustomerAccount {
     }
     
     public List<String[]> loadCustomers() {
-        return loadUsers().stream().filter(data -> "Customer".equalsIgnoreCase(data[8])).toList();
+        //return loadUsers().stream().filter(data -> "Customer".equalsIgnoreCase(data[8])).toList();
+        return this.cust = loadUsers().stream().filter(data -> data[8].trim().equalsIgnoreCase("Customer")).toList();
     }
     
     public boolean saveUsers(List<String> newData) {
@@ -92,4 +96,117 @@ public class ManageCustomerAccount {
         return false;
     }
     
+    public boolean deleteCustomer(int id) {
+        List<String> lines = new ArrayList<>();
+        boolean found = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(usersFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) continue;
+                String[] values = line.trim().split(";");
+                if (values.length >= 9 && Integer.parseInt(values[0]) == id) {
+                    found = true;
+                    continue;
+                }
+                lines.add(line);
+            }
+        }   catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (found) {
+            return saveUsers(lines);
+        }
+        return false;
+    }
+    
+    public boolean addCustomer(String username, String fullname, String email, String pass, String address, String contact) {
+        int newCustomerId = newCustomerId();
+        String newAccount = String.join(";", String.valueOf(newCustomerId), username, fullname, email, pass, address, contact, java.time.LocalDate.now().toString(), "Customer");
+        try (FileWriter fw = new FileWriter(usersFile, true)) {
+            fw.write(newAccount + System.lineSeparator());
+        }
+        catch (IOException ioE) {
+            System.out.println("Encountered an error while writing the file");
+            return false;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private int generateCustomerId() {
+        int maxId = 0;
+        try {
+            File file = new File(usersFile);
+            if (file.exists()) {
+                try (Scanner scanner = new Scanner(file)) {
+                    while (scanner.hasNextLine()) {
+                        String line = scanner.nextLine().trim();
+                        if (!line.isEmpty()) {
+                            String[] values = line.split(";");
+                            if (values.length > 0) {
+                                try {
+                                    int id = Integer.parseInt(values[0]);
+                                    maxId = Math.max(maxId, id);
+                                } catch (NumberFormatException e) {
+                                    // Skip invalid lines
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return maxId + 1;
+    }
+    
+    public boolean checkEmailExists(String email) {
+        List<String[]> users = loadUsers(); 
+        for (String[] user : users) {
+            if (user[3].equalsIgnoreCase(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean checkContactExists(String contact) {
+        List<String[]> users = loadUsers(); 
+        for (String[] user : users) {
+            if (user[6].equals(contact)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean checkIdExists(int id) {
+        List<String[]> users = loadUsers(); 
+        for (String[] user : users) {
+            if (user[0].equals(String.valueOf(id))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public int newCustomerId(){
+        List<String[]> customers = loadCustomers();
+        int currentMaxId = 0;
+        for (String[] customer : customers){
+            if (customer.length > 8){
+                int id = Integer.parseInt(customer[0]);
+                currentMaxId = Math.max(currentMaxId, id);
+            }
+        }
+        return currentMaxId + 1;
+    }
 }

@@ -68,7 +68,7 @@ public class Staff extends User{
         this.role = role;
     }
     
-    private void 
+//    private void 
 //    private void loadAppointmentData() {
 //        appointmentData.clear();
 //        try {
