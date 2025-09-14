@@ -39,6 +39,18 @@ public class StaffController {
         return appointmentModel;
     }
     
+    public DefaultTableModel getPastAppointmentTable(){
+        List<String[]> pastAppointmentData = serviceMCA.loadPastAppointments();
+        String[] colName = {"Appointment ID", "Appointment Date", "Status", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name"};
+        
+        DefaultTableModel pastAppointmentModel = new DefaultTableModel(colName, 0);
+        for (String[] appointments : pastAppointmentData){
+            pastAppointmentModel.addRow(appointments);
+        }
+        
+        return pastAppointmentModel;
+    }
+    
     public DefaultTableModel getDoctorTable(){
         List<String[]> doctorData = serviceMCA.loadDoctors();
         String[] colName = {"ID", "Username", "Fullname", "Email", "Password", "Address", "Contact Number"};
@@ -152,12 +164,8 @@ public class StaffController {
             return 4;
         }
         
-        if (!serviceMCA.addAppointment(appointmentDate, status, doctorId, doctorName, customerId, customerName)){
-            return 5;
-        }
-        
         if(!serviceMCA.updateAppointment(appointmentId, appointmentDate, status, doctorId, doctorName, customerId, customerName)){
-            return 4;
+            return 5;
         }
         return 0;
     }

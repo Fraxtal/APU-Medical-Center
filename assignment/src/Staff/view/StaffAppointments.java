@@ -20,6 +20,7 @@ public class StaffAppointments extends javax.swing.JFrame {
     public StaffAppointments() {
         //appointmentModel.setColumnIdentifiers(columnName);
         initComponents();
+        ckbxPast.setSelected(false);
         tblAppointments.setModel(controller.getAppointmentTable());
         tblDoctors.setModel(controller.getDoctorTable());
     }
@@ -51,7 +52,7 @@ public class StaffAppointments extends javax.swing.JFrame {
         javax.swing.JButton btnAdd = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAppointments = new javax.swing.JTable();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        ckbxPast = new javax.swing.JCheckBox();
         btnReturn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDoctors = new javax.swing.JTable();
@@ -116,7 +117,6 @@ public class StaffAppointments extends javax.swing.JFrame {
         jLabel5.setText("Customer ID");
         jLabel5.setName("lbl_ID"); // NOI18N
 
-        txtCustomerId.setEditable(false);
         txtCustomerId.setName("txt_ID"); // NOI18N
 
         btnAdd.setText("Add");
@@ -207,7 +207,12 @@ public class StaffAppointments extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblAppointments);
 
-        jCheckBox1.setText("Past Appointments");
+        ckbxPast.setText("Past Appointments");
+        ckbxPast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckbxPastActionPerformed(evt);
+            }
+        });
 
         btnReturn.setText("Return");
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
@@ -244,7 +249,7 @@ public class StaffAppointments extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jCheckBox1))
+                                .addComponent(ckbxPast))
                             .addComponent(jScrollPane1)
                             .addComponent(jScrollPane2))
                         .addGap(38, 38, 38))))
@@ -259,7 +264,7 @@ public class StaffAppointments extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jCheckBox1)
+                        .addComponent(ckbxPast)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
@@ -289,24 +294,48 @@ public class StaffAppointments extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        try {
-//        int customer = Integer.parseInt(txtAppointmentId.getText());
-//        String date = txtDay.getText();
-//        String time = txtTime.getText();
-//        int doctor = Integer.parseInt(txtDoctorId.getText());
+//        int appointmentId = Integer.parseInt(txtAppointmentId.getText());
+        String appointmentId = txtAppointmentId.getText();
+        Date appointmentDate = calendarAppointment.getDate();
+        String status = cmbStatus.getSelectedItem().toString();
+        String doctorId = txtDoctorId.getText();
+        String doctorName = txtDoctorName.getText();
+        String customerId = txtCustomerId.getText();
+        String customerName = txtCustomerName.getText();
         
-            if (JOptionPane.showConfirmDialog(this, "Proceed with Changes?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
-               System.out.println("Success"); 
-            }
+        if (appointmentId.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Invalid Appointment ID", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
-        catch (Exception ex){
-            System.out.println(ex);
-            JOptionPane.showMessageDialog(this, "Invalid Inputs", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
         
-
-        //JOptionPane.showMessageDialog(null, "Appointment successfully updated.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(this, "Proceed with Changes?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (option != JOptionPane.YES_OPTION) {
+            return;
+        }
+        int success = controller.validateAppointmentUpdate(Integer.parseInt(appointmentId), appointmentDate, status, doctorId, doctorName, customerId, customerName);
+        switch (success) {
+            case 0:
+                JOptionPane.showMessageDialog(this, "Appointment sucessfullly updated.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case 1:
+                JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(this, "Invalid Doctor ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            case 3:
+                JOptionPane.showMessageDialog(this, "Invalid Customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            case 4:
+                JOptionPane.showMessageDialog(this, "Time machine unavailable", "Error", JOptionPane.ERROR_MESSAGE);
+                break;    
+            case 5:
+                JOptionPane.showMessageDialog(this, "Error occured while updating appointment", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        tblAppointments.setModel(controller.getAppointmentTable());
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -346,20 +375,27 @@ public class StaffAppointments extends javax.swing.JFrame {
         
         switch (success) {
             case 0:
-                JOptionPane.showMessageDialog(this, "Name.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Appointment sucessfullly booked.", "Info", JOptionPane.INFORMATION_MESSAGE);
                 break;
             case 1:
                 JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
                 break;
             case 2:
-                JOptionPane.showMessageDialog(this, "Email already taken.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Invalid Doctor ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            case 3:
+                JOptionPane.showMessageDialog(this, "Invalid Customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             case 4:
-                JOptionPane.showMessageDialog(this, "Error occured during account creation.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Time machine unavailable", "Error", JOptionPane.ERROR_MESSAGE);
+                break;    
+            case 5:
+                JOptionPane.showMessageDialog(this, "Error occured while creating appointment", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        tblAppointments.setModel(controller.getAppointmentTable());
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void tblDoctorsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDoctorsMouseClicked
@@ -371,6 +407,15 @@ public class StaffAppointments extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tblDoctorsMouseClicked
 
+    private void ckbxPastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbxPastActionPerformed
+        if (ckbxPast.isSelected()){
+            tblAppointments.setModel(controller.getPastAppointmentTable());
+        }
+        else{
+            tblAppointments.setModel(controller.getAppointmentTable());
+        }
+    }//GEN-LAST:event_ckbxPastActionPerformed
+
     public void clearText(){
         txtAppointmentId.setText("");
         txtCustomerName.setText("");
@@ -381,15 +426,14 @@ public class StaffAppointments extends javax.swing.JFrame {
         txtDoctorName.setText("");
     }
     public static void main(String args[]) {
-
         java.awt.EventQueue.invokeLater(() -> new StaffAppointments().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReturn;
     private com.toedter.calendar.JCalendar calendarAppointment;
+    private javax.swing.JCheckBox ckbxPast;
     private javax.swing.JComboBox<String> cmbStatus;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

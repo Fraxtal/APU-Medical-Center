@@ -19,6 +19,7 @@ public class ManageCustomerAccount {
     private static final String appointmentsFile = "src/database/appointments.txt";
     private static final String invoicesFile = "src/database/invoices.txt";
     public List<String[]> customersList;
+    public List<String[]> appointmentsList;
     
     public List<String[]> loadUsers() {
         List<String[]> userdata = new ArrayList<>();
@@ -256,7 +257,11 @@ public class ManageCustomerAccount {
         catch (Exception e){
             e.printStackTrace();
         }
-        return appointmentData;
+        return appointmentsList = appointmentData;
+    }
+    
+    public List<String[]> loadPastAppointments() {
+        return appointmentsList.stream().filter(data -> data[2].trim().equalsIgnoreCase("Completed")).toList();
     }
     
     public boolean saveAppointments(List<String> newData) {
