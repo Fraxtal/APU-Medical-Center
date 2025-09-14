@@ -8,13 +8,14 @@ package User;
  *
  * @author Nicholas
  */
+import javax.swing.JOptionPane;
+
 public class UserRegister extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserRegister.class.getName());
+    
+    private User newUser = new User();
 
-    /**
-     * Creates new form Registration
-     */
     public UserRegister() {
         initComponents();
     }
@@ -44,7 +45,7 @@ public class UserRegister extends javax.swing.JFrame {
         tbCfmPassword = new javax.swing.JTextField();
         btnLogin = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnRegister = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,7 +76,12 @@ public class UserRegister extends javax.swing.JFrame {
         jLabel1.setText("Username: ");
         jLabel1.setToolTipText("");
 
-        jButton2.setText("Register");
+        btnRegister.setText("Register");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,7 +128,7 @@ public class UserRegister extends javax.swing.JFrame {
                                     .addComponent(tbPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(249, 249, 249)
-                        .addComponent(jButton2))
+                        .addComponent(btnRegister))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(247, 247, 247)
                         .addComponent(jLabel7)))
@@ -162,7 +168,7 @@ public class UserRegister extends javax.swing.JFrame {
                     .addComponent(tbCfmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addGap(29, 29, 29)
-                .addComponent(jButton2)
+                .addComponent(btnRegister)
                 .addGap(35, 35, 35)
                 .addComponent(btnLogin)
                 .addGap(14, 14, 14))
@@ -176,6 +182,24 @@ public class UserRegister extends javax.swing.JFrame {
         this.setVisible(false);
         new UserLogin().setVisible(true);
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+        
+//        String Username, String Fullname, String Email, String Password, String Address, String ContactNo
+        
+        if (!tbPassword.getText().equals(tbCfmPassword.getText())){
+            JOptionPane.showMessageDialog(this, "Warning: Passwords do not Match!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else if (newUser.register(tbUsername.getText(), tbFullName.getText(), tbEmail.getText(), tbPassword.getText(), tbAddress.getText(), tbContactNumber.getText())){
+            this.setVisible(false);
+            new Homepage().setVisible(true);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Warning: Error has occured during registration, please make sure all the boxes are filled before pressing register!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -204,7 +228,7 @@ public class UserRegister extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnRegister;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

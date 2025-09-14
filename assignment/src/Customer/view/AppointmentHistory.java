@@ -4,6 +4,9 @@
  */
 package Customer.view;
 import Customer.ctrl.CustomerController;
+import Customer.services.CustomerService;
+import Customer.model.Customer;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Nicholas
@@ -13,13 +16,51 @@ public class AppointmentHistory extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentHistory.class.getName());
     
     private CustomerController controller;
-
+    private CustomerService customerService;
+    private Customer currentCustomer;
     public void setController(CustomerController controller) {
         this.controller = controller;
+    }
+    
+    public void setCurrentCustomer(Customer customer) {
+        this.currentCustomer = customer;
+        this.customerService = new CustomerService();
+        loadAppointmentsToTable();
     }
 
     public AppointmentHistory() {
         initComponents();
+    }
+    
+    private void loadAppointmentsToTable() {
+        if (currentCustomer != null && customerService != null) {
+            try {
+                // Get appointments for the current customer
+                Object[][] appointmentsData = customerService.getAppointmentsForTable(currentCustomer.getId());
+                
+                // Create column names
+                String[] columnNames = {"Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"};
+                
+                // Create table model
+                DefaultTableModel model = new DefaultTableModel(appointmentsData, columnNames) {
+                    @Override
+                    public boolean isCellEditable(int row, int column){return false;}
+                };
+                
+                // Set the model to the table
+                tbleAppointments.setModel(model);
+                
+                // Auto-resize columns
+                tbleAppointments.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+            } catch (Exception e) {
+                logger.severe(() -> "Error loading appointments: " + e.getMessage());
+                // Show empty table if error occurs
+                String[] columnNames = {"Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"};
+                DefaultTableModel model = new DefaultTableModel(new Object[0][4], columnNames);
+                tbleAppointments.setModel(model);
+            }
+        }
     }
 
     /**
@@ -31,30 +72,50 @@ public class AppointmentHistory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tbSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        tbleAppointments = new javax.swing.JTable();
         btnReturn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbleAppointments.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        tbleAppointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Appointment ID", "Date of Appointment", "Status", "Doctor Assigned"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        jLabel1.setText("Search: ");
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbleAppointments.getTableHeader().setReorderingAllowed(false);
+        tbleAppointments.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbleAppointmentsMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbleAppointments);
+        if (tbleAppointments.getColumnModel().getColumnCount() > 0) {
+            tbleAppointments.getColumnModel().getColumn(0).setResizable(false);
+            tbleAppointments.getColumnModel().getColumn(1).setResizable(false);
+            tbleAppointments.getColumnModel().getColumn(2).setResizable(false);
+            tbleAppointments.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         btnReturn.setText("Return");
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
@@ -66,45 +127,32 @@ public class AppointmentHistory extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel2.setText("My Appointments");
 
-        jButton2.setText("Export as PDF");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(289, 289, 289)
-                                .addComponent(btnReturn))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jLabel2)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnReturn)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(19, 19, 19)
+                            .addComponent(jLabel2))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(43, 43, 43)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(tbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReturn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnReturn)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -115,6 +163,11 @@ public class AppointmentHistory extends javax.swing.JFrame {
         this.setVisible(false);
         controller.showCustomerDashboard();
     }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void tbleAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbleAppointmentsMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tbleAppointmentsMouseClicked
 
     /**
      * @param args the command line arguments
@@ -142,12 +195,9 @@ public class AppointmentHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReturn;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField tbSearch;
+    private javax.swing.JTable tbleAppointments;
     // End of variables declaration//GEN-END:variables
 
 }

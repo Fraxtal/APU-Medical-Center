@@ -5,6 +5,13 @@
 package Customer.view;
 
 import Customer.ctrl.CustomerController;
+import Customer.model.Customer;
+import Customer.services.CustomerService;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,15 +20,18 @@ import Customer.ctrl.CustomerController;
 public class AppointmentBooking extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentBooking.class.getName());
-    
+
     private CustomerController controller;
+    private CustomerService customerService;
+    private Customer currentCustomer;
 
     public void setController(CustomerController controller) {
         this.controller = controller;
+        this.currentCustomer = controller.getCurrentCustomer();
+        this.customerService = new CustomerService();
+        loadDoctors();
     }
-    /**
-     * Creates new form AppointmentBooking
-     */
+    
     public AppointmentBooking() {
         initComponents();
     }
@@ -36,32 +46,142 @@ public class AppointmentBooking extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        btnReturn = new javax.swing.JButton();
+        cmbDoctor = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        btnBook = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel1.setText("Appointment Booking");
         jLabel1.setToolTipText("");
+
+        btnReturn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        btnReturn.setText("Return");
+        btnReturn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturnActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Doctor: ");
+
+        jLabel3.setText("Date of Appointment: ");
+
+        btnBook.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        btnBook.setText("Book");
+        btnBook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBookActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnReturn)
+                .addGap(32, 32, 32))
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel1)
-                .addContainerGap(430, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
+                        .addComponent(btnBook))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbDoctor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addComponent(jLabel1)))))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(42, 42, 42)
                 .addComponent(jLabel1)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(36, 36, 36))
+                    .addComponent(jLabel3))
+                .addGap(34, 34, 34)
+                .addComponent(btnBook)
+                .addGap(18, 18, 18)
+                .addComponent(btnReturn)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        this.setVisible(false);
+        controller.showCustomerDashboard();
+    }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
+        // TODO add your handling code here:
+        try {
+            // Validate inputs
+            if (cmbDoctor.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Please select a doctor.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            Date utilDate = jDoa.getDate();  // This gives you a java.util.Date
+            if (utilDate == null) {
+                JOptionPane.showMessageDialog(this, "Please enter a date.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Convert util.Date to LocalDate
+            LocalDate appointmentDate = utilDate.toInstant()
+                                                .atZone(ZoneId.systemDefault())
+                                                .toLocalDate();
+            // Check if date is in the past
+            if (appointmentDate.isBefore(LocalDate.now())) {
+                JOptionPane.showMessageDialog(this, "Cannot book appointment in the past.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            // Get doctor info
+            String doctorName = (String) cmbDoctor.getSelectedItem();
+            int doctorId = getDoctorIdFromName(doctorName);
+            if (doctorId == -1) {
+                JOptionPane.showMessageDialog(this, "Unable to resolve selected doctor. Please reselect.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            // Book appointment through controller
+            boolean success = controller.bookAppointment(doctorId, doctorName, appointmentDate);
+            
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Appointment request submitted successfully! Staff will review and confirm your appointment.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                this.setVisible(false);
+                controller.showCustomerDashboard();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to submit appointment request. Please try again.", "Booking Error", JOptionPane.ERROR_MESSAGE);
+            }
+                
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid date format. Please use yyyy-MM-dd.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnBookActionPerformed
 
     /**
      * @param args the command line arguments
@@ -85,10 +205,34 @@ public class AppointmentBooking extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new AppointmentBooking().setVisible(true));
+    }
+    
+    private int getDoctorIdFromName(String doctorName) {
+        if (customerService == null || doctorName == null || doctorName.trim().isEmpty()) {
+            return -1;
+        }
+        int id = customerService.getDoctorIdByName(doctorName.trim());
+        return id;
+    }
+    
+    private void loadDoctors() {
+        if (customerService != null) {
+            List<String> doctors = customerService.getDoctors();
+            cmbDoctor.removeAllItems();
+            for (String doctor : doctors) {
+                cmbDoctor.addItem(doctor);
+            }
+        }
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    // End of variables declaration//GEN-END:variables
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBook;
+    private javax.swing.JButton btnReturn;
+    private javax.swing.JComboBox<String> cmbDoctor;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    // End of variables declaration//GEN-END:variables
 }
