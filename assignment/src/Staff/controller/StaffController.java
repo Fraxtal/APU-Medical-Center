@@ -1,14 +1,15 @@
 package Staff.controller;
 
 import Staff.service.ManageCustomerAccount;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 
 public class StaffController {
     private ManageCustomerAccount serviceMCA;
-    private static final int update = 0;
-    private static final int delete = 1;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     
     
     public StaffController() {
@@ -36,6 +37,18 @@ public class StaffController {
         }
         
         return appointmentModel;
+    }
+    
+    public DefaultTableModel getDoctorTable(){
+        List<String[]> doctorData = serviceMCA.loadDoctors();
+        String[] colName = {"ID", "Username", "Fullname", "Email", "Password", "Address", "Contact Number"};
+        
+        DefaultTableModel doctorModel = new DefaultTableModel(colName, 0);
+        for (String[] doctors : doctorData){
+            doctorModel.addRow(doctors);
+        }
+        
+        return doctorModel;
     }
     
     public int validateAccountUpdate(int id, String username, String fullname, String email, String password, String address, String contactNum) {
@@ -93,6 +106,59 @@ public class StaffController {
             return 2;
         }
         return 0;
-
+    }
+    
+    public int validateAppointmentBooking(Date rawDate, String status, String doctorId, String doctorName, String customerId, String customerName){
+        String appointmentDate = sdf.format(rawDate);
+        if(doctorId.isEmpty() || doctorName.isEmpty() || customerId.isEmpty() || customerName.isEmpty()){
+            return 1;
+        }
+        
+        if(!serviceMCA.checkIdExists(Integer.parseInt(doctorId))){
+            return 2;
+        }
+        
+        if(!serviceMCA.checkIdExists(Integer.parseInt(customerId))){
+            return 3;
+        }
+        
+        if(rawDate.before(new Date())){
+            return 4;
+        }
+        
+        if (!serviceMCA.addAppointment(appointmentDate, status, doctorId, doctorName, customerId, customerName)){
+            return 5;
+        }
+        
+        return 0;
+    }
+    
+    public int validateAppointmentUpdate(int appointmentId, Date rawDate, String status, String doctorId, String doctorName, String customerId, String customerName){
+        String appointmentDate = sdf.format(rawDate);
+        
+        if(doctorId.isEmpty() || doctorName.isEmpty() || customerId.isEmpty() || customerName.isEmpty()){
+            return 1;
+        }
+        
+        if(!serviceMCA.checkIdExists(Integer.parseInt(doctorId))){
+            return 2;
+        }
+        
+        if(!serviceMCA.checkIdExists(Integer.parseInt(customerId))){
+            return 3;
+        }
+        
+        if(rawDate.before(new Date())){
+            return 4;
+        }
+        
+        if (!serviceMCA.addAppointment(appointmentDate, status, doctorId, doctorName, customerId, customerName)){
+            return 5;
+        }
+        
+        if(!serviceMCA.updateAppointment(appointmentId, appointmentDate, status, doctorId, doctorName, customerId, customerName)){
+            return 4;
+        }
+        return 0;
     }
 }
