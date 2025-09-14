@@ -26,6 +26,18 @@ public class StaffController {
         return customerModel;
     }
     
+    public DefaultTableModel getAppointmentTable(){
+        List<String[]> appointmentData = serviceMCA.loadAppointments();
+        String[] colName = {"Appointment ID", "Appointment Date", "Status", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name"};
+        
+        DefaultTableModel appointmentModel = new DefaultTableModel(colName, 0);
+        for (String[] appointments : appointmentData){
+            appointmentModel.addRow(appointments);
+        }
+        
+        return appointmentModel;
+    }
+    
     public int validateAccountUpdate(int id, String username, String fullname, String email, String password, String address, String contactNum) {
         if (username.isEmpty() || fullname.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || contactNum.isEmpty()) {
             return 1;

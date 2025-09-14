@@ -13,7 +13,9 @@ import java.util.Scanner;
  */
 public class ManageCustomerAccount {
     private static final String usersFile = "src/database/users.txt";
-    public List<String[]> cust;
+    private static final String appointmentsFile = "src/database/appointments.txt";
+    private static final String invoicesFile = "src/database/invoices.txt";
+    public List<String[]> customersList;
     
     public List<String[]> loadUsers() {
         List<String[]> userdata = new ArrayList<>();
@@ -24,7 +26,7 @@ public class ManageCustomerAccount {
                 if (line.isEmpty()) continue;
                 String[] data = line.split(";");
                 if (data.length >= 9) {
-                    int id = Integer.parseInt(data[0]);
+                    int customerId = Integer.parseInt(data[0]);
                     String username = data[1];
                     String fullname = data[2];
                     String email = data[3];
@@ -47,7 +49,7 @@ public class ManageCustomerAccount {
     
     public List<String[]> loadCustomers() {
         //return loadUsers().stream().filter(data -> "Customer".equalsIgnoreCase(data[8])).toList();
-        return this.cust = loadUsers().stream().filter(data -> data[8].trim().equalsIgnoreCase("Customer")).toList();
+        return this.customersList = loadUsers().stream().filter(data -> data[8].trim().equalsIgnoreCase("Customer")).toList();
     }
     
     public boolean saveUsers(List<String> newData) {
@@ -208,5 +210,33 @@ public class ManageCustomerAccount {
             }
         }
         return currentMaxId + 1;
+    }
+    
+    public List<String[]> loadAppointments() {
+        List<String[]> appointmentData = new ArrayList<>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(usersFile))){
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) continue;
+                String[] data = line.split(";");
+                if (data.length >= 9) {
+                    int appointmentId = Integer.parseInt(data[0]);
+                    String appointmentDate = data[1];
+                    String status = data[2];
+                    String doctorId = data[3];
+                    String doctorName = data[4];
+                    String customerId = data[5];
+                    String customerName = data[6];
+                    
+                    appointmentData.add(data);
+                }
+                
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return appointmentData;
     }
 }
