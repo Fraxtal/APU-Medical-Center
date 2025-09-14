@@ -11,16 +11,11 @@ import javax.swing.table.TableModel;
 
 
 public class StaffAccountManager extends javax.swing.JFrame {
-    
-    //private DefaultTableModel userModel = new DefaultTableModel();
-    //private String[] columnName = {"ID", "Username", "Email", "Password", "Address", "Contact Number", "Role"};
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffAccountManager.class.getName());
     StaffController controller = new StaffController();
     ManageCustomerAccount mca = new ManageCustomerAccount();
 
     public StaffAccountManager() {
-        
-        //userModel.setColumnIdentifiers(columnName);
         initComponents();
         tblAccounts.setModel(controller.getCustomerTable());
     }

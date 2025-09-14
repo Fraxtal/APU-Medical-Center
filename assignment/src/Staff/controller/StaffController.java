@@ -63,6 +63,30 @@ public class StaffController {
         return doctorModel;
     }
     
+    public DefaultTableModel getInvoiceTable(){
+        List<String[]> invoiceData = serviceMCA.loadInvoices();
+        String[] colName = {"Invoice ID", "Subtotal", "Payment Method", "Customer ID"};
+        
+        DefaultTableModel invoiceModel = new DefaultTableModel(colName, 0);
+        for (String[] invoice : invoiceData){
+            invoiceModel.addRow(invoice);
+        }
+        
+        return invoiceModel;
+    }
+    
+    public DefaultTableModel getInvoiceDetailTable(){
+        List<String[]> invoiceDetailData = serviceMCA.loadInvoiceDetails();
+        String[] colName = {"Invoice Detail ID", "Item Name", "Quantity", "Price Per Item", "Total Price", "Invoice ID", "Customer ID"};
+        
+        DefaultTableModel invoiceDetailModel = new DefaultTableModel(colName, 0);
+        for (String[] invoiceDetail : invoiceDetailData){
+            invoiceDetailModel.addRow(invoiceDetail);
+        }
+        
+        return invoiceDetailModel;
+    }
+    
     public int validateAccountUpdate(int id, String username, String fullname, String email, String password, String address, String contactNum) {
         if (username.isEmpty() || fullname.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || contactNum.isEmpty()) {
             return 1;

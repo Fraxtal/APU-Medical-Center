@@ -18,8 +18,11 @@ public class ManageCustomerAccount {
     private static final String usersFile = "src/database/users.txt";
     private static final String appointmentsFile = "src/database/appointments.txt";
     private static final String invoicesFile = "src/database/invoices.txt";
+    private static final String invoiceDetailsFile = "src/database/invoiceDetails.txt";
     public List<String[]> customersList;
     public List<String[]> appointmentsList;
+    public List<String[]> invoicesList;
+    public List<String[]> invoiceDetailsList;
     
     public List<String[]> loadUsers() {
         List<String[]> userdata = new ArrayList<>();
@@ -349,6 +352,60 @@ public class ManageCustomerAccount {
         return String.format("A%04d", currentMaxId + 1);
     }
     
+    public List<String[]> loadInvoices() {
+        List<String[]> invoicesData = new ArrayList<>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(invoicesFile))){
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) continue;
+                String[] data = line.split(";");
+                if (data.length >= 4) {
+                    String invoicesId = data[0];
+                    String subtotal = data[1];
+                    String paymentMethod = data[2];
+                    String customerId = data[3];
+                    
+                    invoicesData.add(data);
+                }
+                
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return appointmentsList = invoicesData;
+    }
+    
+    public List<String[]> loadInvoiceDetails() {
+        List<String[]> invoiceDetailsData = new ArrayList<>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(invoiceDetailsFile))){
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) continue;
+                String[] data = line.split(";");
+                if (data.length >= 7) {
+                    String invoiceDetailId = data[0];
+                    String itemName = data[1];
+                    String quantity = data[2];
+                    String pricePer = data[3];
+                    String priceTotal = data[4];
+                    String invoiceId = data[5];
+                    String customerId = data[6];
+                    
+                    invoiceDetailsData.add(data);
+                }
+                
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return invoiceDetailsList = invoiceDetailsData;
+    }
+    
+    //write a function that returns a customer's details(uername, fullname) based on the selected invoiceid
     
     public Date parseDate(String date){
         try {
