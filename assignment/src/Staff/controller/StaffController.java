@@ -65,7 +65,7 @@ public class StaffController {
     
     public DefaultTableModel getInvoiceTable(){
         List<String[]> invoiceData = serviceMCA.loadInvoices();
-        String[] colName = {"Invoice ID", "Subtotal", "Payment Method", "Customer ID"};
+        String[] colName = {"Invoice ID", "Subtotal", "Payment Method", "Appointment ID"};
         
         DefaultTableModel invoiceModel = new DefaultTableModel(colName, 0);
         for (String[] invoice : invoiceData){
@@ -77,7 +77,7 @@ public class StaffController {
     
     public DefaultTableModel getInvoiceDetailTable(){
         List<String[]> invoiceDetailData = serviceMCA.loadInvoiceDetails();
-        String[] colName = {"Invoice Detail ID", "Item Name", "Quantity", "Price Per Item", "Total Price", "Invoice ID", "Customer ID"};
+        String[] colName = {"Invoice Detail ID", "Item Name", "Quantity", "Price Per Item", "Total Price", "Invoice ID", "Appointment ID"};
         
         DefaultTableModel invoiceDetailModel = new DefaultTableModel(colName, 0);
         for (String[] invoiceDetail : invoiceDetailData){
@@ -169,10 +169,10 @@ public class StaffController {
         return 0;
     }
     
-    public int validateAppointmentUpdate(int appointmentId, Date rawDate, String status, String doctorId, String doctorName, String customerId, String customerName){
+    public int validateAppointmentUpdate(String appointmentId, Date rawDate, String status, String doctorId, String doctorName, String customerId, String customerName){
         String appointmentDate = sdf.format(rawDate);
         
-        if(doctorId.isEmpty() || doctorName.isEmpty() || customerId.isEmpty() || customerName.isEmpty()){
+        if(appointmentId.isEmpty() || doctorId.isEmpty() || doctorName.isEmpty() || customerId.isEmpty() || customerName.isEmpty()){
             return 1;
         }
         

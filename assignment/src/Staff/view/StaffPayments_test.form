@@ -54,8 +54,8 @@
                                   </Group>
                                   <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jTextField1" pref="192" max="32767" attributes="0"/>
-                                      <Component id="cmbMedication" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtInvoiceId" pref="192" max="32767" attributes="0"/>
+                                      <Component id="cmbPayment" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -94,12 +94,12 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtInvoiceId" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cmbMedication" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cmbPayment" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="lblpricing" min="-2" pref="284" max="-2" attributes="0"/>
@@ -124,7 +124,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="txtInvoiceId">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
@@ -139,7 +139,7 @@
             <Property name="text" type="java.lang.String" value="Payment Method"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cmbMedication">
+        <Component class="javax.swing.JComboBox" name="cmbPayment">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
@@ -170,6 +170,9 @@
                   </Table>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblInvoiceMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

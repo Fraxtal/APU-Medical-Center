@@ -269,8 +269,8 @@ public class ManageCustomerAccount {
     
     public boolean saveAppointments(List<String> newData) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(appointmentsFile))) {
-            for (String user : newData) {
-                bw.write(user);
+            for (String appointment : newData) {
+                bw.write(appointment);
                 bw.newLine();
             }
         } 
@@ -299,7 +299,7 @@ public class ManageCustomerAccount {
         return true;
     }
     
-    public boolean updateAppointment(int appointmentId, String appointmentDate, String status, String doctorId, String doctorName, String customerId, String customerName) {
+    public boolean updateAppointment(String appointmentId, String appointmentDate, String status, String doctorId, String doctorName, String customerId, String customerName) {
         List<String> appointmentLines = new ArrayList<>();
         boolean found = false;
 
@@ -308,7 +308,7 @@ public class ManageCustomerAccount {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) continue;
                 String[] values = line.trim().split(";");
-                if (values.length >= 7 && Integer.parseInt(values[0]) == appointmentId) {
+                if (values.length >= 7 && values[0].equalsIgnoreCase(appointmentId)) {
                     values[1] = appointmentDate;
                     values[2] = status;
                     values[3] = doctorId;
@@ -326,7 +326,7 @@ public class ManageCustomerAccount {
         }
 
         if (found) {
-            return saveUsers(appointmentLines);
+            return saveAppointments(appointmentLines);
         }
         return false;
     }
@@ -364,7 +364,7 @@ public class ManageCustomerAccount {
                     String invoicesId = data[0];
                     String subtotal = data[1];
                     String paymentMethod = data[2];
-                    String customerId = data[3];
+                    String appointmentId = data[3];
                     
                     invoicesData.add(data);
                 }
@@ -375,6 +375,20 @@ public class ManageCustomerAccount {
             e.printStackTrace();
         }
         return appointmentsList = invoicesData;
+    }
+    
+    public boolean saveInvoices(List<String> newData) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(invoicesFile))) {
+            for (String invoice : newData) {
+                bw.write(invoice);
+                bw.newLine();
+            }
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
     
     public List<String[]> loadInvoiceDetails() {
@@ -392,7 +406,7 @@ public class ManageCustomerAccount {
                     String pricePer = data[3];
                     String priceTotal = data[4];
                     String invoiceId = data[5];
-                    String customerId = data[6];
+                    String appointmentId = data[6];
                     
                     invoiceDetailsData.add(data);
                 }
@@ -406,6 +420,34 @@ public class ManageCustomerAccount {
     }
     
     //write a function that returns a customer's details(uername, fullname) based on the selected invoiceid
+    
+    public boolean updateInvoicePayment(String invoiceId, String paymentMethod){
+        List<String> invoiceLines = new ArrayList<>();
+        boolean found = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(invoicesFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) continue;
+                String[] values = line.trim().split(";");
+                if (values.length >= 4 && values[0].equalsIgnoreCase(invoiceId)) {
+                    values[2] = paymentMethod;
+                    line = String.join(";", values);
+                    found = true;
+                }
+                invoiceLines.add(line);
+            }
+        }   catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (found) {
+            return saveInvoices(invoiceLines);
+        }
+        return false;
+    }
+    
     
     public Date parseDate(String date){
         try {

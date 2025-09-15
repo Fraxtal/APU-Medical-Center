@@ -6,6 +6,7 @@ package Staff.view;
 
 import Staff.controller.StaffController;
 import Staff.service.ManageCustomerAccount;
+import javax.swing.table.TableModel;
 
 
 public class StaffPayments_test extends javax.swing.JFrame {
@@ -31,10 +32,10 @@ public class StaffPayments_test extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanelPayment = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        txtInvoiceId = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        cmbMedication = new javax.swing.JComboBox<>();
+        cmbPayment = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblInvoice = new javax.swing.JTable();
         lblpricing = new javax.swing.JLabel();
@@ -50,13 +51,13 @@ public class StaffPayments_test extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setEnabled(false);
+        txtInvoiceId.setEnabled(false);
 
         jLabel1.setText("Invoice ID");
 
         jLabel2.setText("Payment Method");
 
-        cmbMedication.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Credit" }));
+        cmbPayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Credit" }));
 
         tblInvoice.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,6 +70,11 @@ public class StaffPayments_test extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblInvoice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblInvoiceMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblInvoice);
 
         lblpricing.setText("Total Price");
@@ -124,8 +130,8 @@ public class StaffPayments_test extends javax.swing.JFrame {
                                     .addComponent(jLabel2))
                                 .addGap(53, 53, 53)
                                 .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                                    .addComponent(cmbMedication, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(txtInvoiceId, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                                    .addComponent(cmbPayment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(89, 89, 89)
                         .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -154,11 +160,11 @@ public class StaffPayments_test extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtInvoiceId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(cmbMedication, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(lblpricing, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -196,6 +202,15 @@ public class StaffPayments_test extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_txtReturnActionPerformed
 
+    private void tblInvoiceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInvoiceMouseClicked
+        int index = tblInvoice.getSelectedRow();
+        TableModel invoiceModel = tblInvoice.getModel();
+        if (index != -1){
+            txtInvoiceId.setText(invoiceModel.getValueAt(index, 0).toString());
+            cmbPayment.setSelectedItem(invoiceModel.getValueAt(index, 2).toString());
+        }
+    }//GEN-LAST:event_tblInvoiceMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -222,7 +237,7 @@ public class StaffPayments_test extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cmbMedication;
+    private javax.swing.JComboBox<String> cmbPayment;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
@@ -234,10 +249,10 @@ public class StaffPayments_test extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelPayment;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblpricing;
     private javax.swing.JTable tblInvoice;
     private javax.swing.JTable tblInvoiceDetails;
+    private javax.swing.JTextField txtInvoiceId;
     private javax.swing.JButton txtReturn;
     // End of variables declaration//GEN-END:variables
 }
