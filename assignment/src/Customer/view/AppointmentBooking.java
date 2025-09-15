@@ -7,11 +7,7 @@ package Customer.view;
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
 import Customer.services.CustomerService;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -51,6 +47,7 @@ public class AppointmentBooking extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnBook = new javax.swing.JButton();
+        DOAChooser = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,7 +96,9 @@ public class AppointmentBooking extends javax.swing.JFrame {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addGap(18, 18, 18)
-                                .addComponent(cmbDoctor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbDoctor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(DOAChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(76, 76, 76)
                                 .addComponent(jLabel1)))))
@@ -113,12 +112,15 @@ public class AppointmentBooking extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(34, 34, 34))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cmbDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
-                        .addGap(36, 36, 36))
-                    .addComponent(jLabel3))
-                .addGap(34, 34, 34)
+                        .addGap(18, 18, 18)
+                        .addComponent(DOAChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)))
                 .addComponent(btnBook)
                 .addGap(18, 18, 18)
                 .addComponent(btnReturn)
@@ -135,52 +137,7 @@ public class AppointmentBooking extends javax.swing.JFrame {
 
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
         // TODO add your handling code here:
-        try {
-            // Validate inputs
-            if (cmbDoctor.getSelectedItem() == null) {
-                JOptionPane.showMessageDialog(this, "Please select a doctor.", "Validation Error", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            Date utilDate = jDoa.getDate();  // This gives you a java.util.Date
-            if (utilDate == null) {
-                JOptionPane.showMessageDialog(this, "Please enter a date.", "Validation Error", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // Convert util.Date to LocalDate
-            LocalDate appointmentDate = utilDate.toInstant()
-                                                .atZone(ZoneId.systemDefault())
-                                                .toLocalDate();
-            // Check if date is in the past
-            if (appointmentDate.isBefore(LocalDate.now())) {
-                JOptionPane.showMessageDialog(this, "Cannot book appointment in the past.", "Validation Error", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            // Get doctor info
-            String doctorName = (String) cmbDoctor.getSelectedItem();
-            int doctorId = getDoctorIdFromName(doctorName);
-            if (doctorId == -1) {
-                JOptionPane.showMessageDialog(this, "Unable to resolve selected doctor. Please reselect.", "Validation Error", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            // Book appointment through controller
-            boolean success = controller.bookAppointment(doctorId, doctorName, appointmentDate);
-            
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Appointment request submitted successfully! Staff will review and confirm your appointment.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                this.setVisible(false);
-                controller.showCustomerDashboard();
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to submit appointment request. Please try again.", "Booking Error", JOptionPane.ERROR_MESSAGE);
-            }
-                
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Invalid date format. Please use yyyy-MM-dd.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-        }
-
+        
     }//GEN-LAST:event_btnBookActionPerformed
 
     /**
@@ -228,6 +185,7 @@ public class AppointmentBooking extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser DOAChooser;
     private javax.swing.JButton btnBook;
     private javax.swing.JButton btnReturn;
     private javax.swing.JComboBox<String> cmbDoctor;

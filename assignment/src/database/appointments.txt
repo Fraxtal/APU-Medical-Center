@@ -1,4 +1,4 @@
-A0001;2024-05-01;Scheduled;20000;Dr.Sophia;10000;Chris
+A0001;2024-05-01;Completed;20000;Dr.Sophia;10000;Chris
 A0002;2024-10-10;Completed;20001;Dr.Kim;10001;Alice
 A0003;2024-11-21;Scheduled;20001;Dr.Kim;10001;Alice
 A0004;2024-12-05;Pending;20000;Dr.Sophia;10000;Chase

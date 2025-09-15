@@ -72,20 +72,6 @@ public abstract class BaseEntity implements Serializable {
         this.updatedAt = LocalDateTime.now();
     }
     
-    /**
-     * Abstract method to validate entity data
-     * Must be implemented by subclasses - demonstrates abstraction
-     * @return true if valid, false otherwise
-     */
-    public abstract boolean isValid();
-    
-    /**
-     * Abstract method to get entity summary
-     * Must be implemented by subclasses - demonstrates polymorphism
-     * @return Entity summary string
-     */
-    public abstract String getSummary();
-    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

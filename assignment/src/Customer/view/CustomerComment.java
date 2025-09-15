@@ -7,6 +7,7 @@ package Customer.view;
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
 import Customer.services.CustomerService;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -59,6 +60,11 @@ public class CustomerComment extends javax.swing.JFrame {
         cmbSubject.setToolTipText("");
 
         btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -103,6 +109,36 @@ public class CustomerComment extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        String subject = (String) cmbSubject.getSelectedItem();
+        String context = tbContext.getText();
+
+        if (subject == null || subject.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a subject.", "Validation", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (context == null || context.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter your comment.", "Validation", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (controller == null) {
+            JOptionPane.showMessageDialog(this, "Controller not initialized.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean ok = controller.submitComment(subject.trim(), context.trim());
+        if (ok) {
+            JOptionPane.showMessageDialog(this, "Comment submitted successfully.");
+            tbContext.setText("");
+            cmbSubject.setSelectedIndex(0);
+            this.setVisible(false);
+            controller.showCustomerDashboard();
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to submit comment. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
      * @param args the command line arguments

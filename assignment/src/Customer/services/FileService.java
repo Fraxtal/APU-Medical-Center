@@ -9,8 +9,6 @@ public interface FileService {
     
     List<Appointment> getCustomerAppointments(int customerId);
 
-    boolean bookAppointment(Appointment appointment);
-    
     boolean updateCustomerInfo(Customer customer);
     
 }

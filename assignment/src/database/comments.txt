@@ -1,12 +1,15 @@
-1;10000;20000;Very helpful during consultation, explained clearly.
-2;10001;20001;Appreciated the thorough check-up and friendly attitude.
-3;10001;20001;Wait time was a bit long but overall good.
-4;10000;20000;Follow-up instructions were easy to understand.
-5;10002;40000;Reception was efficient and polite.
-6;10003;40001;Nurse was caring and professional.
-7;10004;40003;Helped quickly with the kiosk issue.
-8;10002;40004;System update caused slight delay.
-9;10000;30000;Billing process was handled smoothly.
-10;10001;30001;Appreciate the quick response to my feedback.
-11;10003;30001;Would like extended clinic hours.
-12;10004;20003;Great bedside manner and timely diagnosis.
+1;10000;General Experience;Very helpful during consultation explained clearly
+2;10001;Clinic Experience;Appreciated the thorough check-up and friendly attitude
+3;10001;Clinic Experience;Wait time was a bit long but overall good
+4;10000;Doctor's Experience;Follow-up instructions were easy to understand
+5;10002;Management Experience;Reception was efficient and polite
+6;10003;Clinic Experience;Nurse was caring and professional
+7;10004;Management Experience;Helped quickly with the kiosk issue
+8;10002;Management Experience;System update caused slight delay
+9;10000;Management Experience;Billing process was handled smoothly
+10;10001;General Experience;Appreciate the quick response to my feedback
+11;10003;General Experience;Would like extended clinic hours
+12;10004;Doctor's Experience;Great bedside manner and timely diagnosis
+13;10005;Clinic Experience;Clean facilities and organized workflow
+14;10006;General Experience;Front desk staff were welcoming
+15;10007;Doctor's Experience;Doctor listened carefully and addressed concerns

@@ -166,6 +166,19 @@ public class AppointmentHistory extends javax.swing.JFrame {
 
     private void tbleAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbleAppointmentsMouseClicked
         // TODO add your handling code here:
+        javax.swing.JTable source = (javax.swing.JTable)evt.getSource();
+        int row = source.rowAtPoint(evt.getPoint());
+        
+        if (row >= 0) {
+            // Get the appointment ID from the first column
+            String appointmentId = (String) source.getModel().getValueAt(row, 0);
+            
+            if (appointmentId != null && !appointmentId.trim().isEmpty()) {
+                // Navigate to AppointmentDetails with the selected appointment ID
+                this.setVisible(false);
+                controller.showAppointmentDetails(appointmentId);
+            }
+        }
         
     }//GEN-LAST:event_tbleAppointmentsMouseClicked
 

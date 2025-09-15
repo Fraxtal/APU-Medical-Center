@@ -15,6 +15,7 @@ public class CustomerService implements FileService {
     private static final String APPOINTMENTS_FILE = "src\\database\\appointments.txt";
     private static final String USERS_FILE = "src\\database\\users.txt";
     private static final String INVOICES_FILE = "src\\database\\invoices.txt";
+    private static final String COMMENTS_FILE = "src\\database\\comments.txt";
     private static final DateTimeFormatter DTFORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     /**
@@ -50,46 +51,6 @@ public class CustomerService implements FileService {
         }
         
         return appointments;
-    }
-    
-    /**
-     * Book a new appointment - demonstrates business logic and validation
-     */
-    public boolean bookAppointment(Appointment appointment) {
-        if (appointment == null) {
-            logger.warning("Invalid appointment data provided");
-            return false;
-        }
-        
-        try {
-            // Generate appointment ID first so validation that requires it can pass
-            String appointmentId = generateAppointmentId();
-            appointment.setAppointmentId(appointmentId);
-            
-            // Input validation - demonstrates encapsulation
-            if (!appointment.isValid()) {
-                logger.warning("Invalid appointment data provided");
-                return false;
-            }
-            
-            // Business rule validation
-            if (appointment.isPastAppointment()) {
-                logger.warning("Cannot book appointment in the past");
-                return false;
-            }
-            try (FileWriter writer = new FileWriter(APPOINTMENTS_FILE, true)) {
-                String line = formatAppointmentForFile(appointment);
-                writer.write(line + "\n");
-                writer.flush();
-            }
-            
-            logger.info("Appointment booked successfully: " + appointmentId);
-            return true;
-            
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error booking appointment", e);
-            return false;
-        }
     }
     /**
      * Update customer information - demonstrates validation and file operations
@@ -170,38 +131,107 @@ public class CustomerService implements FileService {
         return tableData;
     }
     
-    /**
-     * Get invoices for a specific appointment
-     */
-    public List<Invoice> getInvoicesForAppointment(int appointmentId) {
+        public List<Invoice> getInvoicesForAppointment(String appointmentId) {
         List<Invoice> invoices = new ArrayList<>();
+        try (Scanner sc = new Scanner(new File(INVOICES_FILE))) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine().trim();
+                if (line.isEmpty()) continue;
+                String[] v = line.split("[;,]");
+                if (v.length >= 4) {
+                    String invApptId = v[3].trim();    // now A0001 format
+                    if (appointmentId.equalsIgnoreCase(invApptId)) {
+                        invoices.add(parseInvoiceFromLine(v));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error loading invoices", e);
+        }
+        return invoices;
+    }
+
+
+    public Invoice getInvoiceByAppointmentId(String appointmentId) {
+        List<Invoice> list = getInvoicesForAppointment(appointmentId);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    public Object[][] getInvoiceDetailsForDisplay(String invoiceId) {
+        List<Object[]> details = new ArrayList<>();
         
         try {
-            File file = new File(INVOICES_FILE);
+            File file = new File("src\\database\\invoiceDetails.txt");
             if (!file.exists()) {
-                return invoices; // Return empty list if file doesn't exist
+                return new Object[0][4];
             }
             
             try (Scanner scanner = new Scanner(file)) {
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine().trim();
-                    if (!line.isEmpty()) {
-                        String[] values = line.split(";");
-                        if (values.length >= 4) {
-                            int invoiceAppointmentId = Integer.parseInt(values[3]); // AppointmentID is at index 3
-                            if (invoiceAppointmentId == appointmentId) {
-                                Invoice invoice = parseInvoiceFromLine(values);
-                                invoices.add(invoice);
-                            }
+                    if (line.isEmpty()) continue;
+                    String[] values = line.split("[;,]");
+                    if (values.length >= 7) {
+                        String detailInvoiceId = values[5].trim();
+                        if (detailInvoiceId.equalsIgnoreCase(invoiceId)) {
+                            Object[] row = new Object[] {
+                                values[1],
+                                Integer.parseInt(values[2]),
+                                String.format("RM %.2f", Double.parseDouble(values[3])),
+                                String.format("RM %.2f", Double.parseDouble(values[4]))
+                            };
+                            details.add(row);
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error loading invoices for appointment", e);
+            logger.log(Level.SEVERE, "Error loading invoice details", e);
         }
-        
-        return invoices;
+        return details.toArray(new Object[0][4]);
+    }
+
+    public String getDoctorFeedbackForAppointment(String appointmentId) {
+        File file = new File("src\\database\\feedbacks.txt");
+        if (!file.exists()) return null;
+        try (Scanner sc = new Scanner(file)) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine().trim();
+                if (line.isEmpty()) continue;
+                String[] p = line.split("[;,]");
+                if (p.length >= 7) {
+                    String rawApptId = p[1].trim();
+                    String normalizedFileAppt = normalizeAppointmentId(rawApptId);
+                    String normalizedInputAppt = normalizeAppointmentId(appointmentId);
+                    if (normalizedFileAppt.equalsIgnoreCase(normalizedInputAppt)) {
+                        return p[6].trim();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error loading doctor feedback", e);
+        }
+        return null;
+    }
+    
+    private String normalizeAppointmentId(String id) {
+        if (id == null || id.isBlank()) return "";
+        String trimmed = id.trim();
+        if (trimmed.matches("A0*\\d+")) {
+            try {
+                int n = Integer.parseInt(trimmed.substring(1));
+                return String.valueOf(10000 + n);
+            } catch (NumberFormatException ignore) { /* fall through */ }
+        }
+        if (trimmed.matches("\\d+")) {
+            try {
+                int n = Integer.parseInt(trimmed);
+                if (n >= 10000) {
+                    return String.valueOf(n);
+                }
+            } catch (NumberFormatException ignore) { /* fall through */ }
+        }
+        return trimmed;
     }
     
     public List<String> getDoctors() {
@@ -357,16 +387,15 @@ public class CustomerService implements FileService {
     }
     
     private Invoice parseInvoiceFromLine(String[] values) {
-        int invoiceId = Integer.parseInt(values[0]); // InvoiceID
-        double total = Double.parseDouble(values[1]); // Total
-        String paymentMethod = values[2]; // PaymentMethod
-        int appointmentId = Integer.parseInt(values[3]); // AppointmentID
-        
+        int invoiceId = Integer.parseInt(values[0].replaceAll("\\D", "")); // supports INV001
+        double total = Double.parseDouble(values[1]);
+        String paymentMethod = values[2]; // may be empty
+        String appointmentId = values[3].trim(); 
         return new Invoice(invoiceId, total, paymentMethod, appointmentId);
     }
     
     private String formatInvoiceForFile(Invoice invoice) {
-        return String.format("%d;%.2f;%s;%d",
+        return String.format("%d;%.2f;%s;%s",
                            invoice.getInvoiceId(),
                            invoice.getTotal(),
                            invoice.getPaymentMethod(),
@@ -375,6 +404,86 @@ public class CustomerService implements FileService {
     
     private LocalDate parseDate(String raw) {
         return LocalDate.parse(raw.trim(), DTFORMATTER);
+    }
+
+    public Appointment getAppointmentById(String appointmentId) {
+        try {
+            File file = new File(APPOINTMENTS_FILE);
+            if (!file.exists()) {
+                return null;
+            }
+
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine().trim();
+                    if (!line.isEmpty()) {
+                        String[] values = line.split(";");
+                        if (values.length >= 7) {
+                            String currentAppointmentId = values[0];
+                            if (currentAppointmentId.equals(appointmentId)) {
+                                return parseAppointmentFromLine(values);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error loading appointment by ID", e);
+        }
+        return null;
+    }
+
+    public boolean submitCustomerComment(int customerId, String subject, String context) {
+        if (customerId <= 0) {
+            logger.warning("Invalid customerId for comment");
+            return false;
+        }
+        if (subject == null || subject.trim().isEmpty()) {
+            logger.warning("Subject is required");
+            return false;
+        }
+        if (context == null || context.trim().isEmpty()) {
+            logger.warning("Context is required");
+            return false;
+        }
+
+        int nextId = 1;
+        List<String> lines = new ArrayList<>();
+        try {
+            File file = new File(COMMENTS_FILE);
+            if (file.exists()) {
+                try (Scanner scanner = new Scanner(file)) {
+                    while (scanner.hasNextLine()) {
+                        String line = scanner.nextLine().trim();
+                        if (line.isEmpty()) continue;
+                        lines.add(line);
+                        String[] parts = line.split("[;,]");
+                        if (parts.length >= 1) {
+                            try {
+                                int id = Integer.parseInt(parts[0].trim());
+                                nextId = Math.max(nextId, id + 1);
+                            } catch (NumberFormatException ignore) {}
+                        }
+                    }
+                }
+            }
+
+            // Write back existing lines (unchanged), then append the new line (semicolon-separated)
+            try (FileWriter writer = new FileWriter(COMMENTS_FILE)) {
+                for (String l : lines) {
+                    writer.write(l + "\n");
+                }
+                // Format: CommentId;CustomerID;Subject;Context
+                String safeSubject = subject.replace("\n", " ").trim();
+                String safeContext = context.replace("\n", " ").trim();
+                writer.write(String.format("%d;%d;%s;%s%n", nextId, customerId, safeSubject, safeContext));
+            }
+            logger.info("Comment submitted: id=" + nextId + ", customerId=" + customerId);
+            return true;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error submitting customer comment", e);
+            return false;
+        }
     }
 
 }
