@@ -77,7 +77,7 @@ public class ManageCustomerAccount {
         return true;
     }
     
-    public boolean updateCustomer(int id, String username, String fullname, String email, String pass, String address, String contact) {
+    public boolean updateCustomer(String customerId, String username, String fullname, String email, String pass, String address, String contact) {
         List<String> lines = new ArrayList<>();
         boolean found = false;
 
@@ -86,7 +86,7 @@ public class ManageCustomerAccount {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) continue;
                 String[] values = line.trim().split(";");
-                if (values.length >= 9 && Integer.parseInt(values[0]) == id) {
+                if (values.length >= 9 && values[0].equals(customerId)) {
                     values[1] = username;
                     values[2] = fullname;
                     values[3] = email;
@@ -109,7 +109,7 @@ public class ManageCustomerAccount {
         return false;
     }
     
-    public boolean deleteCustomer(int id) {
+    public boolean deleteCustomer(String customerId) {
         List<String> lines = new ArrayList<>();
         boolean found = false;
 
@@ -118,7 +118,7 @@ public class ManageCustomerAccount {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) continue;
                 String[] values = line.trim().split(";");
-                if (values.length >= 9 && Integer.parseInt(values[0]) == id) {
+                if (values.length >= 9 && values[0].equals(customerId)) {
                     found = true;
                     continue;
                 }
@@ -201,11 +201,62 @@ public class ManageCustomerAccount {
         return false;
     }
     
-    public boolean checkIdExists(int id) {
+    public boolean checkUserIdExists(String id) {
         try {
             List<String[]> users = loadUsers();
             for (String[] user : users) {
-                if (user[0].equals(String.valueOf(id))) {
+                if (user[0].equals(id)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        
+        return false;
+    }
+    
+    public boolean checkAppointmentIdExists(String appId) {
+        try {
+            List<String[]> appointments = loadAppointments();
+            for (String[] appointment : appointments) {
+                if (appointment[0].equalsIgnoreCase(appId)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        
+        return false;
+    }
+    
+    public boolean checkEmailLinkedUserId(String userId, String email){
+        try {
+            List<String[]> users = loadUsers();
+            for (String[] user : users) {
+                if (user[0].equals(userId) && user[3].equalsIgnoreCase(email)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        
+        return false;
+    }
+    
+    public boolean checkContactLinkedUserId(String userId, String contact){
+        try {
+            List<String[]> users = loadUsers();
+            for (String[] user : users) {
+                if (user[0].equals(userId) && user[6].equalsIgnoreCase(contact)) {
                     return true;
                 }
             }
@@ -419,7 +470,9 @@ public class ManageCustomerAccount {
         return invoiceDetailsList = invoiceDetailsData;
     }
     
-    //write a function that returns a customer's details(uername, fullname) based on the selected invoiceid
+    public List<String[]> loadSpecificInvoiceDetails(String invoiceId) {
+        return loadInvoiceDetails().stream().filter(data -> invoiceId.equalsIgnoreCase(data[5])).toList();
+    }
     
     public boolean updateInvoicePayment(String invoiceId, String paymentMethod){
         List<String> invoiceLines = new ArrayList<>();
@@ -448,8 +501,30 @@ public class ManageCustomerAccount {
         return false;
     }
     
+    //a function that returns a customer's details(Id, fullname) based on the selected invoice.txt - AppointmentId
+    public String returnCustomerNamefromId(String customerId){
+        List<String[]> customers = loadCustomers(); 
+        for (String[] customer : customers) {
+            if (customer[0].equalsIgnoreCase(customerId)) {
+                return customer[2];
+            }
+        }
+        return null;
+    }
     
-    public Date parseDate(String date){
+    public String returnCustomerIDfromAppId(String appointmentId){
+        List<String[]> appointments = loadAppointments(); 
+        for (String[] appointment : appointments) {
+            if (appointment[0].equalsIgnoreCase(appointmentId)) {
+                return appointment[5];
+            }
+        }
+        return null;
+        
+    }
+    
+    
+    public Date parseStrToDate(String date){
         try {
         return new SimpleDateFormat("yyyy-MM-dd").parse(date);
         }
@@ -458,4 +533,5 @@ public class ManageCustomerAccount {
             return null;
         }
     }
+    
 }

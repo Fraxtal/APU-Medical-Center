@@ -2,6 +2,7 @@ package Staff.controller;
 
 import Staff.service.ManageCustomerAccount;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -10,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 public class StaffController {
     private ManageCustomerAccount serviceMCA;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    
+    private static String[] paymentTypes = {"Cash", "Credit"};
     
     public StaffController() {
         this.serviceMCA = new ManageCustomerAccount();
@@ -87,21 +88,42 @@ public class StaffController {
         return invoiceDetailModel;
     }
     
-    public int validateAccountUpdate(int id, String username, String fullname, String email, String password, String address, String contactNum) {
-        if (username.isEmpty() || fullname.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || contactNum.isEmpty()) {
+    public DefaultTableModel getSpecificInvoiceDetailTable(String invoiceId){
+        List<String[]> sInvoiceDetailData = serviceMCA.loadSpecificInvoiceDetails(invoiceId);
+        String[] colName = {"Invoice Detail ID", "Item Name", "Quantity", "Price Per Item", "Total Price", "Invoice ID", "Appointment ID"};
+        
+        DefaultTableModel sInvoiceDetailModel = new DefaultTableModel(colName, 0);
+        for (String[] sInvoiceDetail : sInvoiceDetailData){
+            sInvoiceDetailModel.addRow(sInvoiceDetail);
+        }
+        
+        return sInvoiceDetailModel;
+    }
+    
+    public int validateAccountUpdate(String customerId, String username, String fullname, String email, String password, String address, String contactNum) {
+        if (customerId.isEmpty() || username.isEmpty() || fullname.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || contactNum.isEmpty()) {
             return 1;
         }
         
-        if (serviceMCA.checkEmailExists(email)){
+        if (!serviceMCA.checkUserIdExists(customerId)){
             return 2;
         }
         
-        if (serviceMCA.checkContactExists(contactNum)){
-            return 3;
+        if (!serviceMCA.checkEmailLinkedUserId(customerId, email)){
+            if (serviceMCA.checkEmailExists(email)){
+                return 3;
+            }
         }
         
-        if(!serviceMCA.updateCustomer(id, username, fullname, email, password, address, contactNum)){
-            return 4;
+        if (!serviceMCA.checkContactLinkedUserId(customerId, contactNum)){
+            if (serviceMCA.checkContactExists(contactNum)){
+                return 4;
+            }
+        }
+        
+        
+        if(!serviceMCA.updateCustomer(customerId, username, fullname, email, password, address, contactNum)){
+            return 5;
         }
 
         return 0;
@@ -128,17 +150,16 @@ public class StaffController {
         return 0;
     }
     
-    public int validateAccountDeletion(String id) {
-        int cId = Integer.parseInt(id);
-        if (id.isEmpty())
+    public int validateAccountDeletion(String customerId) {
+        if (customerId.isEmpty())
         {
             return 1;
         }
-        if (!serviceMCA.checkIdExists(cId)){
+        if (!serviceMCA.checkUserIdExists(customerId)){
             return 1;
         }
         
-        if(!serviceMCA.deleteCustomer(cId)){
+        if(!serviceMCA.deleteCustomer(customerId)){
             return 2;
         }
         return 0;
@@ -150,11 +171,11 @@ public class StaffController {
             return 1;
         }
         
-        if(!serviceMCA.checkIdExists(Integer.parseInt(doctorId))){
+        if(!serviceMCA.checkUserIdExists(doctorId)){
             return 2;
         }
         
-        if(!serviceMCA.checkIdExists(Integer.parseInt(customerId))){
+        if(!serviceMCA.checkUserIdExists(customerId)){
             return 3;
         }
         
@@ -176,21 +197,70 @@ public class StaffController {
             return 1;
         }
         
-        if(!serviceMCA.checkIdExists(Integer.parseInt(doctorId))){
+        if(!serviceMCA.checkUserIdExists(doctorId)){
             return 2;
         }
         
-        if(!serviceMCA.checkIdExists(Integer.parseInt(customerId))){
+        if(!serviceMCA.checkUserIdExists(customerId)){
             return 3;
         }
         
-        if(rawDate.before(new Date())){
+        if(!serviceMCA.checkAppointmentIdExists(appointmentId)){
             return 4;
         }
         
-        if(!serviceMCA.updateAppointment(appointmentId, appointmentDate, status, doctorId, doctorName, customerId, customerName)){
+        if(rawDate.before(new Date())){
             return 5;
         }
+        
+        if(!serviceMCA.updateAppointment(appointmentId, appointmentDate, status, doctorId, doctorName, customerId, customerName)){
+            return 6;
+        }
         return 0;
+    }
+    
+    public int validateInvoiceUpdate(String invoiceId, String paymentMethod){
+        if (invoiceId.isEmpty() || paymentMethod.isEmpty()){
+            return 1;
+        }
+         
+         if (!Arrays.asList(paymentTypes).contains(paymentMethod)){
+             return 2;
+         }
+        
+        if (!serviceMCA.updateInvoicePayment(invoiceId, paymentMethod)){
+            return 3;
+        }
+        
+        return 0;
+    }
+    
+    public String validateCustomerIDtoName(String customerId){
+        if(!serviceMCA.checkUserIdExists(customerId)){
+            return null;
+        }
+        
+        String customerName = serviceMCA.returnCustomerNamefromId(customerId);
+        if(customerName != null){
+            return customerName;
+        }
+        
+        return null;
+    }
+    
+    public String validateAppIdtoCustomerName(String appointmentId){
+        if(!serviceMCA.checkAppointmentIdExists(appointmentId)){
+            return null;
+        }
+        
+        String customerId = serviceMCA.returnCustomerIDfromAppId(appointmentId);
+        if(customerId != null){
+            String customerName = serviceMCA.returnCustomerNamefromId(customerId);
+            if (customerName != null){
+                return customerName;
+            }
+        }
+        
+        return null;
     }
 }

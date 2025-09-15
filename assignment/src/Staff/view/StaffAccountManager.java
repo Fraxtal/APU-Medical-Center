@@ -275,7 +275,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnclearActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        int customerID = Integer.parseInt(txtID.getText());
+        String customerID = txtID.getText();
         String username = txtUsername.getText();
         String fullname = txtFullname.getText();
         String email = txtEmail.getText();
@@ -284,8 +284,14 @@ public class StaffAccountManager extends javax.swing.JFrame {
         String contact = txtContact.getText();
         
         int success = controller.validateAccountUpdate(customerID, username, fullname, email, pass, address, contact);
+        int currentRow = tblAccounts.getSelectedRow();
+        
+        if (currentRow == -1){
+            JOptionPane.showMessageDialog(this, "Please select a record to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        if (success == 3) {
+        if (success == 4) {
             int option = JOptionPane.showConfirmDialog(this,"Contact Number: " + contact + "\nThis number is already tied to an account.\nProceed?",
                     "Confirmation",JOptionPane.YES_NO_OPTION);
 
@@ -293,22 +299,27 @@ public class StaffAccountManager extends javax.swing.JFrame {
                 return;
             }
         }
+        
 
         switch (success) {
             case 0:
-                JOptionPane.showMessageDialog(this, "Account details updated.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Account details updated.", "Info", JOptionPane.INFORMATION_MESSAGE);tblAccounts.setModel(controller.getCustomerTable());
                 break;
             case 1:
                 JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
                 break;
             case 2:
+                JOptionPane.showMessageDialog(this, "Invalid ID", "Info", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case 3:
                 JOptionPane.showMessageDialog(this, "Email already taken.", "Info", JOptionPane.INFORMATION_MESSAGE);
+
                 break;
             case 4:
-                JOptionPane.showMessageDialog(this, "Error occurred while updating account.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error occurred while updating account.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             default:
-                JOptionPane.showMessageDialog(this, "ERROR.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "ERROR.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
 

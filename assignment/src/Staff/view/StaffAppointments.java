@@ -57,6 +57,8 @@ public class StaffAppointments extends javax.swing.JFrame {
         btnReturn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDoctors = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
 
@@ -108,6 +110,7 @@ public class StaffAppointments extends javax.swing.JFrame {
 
         txtCustomerName.setName("txt_ID"); // NOI18N
 
+        txtDoctorName.setEditable(false);
         txtDoctorName.setName("txt_contact"); // NOI18N
 
         jLabel9.setText("Doctor Name");
@@ -129,6 +132,11 @@ public class StaffAppointments extends javax.swing.JFrame {
         });
 
         btnCheck.setText("Check");
+        btnCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -141,7 +149,6 @@ public class StaffAppointments extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
                     .addComponent(txtAppointmentId)
-                    .addComponent(txtDoctorId)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCustomerName)
                     .addComponent(txtDoctorName)
@@ -162,7 +169,8 @@ public class StaffAppointments extends javax.swing.JFrame {
                             .addComponent(txtCustomerId, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
+                        .addComponent(btnCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                    .addComponent(txtDoctorId))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -236,6 +244,10 @@ public class StaffAppointments extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblDoctors);
 
+        jLabel1.setText("Doctors");
+
+        jLabel10.setText("Appointments");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -250,17 +262,20 @@ public class StaffAppointments extends javax.swing.JFrame {
                         .addComponent(lblAppointments)))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnReturn)
-                        .addContainerGap(500, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(ckbxPast))
-                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                             .addComponent(jScrollPane2))
-                        .addGap(38, 38, 38))))
+                        .addGap(38, 38, 38))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnReturn)
+                            .addComponent(jLabel1))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,10 +287,14 @@ public class StaffAppointments extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(ckbxPast)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ckbxPast)
+                            .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -302,7 +321,7 @@ public class StaffAppointments extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-//        int appointmentId = Integer.parseInt(txtAppointmentId.getText());
+
         String appointmentId = txtAppointmentId.getText();
         Date appointmentDate = calendarAppointment.getDate();
         String status = cmbStatus.getSelectedItem().toString();
@@ -310,11 +329,6 @@ public class StaffAppointments extends javax.swing.JFrame {
         String doctorName = txtDoctorName.getText();
         String customerId = txtCustomerId.getText();
         String customerName = txtCustomerName.getText();
-        
-        if (appointmentId.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Invalid Appointment ID", "Info", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
         
         int option = JOptionPane.showConfirmDialog(this, "Proceed with Changes?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (option != JOptionPane.YES_OPTION) {
@@ -335,10 +349,13 @@ public class StaffAppointments extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Invalid Customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             case 4:
-                JOptionPane.showMessageDialog(this, "Time machine unavailable", "Error", JOptionPane.ERROR_MESSAGE);
-                break;    
+                JOptionPane.showMessageDialog(this, "Invalid Appointment ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
             case 5:
-                JOptionPane.showMessageDialog(this, "Error occured while updating appointment", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "You can't book in the past.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;    
+            case 6:
+                JOptionPane.showMessageDialog(this, "Error occured while updating appointment.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
@@ -361,7 +378,7 @@ public class StaffAppointments extends javax.swing.JFrame {
         TableModel Appmodel = tblAppointments.getModel();
         if (index != -1){
             txtAppointmentId.setText(Appmodel.getValueAt(index, 0).toString());
-            calendarAppointment.setDate(mca.parseDate(Appmodel.getValueAt(index, 1).toString()));
+            calendarAppointment.setDate(mca.parseStrToDate(Appmodel.getValueAt(index, 1).toString()));
             cmbStatus.setSelectedItem(Appmodel.getValueAt(index, 2).toString());
             txtDoctorId.setText(Appmodel.getValueAt(index, 3).toString());
             txtDoctorName.setText(Appmodel.getValueAt(index, 4).toString());
@@ -424,6 +441,18 @@ public class StaffAppointments extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ckbxPastActionPerformed
 
+    private void btnCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckActionPerformed
+        String customerId = txtCustomerId.getText();
+        String customerName = controller.validateCustomerIDtoName(customerId);
+        
+        if (customerName == null){
+            JOptionPane.showMessageDialog(this, "Invalid Customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        txtCustomerName.setText(customerName);
+    }//GEN-LAST:event_btnCheckActionPerformed
+
     public void clearText(){
         txtAppointmentId.setText("");
         txtCustomerName.setText("");
@@ -443,6 +472,8 @@ public class StaffAppointments extends javax.swing.JFrame {
     private com.toedter.calendar.JCalendar calendarAppointment;
     private javax.swing.JCheckBox ckbxPast;
     private javax.swing.JComboBox<String> cmbStatus;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

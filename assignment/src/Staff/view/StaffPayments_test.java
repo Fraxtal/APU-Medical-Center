@@ -6,6 +6,7 @@ package Staff.view;
 
 import Staff.controller.StaffController;
 import Staff.service.ManageCustomerAccount;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 
 
@@ -18,7 +19,6 @@ public class StaffPayments_test extends javax.swing.JFrame {
     public StaffPayments_test() {
         initComponents();
         tblInvoice.setModel(controller.getInvoiceTable());
-        tblInvoiceDetails.setModel(controller.getInvoiceDetailTable());
         
     }
 
@@ -38,16 +38,17 @@ public class StaffPayments_test extends javax.swing.JFrame {
         cmbPayment = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblInvoice = new javax.swing.JTable();
-        lblpricing = new javax.swing.JLabel();
+        lblSubtotal = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnPayNFInalize = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblInvoiceDetails = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtReturn = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,32 +78,40 @@ public class StaffPayments_test extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblInvoice);
 
-        lblpricing.setText("Total Price");
-        lblpricing.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        lblpricing.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lblSubtotal.setText("RM xx");
+        lblSubtotal.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblSubtotal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jButton2.setText("Confirm");
 
-        jButton3.setText("Pay and Finalize");
+        btnPayNFInalize.setText("Pay and Finalize");
+        btnPayNFInalize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPayNFInalizeActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Print Receipt");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         tblInvoiceDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Invoice Details ID", "Item Name", "Quantity", "Price Per Item", "Total Price", "Invoice ID", "Appointment ID"
             }
         ));
+        tblInvoiceDetails.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblInvoiceDetails);
 
         jLabel5.setText("Invoice");
 
-        jLabel6.setText("Invoice Details");
+        jLabel6.setText("Invoice Details - Price Breakdown");
 
         txtReturn.setText("Return");
         txtReturn.addActionListener(new java.awt.event.ActionListener() {
@@ -110,6 +119,8 @@ public class StaffPayments_test extends javax.swing.JFrame {
                 txtReturnActionPerformed(evt);
             }
         });
+
+        jLabel3.setText("Total Price");
 
         javax.swing.GroupLayout jPanelPaymentLayout = new javax.swing.GroupLayout(jPanelPayment);
         jPanelPayment.setLayout(jPanelPaymentLayout);
@@ -119,31 +130,33 @@ public class StaffPayments_test extends javax.swing.JFrame {
                 .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
                         .addGap(49, 49, 49)
-                        .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lblpricing, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelPaymentLayout.createSequentialGroup()
-                                .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel2))
-                                .addGap(53, 53, 53)
-                                .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtInvoiceId, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                                    .addComponent(cmbPayment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(89, 89, 89)
                         .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblSubtotal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnPayNFInalize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelPaymentLayout.createSequentialGroup()
+                                    .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel2))
+                                    .addGap(53, 53, 53)
+                                    .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtInvoiceId, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                                        .addComponent(cmbPayment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jLabel3))
+                        .addGap(89, 89, 89)
+                        .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1)))
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(txtReturn)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanelPaymentLayout.setVerticalGroup(
             jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,7 +170,7 @@ public class StaffPayments_test extends javax.swing.JFrame {
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(104, 104, 104)
                         .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtInvoiceId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -165,12 +178,15 @@ public class StaffPayments_test extends javax.swing.JFrame {
                         .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(cmbPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(lblpricing, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPayNFInalize, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78))
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -206,10 +222,73 @@ public class StaffPayments_test extends javax.swing.JFrame {
         int index = tblInvoice.getSelectedRow();
         TableModel invoiceModel = tblInvoice.getModel();
         if (index != -1){
-            txtInvoiceId.setText(invoiceModel.getValueAt(index, 0).toString());
+            String invoiceId = invoiceModel.getValueAt(index, 0).toString();
+            
+            txtInvoiceId.setText(invoiceId);
+            lblSubtotal.setText("RM" + invoiceModel.getValueAt(index, 1).toString());
             cmbPayment.setSelectedItem(invoiceModel.getValueAt(index, 2).toString());
+            
+            tblInvoiceDetails.setModel(controller.getSpecificInvoiceDetailTable(invoiceId));
         }
     }//GEN-LAST:event_tblInvoiceMouseClicked
+
+    private void btnPayNFInalizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayNFInalizeActionPerformed
+        int currentRow = tblInvoice.getSelectedRow();
+        
+        if (currentRow == -1){
+            JOptionPane.showMessageDialog(this, "Please select a record to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String invoiceID = txtInvoiceId.getText();
+        String paymentMethod = cmbPayment.getSelectedItem().toString();
+        String subtotal = tblInvoice.getValueAt(currentRow, 1).toString();
+        String appointmentId = tblInvoice.getValueAt(currentRow, 3).toString();
+        String customerName = controller.validateAppIdtoCustomerName(appointmentId);
+        
+        if (!paymentMethod.isEmpty()){
+            JOptionPane.showConfirmDialog(this, "Invoice has already been paid for. \nUpdate Payment Method?", "Confirmation",JOptionPane.YES_NO_OPTION);
+        }
+        
+        int option = JOptionPane.showConfirmDialog(this, "Confirm Payment?"  + "\nCustomer: " + customerName + "\nAppointment ID: " + 
+                appointmentId + "\nInvoice ID: " + customerName + "\nPayment Method: " + paymentMethod + "\nTotal Price: " + subtotal, 
+                    "Confirmation",JOptionPane.YES_NO_OPTION);
+
+        if (option != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+        int success = controller.validateInvoiceUpdate(invoiceID, paymentMethod);
+        
+        switch (success){
+            case 0:
+                JOptionPane.showMessageDialog(this, "Payment successful.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case 1:
+                JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(this, "Invalid Payment Method.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            case 3:
+                JOptionPane.showMessageDialog(this, "Error occured while updating invoices", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+        }
+        tblInvoice.setModel(controller.getInvoiceTable());
+    }//GEN-LAST:event_btnPayNFInalizeActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        int currentRow = tblInvoice.getSelectedRow();
+        String paymentMethod = tblInvoice.getValueAt(currentRow, 2).toString().trim();
+        if (!paymentMethod.equalsIgnoreCase("Cash") || !paymentMethod.equalsIgnoreCase("Credit")){
+            JOptionPane.showMessageDialog(this, "Invoice still unpaid", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,19 +316,20 @@ public class StaffPayments_test extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPayNFInalize;
     private javax.swing.JComboBox<String> cmbPayment;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanelPayment;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblpricing;
+    private javax.swing.JLabel lblSubtotal;
     private javax.swing.JTable tblInvoice;
     private javax.swing.JTable tblInvoiceDetails;
     private javax.swing.JTextField txtInvoiceId;
