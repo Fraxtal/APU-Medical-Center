@@ -1,6 +1,8 @@
 package Staff.controller;
 
+import Staff.service.ManageAppointments;
 import Staff.service.ManageCustomerAccount;
+import Staff.service.ManagePayments;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -9,15 +11,21 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class StaffController {
-    private ManageCustomerAccount serviceMCA;
+    private ManageCustomerAccount mca;
+    private ManageAppointments ma;
+    private ManagePayments mp;
+    
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private static String[] paymentTypes = {"Cash", "Credit"};
     
     public StaffController() {
-        this.serviceMCA = new ManageCustomerAccount();
+        this.mca = new ManageCustomerAccount();
+        this.ma = new ManageAppointments();
+        this.mp = new ManagePayments();
     }
+    
     public DefaultTableModel getCustomerTable() {
-        List<String[]> customerData = serviceMCA.loadCustomers();
+        List<String[]> customerData = mca.loadCustomers();
         String[] colName = {"ID", "Username", "Fullname", "Email", "Password", "Address", "Contact Number", "Date Created", "Role"};
         
         DefaultTableModel customerModel = new DefaultTableModel(colName, 0);
@@ -29,7 +37,7 @@ public class StaffController {
     }
     
     public DefaultTableModel getAppointmentTable(){
-        List<String[]> appointmentData = serviceMCA.loadAppointments();
+        List<String[]> appointmentData = ma.loadAppointments();
         String[] colName = {"Appointment ID", "Appointment Date", "Status", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name"};
         
         DefaultTableModel appointmentModel = new DefaultTableModel(colName, 0);
@@ -41,7 +49,7 @@ public class StaffController {
     }
     
     public DefaultTableModel getPastAppointmentTable(){
-        List<String[]> pastAppointmentData = serviceMCA.loadPastAppointments();
+        List<String[]> pastAppointmentData = ma.loadPastAppointments();
         String[] colName = {"Appointment ID", "Appointment Date", "Status", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name"};
         
         DefaultTableModel pastAppointmentModel = new DefaultTableModel(colName, 0);
@@ -53,7 +61,7 @@ public class StaffController {
     }
     
     public DefaultTableModel getDoctorTable(){
-        List<String[]> doctorData = serviceMCA.loadDoctors();
+        List<String[]> doctorData = mca.loadDoctors();
         String[] colName = {"ID", "Username", "Fullname", "Email", "Password", "Address", "Contact Number"};
         
         DefaultTableModel doctorModel = new DefaultTableModel(colName, 0);
@@ -65,7 +73,7 @@ public class StaffController {
     }
     
     public DefaultTableModel getInvoiceTable(){
-        List<String[]> invoiceData = serviceMCA.loadInvoices();
+        List<String[]> invoiceData = mp.loadInvoices();
         String[] colName = {"Invoice ID", "Subtotal", "Payment Method", "Appointment ID"};
         
         DefaultTableModel invoiceModel = new DefaultTableModel(colName, 0);
@@ -77,7 +85,7 @@ public class StaffController {
     }
     
     public DefaultTableModel getInvoiceDetailTable(){
-        List<String[]> invoiceDetailData = serviceMCA.loadInvoiceDetails();
+        List<String[]> invoiceDetailData = mp.loadInvoiceDetails();
         String[] colName = {"Invoice Detail ID", "Item Name", "Quantity", "Price Per Item", "Total Price", "Invoice ID", "Appointment ID"};
         
         DefaultTableModel invoiceDetailModel = new DefaultTableModel(colName, 0);
@@ -89,7 +97,7 @@ public class StaffController {
     }
     
     public DefaultTableModel getSpecificInvoiceDetailTable(String invoiceId){
-        List<String[]> sInvoiceDetailData = serviceMCA.loadSpecificInvoiceDetails(invoiceId);
+        List<String[]> sInvoiceDetailData = mp.loadSpecificInvoiceDetails(invoiceId);
         String[] colName = {"Invoice Detail ID", "Item Name", "Quantity", "Price Per Item", "Total Price", "Invoice ID", "Appointment ID"};
         
         DefaultTableModel sInvoiceDetailModel = new DefaultTableModel(colName, 0);
@@ -105,24 +113,24 @@ public class StaffController {
             return 1;
         }
         
-        if (!serviceMCA.checkUserIdExists(customerId)){
+        if (!mca.checkUserIdExists(customerId)){
             return 2;
         }
         
-        if (!serviceMCA.checkEmailLinkedUserId(customerId, email)){
-            if (serviceMCA.checkEmailExists(email)){
+        if (!mca.checkEmailLinkedUserId(customerId, email)){
+            if (mca.checkEmailExists(email)){
                 return 3;
             }
         }
         
-        if (!serviceMCA.checkContactLinkedUserId(customerId, contactNum)){
-            if (serviceMCA.checkContactExists(contactNum)){
+        if (!mca.checkContactLinkedUserId(customerId, contactNum)){
+            if (mca.checkContactExists(contactNum)){
                 return 4;
             }
         }
         
         
-        if(!serviceMCA.updateCustomer(customerId, username, fullname, email, password, address, contactNum)){
+        if(!mca.updateCustomer(customerId, username, fullname, email, password, address, contactNum)){
             return 5;
         }
 
@@ -135,15 +143,15 @@ public class StaffController {
             return 1;
         }
         
-        if (serviceMCA.checkEmailExists(email)){
+        if (mca.checkEmailExists(email)){
             return 2;
         }
         
-        if (serviceMCA.checkContactExists(contactNum)){
+        if (mca.checkContactExists(contactNum)){
             return 3;
         }
         
-        if(!serviceMCA.addCustomer(username, fullname, email, password, address, contactNum)){
+        if(!mca.addCustomer(username, fullname, email, password, address, contactNum)){
             return 4;
         }
 
@@ -155,11 +163,11 @@ public class StaffController {
         {
             return 1;
         }
-        if (!serviceMCA.checkUserIdExists(customerId)){
+        if (!mca.checkUserIdExists(customerId)){
             return 1;
         }
         
-        if(!serviceMCA.deleteCustomer(customerId)){
+        if(!mca.deleteCustomer(customerId)){
             return 2;
         }
         return 0;
@@ -171,11 +179,11 @@ public class StaffController {
             return 1;
         }
         
-        if(!serviceMCA.checkUserIdExists(doctorId)){
+        if(!mca.checkUserIdExists(doctorId)){
             return 2;
         }
         
-        if(!serviceMCA.checkUserIdExists(customerId)){
+        if(!mca.checkUserIdExists(customerId)){
             return 3;
         }
         
@@ -183,7 +191,7 @@ public class StaffController {
             return 4;
         }
         
-        if (!serviceMCA.addAppointment(appointmentDate, status, doctorId, doctorName, customerId, customerName)){
+        if (!ma.addAppointment(appointmentDate, status, doctorId, doctorName, customerId, customerName)){
             return 5;
         }
         
@@ -197,15 +205,15 @@ public class StaffController {
             return 1;
         }
         
-        if(!serviceMCA.checkUserIdExists(doctorId)){
+        if(!mca.checkUserIdExists(doctorId)){
             return 2;
         }
         
-        if(!serviceMCA.checkUserIdExists(customerId)){
+        if(!mca.checkUserIdExists(customerId)){
             return 3;
         }
         
-        if(!serviceMCA.checkAppointmentIdExists(appointmentId)){
+        if(!ma.checkAppointmentIdExists(appointmentId)){
             return 4;
         }
         
@@ -213,7 +221,7 @@ public class StaffController {
             return 5;
         }
         
-        if(!serviceMCA.updateAppointment(appointmentId, appointmentDate, status, doctorId, doctorName, customerId, customerName)){
+        if(!ma.updateAppointment(appointmentId, appointmentDate, status, doctorId, doctorName, customerId, customerName)){
             return 6;
         }
         return 0;
@@ -228,7 +236,7 @@ public class StaffController {
              return 2;
          }
         
-        if (!serviceMCA.updateInvoicePayment(invoiceId, paymentMethod)){
+        if (!mp.updateInvoicePayment(invoiceId, paymentMethod)){
             return 3;
         }
         
@@ -236,11 +244,11 @@ public class StaffController {
     }
     
     public String validateCustomerIDtoName(String customerId){
-        if(!serviceMCA.checkUserIdExists(customerId)){
+        if(!mca.checkUserIdExists(customerId)){
             return null;
         }
         
-        String customerName = serviceMCA.returnCustomerNamefromId(customerId);
+        String customerName = mp.returnCustomerNamefromId(customerId);
         if(customerName != null){
             return customerName;
         }
@@ -249,13 +257,13 @@ public class StaffController {
     }
     
     public String validateAppIdtoCustomerName(String appointmentId){
-        if(!serviceMCA.checkAppointmentIdExists(appointmentId)){
+        if(!ma.checkAppointmentIdExists(appointmentId)){
             return null;
         }
         
-        String customerId = serviceMCA.returnCustomerIDfromAppId(appointmentId);
+        String customerId = ma.returnCustomerIDfromAppId(appointmentId);
         if(customerId != null){
-            String customerName = serviceMCA.returnCustomerNamefromId(customerId);
+            String customerName = mp.returnCustomerNamefromId(customerId);
             if (customerName != null){
                 return customerName;
             }

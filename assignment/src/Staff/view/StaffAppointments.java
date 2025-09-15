@@ -10,15 +10,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class StaffAppointments extends javax.swing.JFrame {
-    
-    //private DefaultTableModel appointmentModel = new DefaultTableModel();
-    //private String[] columnName = {"Customer", "Date", "Time", "Status", "Doctor"};
     StaffController controller = new StaffController();
     ManageCustomerAccount mca = new ManageCustomerAccount();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffAppointments.class.getName());
 
     public StaffAppointments() {
-        //appointmentModel.setColumnIdentifiers(columnName);
         initComponents();
         ckbxPast.setSelected(false);
         tblAppointments.setModel(controller.getAppointmentTable());
