@@ -4,8 +4,10 @@
  */
 package Staff.view;
 
+import Doctor.controller.TableSearchHandler;
 import Staff.controller.StaffController;
 import Staff.service.ManageCustomerAccount;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 
@@ -14,11 +16,13 @@ public class StaffPayments extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffPayments.class.getName());
     StaffController controller = new StaffController();
+    TableSearchHandler tbs;
     
     public StaffPayments() {
         initComponents();
         tblInvoice.setModel(controller.getInvoiceTable());
-        
+        tbs = new TableSearchHandler(tblInvoice);
+        txtInvoiceId.requestFocusInWindow();
     }
 
     /**
@@ -48,6 +52,7 @@ public class StaffPayments extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtReturn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        txtInvoiceSearch = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,6 +126,22 @@ public class StaffPayments extends javax.swing.JFrame {
 
         jLabel3.setText("Total Price");
 
+        txtInvoiceSearch.setForeground(new java.awt.Color(204, 204, 204));
+        txtInvoiceSearch.setText("Search...");
+        txtInvoiceSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtInvoiceSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtInvoiceSearchFocusLost(evt);
+            }
+        });
+        txtInvoiceSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtInvoiceSearchKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelPaymentLayout = new javax.swing.GroupLayout(jPanelPayment);
         jPanelPayment.setLayout(jPanelPaymentLayout);
         jPanelPaymentLayout.setHorizontalGroup(
@@ -146,7 +167,10 @@ public class StaffPayments extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(89, 89, 89)
                         .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5)
+                            .addGroup(jPanelPaymentLayout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtInvoiceSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel6)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)))
@@ -164,7 +188,7 @@ public class StaffPayments extends javax.swing.JFrame {
                 .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtReturn)
                     .addComponent(jButton2))
-                .addGap(40, 40, 40)
+                .addGap(37, 37, 37)
                 .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
@@ -187,7 +211,9 @@ public class StaffPayments extends javax.swing.JFrame {
                         .addComponent(btnReceipt, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(78, 78, 78))
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
-                        .addComponent(jLabel5)
+                        .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtInvoiceSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -218,15 +244,29 @@ public class StaffPayments extends javax.swing.JFrame {
     }//GEN-LAST:event_txtReturnActionPerformed
 
     private void tblInvoiceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInvoiceMouseClicked
-        int index = tblInvoice.getSelectedRow();
-        TableModel invoiceModel = tblInvoice.getModel();
-        if (index != -1){
-            String invoiceId = invoiceModel.getValueAt(index, 0).toString();
-            
+//        int index = tblInvoice.getSelectedRow();
+//        TableModel invoiceModel = tblInvoice.getModel();
+//        if (index != -1){
+//            String invoiceId = invoiceModel.getValueAt(index, 0).toString();
+//            
+//            txtInvoiceId.setText(invoiceId);
+//            lblSubtotal.setText("RM" + invoiceModel.getValueAt(index, 1).toString());
+//            cmbPayment.setSelectedItem(invoiceModel.getValueAt(index, 2).toString());
+//            
+//            tblInvoiceDetails.setModel(controller.getSpecificInvoiceDetailTable(invoiceId));
+//        }
+
+        int baseIndex = tblInvoice.getSelectedRow();
+        if (baseIndex != -1) {
+            int displayIndex = tblInvoice.convertRowIndexToModel(baseIndex); 
+
+            TableModel invoiceModel = tblInvoice.getModel();
+            String invoiceId = invoiceModel.getValueAt(displayIndex, 0).toString();
+
             txtInvoiceId.setText(invoiceId);
-            lblSubtotal.setText("RM" + invoiceModel.getValueAt(index, 1).toString());
-            cmbPayment.setSelectedItem(invoiceModel.getValueAt(index, 2).toString());
-            
+            lblSubtotal.setText("RM" + invoiceModel.getValueAt(displayIndex, 1).toString());
+            cmbPayment.setSelectedItem(invoiceModel.getValueAt(displayIndex, 2).toString());
+
             tblInvoiceDetails.setModel(controller.getSpecificInvoiceDetailTable(invoiceId));
         }
     }//GEN-LAST:event_tblInvoiceMouseClicked
@@ -246,11 +286,14 @@ public class StaffPayments extends javax.swing.JFrame {
         String customerName = controller.validateAppIdtoCustomerName(appointmentId);
         
         if (!paymentMethod.isEmpty()){
-            JOptionPane.showConfirmDialog(this, "Invoice has already been paid for. \nUpdate Payment Method?", "Confirmation",JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(this, "Invoice has already been paid for. \nUpdate Payment Method?", "Confirmation",JOptionPane.YES_NO_OPTION);
+            if (option != JOptionPane.YES_OPTION) {
+                return;
+            }
         }
-        
+
         int option = JOptionPane.showConfirmDialog(this, "Confirm Payment?"  + "\n\nCustomer: " + customerName + "\nAppointment ID: " + 
-                appointmentId + "\nInvoice ID: " + customerName + "\nPayment Method: " + paymentMethod + "\nTotal Price: " + subtotal, 
+                appointmentId + "\nInvoice ID: " + invoiceID + "\nPayment Method: " + paymentMethod + "\nTotal Price: " + subtotal, 
                     "Confirmation",JOptionPane.YES_NO_OPTION);
 
         if (option != JOptionPane.YES_OPTION) {
@@ -288,6 +331,25 @@ public class StaffPayments extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnReceiptActionPerformed
+
+    private void txtInvoiceSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceSearchKeyReleased
+        String query = txtInvoiceSearch.getText();
+        tbs.filterTable(query);
+    }//GEN-LAST:event_txtInvoiceSearchKeyReleased
+
+    private void txtInvoiceSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtInvoiceSearchFocusGained
+        if(txtInvoiceSearch.getText().equals("Search...")){
+            txtInvoiceSearch.setText("");
+            txtInvoiceSearch.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_txtInvoiceSearchFocusGained
+
+    private void txtInvoiceSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtInvoiceSearchFocusLost
+        if(txtInvoiceSearch.getText().equals("")){
+            txtInvoiceSearch.setText("Search...");
+            txtInvoiceSearch.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_txtInvoiceSearchFocusLost
 
     /**
      * @param args the command line arguments
@@ -332,6 +394,7 @@ public class StaffPayments extends javax.swing.JFrame {
     private javax.swing.JTable tblInvoice;
     private javax.swing.JTable tblInvoiceDetails;
     private javax.swing.JTextField txtInvoiceId;
+    private javax.swing.JTextField txtInvoiceSearch;
     private javax.swing.JButton txtReturn;
     // End of variables declaration//GEN-END:variables
 }

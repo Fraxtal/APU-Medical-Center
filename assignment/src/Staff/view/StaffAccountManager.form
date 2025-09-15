@@ -53,7 +53,7 @@
                       <Group type="102" attributes="0">
                           <Component id="jLabel1" min="-2" pref="270" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="txtAppointmentSearch" min="-2" pref="274" max="-2" attributes="0"/>
+                          <Component id="txtCustomerSearch" min="-2" pref="274" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
@@ -80,7 +80,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jLabel1" min="-2" pref="44" max="-2" attributes="0"/>
-                      <Component id="txtAppointmentSearch" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtCustomerSearch" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -390,7 +390,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReturnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtAppointmentSearch">
+        <Component class="javax.swing.JTextField" name="txtCustomerSearch">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="cc" red="cc" type="rgb"/>
@@ -398,9 +398,9 @@
             <Property name="text" type="java.lang.String" value="Search..."/>
           </Properties>
           <Events>
-            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtAppointmentSearchFocusGained"/>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtAppointmentSearchFocusLost"/>
-            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtAppointmentSearchKeyReleased"/>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtCustomerSearchFocusGained"/>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtCustomerSearchFocusLost"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCustomerSearchKeyReleased"/>
           </Events>
         </Component>
       </SubComponents>

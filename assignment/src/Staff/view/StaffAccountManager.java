@@ -52,7 +52,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAccounts = new javax.swing.JTable();
         btnReturn = new javax.swing.JButton();
-        txtAppointmentSearch = new javax.swing.JTextField();
+        txtCustomerSearch = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -223,19 +223,19 @@ public class StaffAccountManager extends javax.swing.JFrame {
             }
         });
 
-        txtAppointmentSearch.setForeground(new java.awt.Color(204, 204, 204));
-        txtAppointmentSearch.setText("Search...");
-        txtAppointmentSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtCustomerSearch.setForeground(new java.awt.Color(204, 204, 204));
+        txtCustomerSearch.setText("Search...");
+        txtCustomerSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtAppointmentSearchFocusGained(evt);
+                txtCustomerSearchFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                txtAppointmentSearchFocusLost(evt);
+                txtCustomerSearchFocusLost(evt);
             }
         });
-        txtAppointmentSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtCustomerSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtAppointmentSearchKeyReleased(evt);
+                txtCustomerSearchKeyReleased(evt);
             }
         });
 
@@ -249,7 +249,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtCustomerSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,7 +268,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCustomerSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -359,17 +359,32 @@ public class StaffAccountManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void tblAccountsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountsMouseClicked
-        int index = tblAccounts.getSelectedRow();
-        TableModel model = tblAccounts.getModel();
-        if (index != -1){
-            txtID.setText(model.getValueAt(index, 0).toString());
-            txtUsername.setText(model.getValueAt(index, 1).toString());
-            txtFullname.setText(model.getValueAt(index, 2).toString());
-            txtEmail.setText(model.getValueAt(index, 3).toString());
-            txtPassword.setText(model.getValueAt(index, 4).toString());
-            txtAddress.setText(model.getValueAt(index, 5).toString());
-            txtContact.setText(model.getValueAt(index, 6).toString());
-        }
+//        int index = tblAccounts.getSelectedRow();
+//        TableModel model = tblAccounts.getModel();
+//        if (index != -1){
+//            txtID.setText(model.getValueAt(index, 0).toString());
+//            txtUsername.setText(model.getValueAt(index, 1).toString());
+//            txtFullname.setText(model.getValueAt(index, 2).toString());
+//            txtEmail.setText(model.getValueAt(index, 3).toString());
+//            txtPassword.setText(model.getValueAt(index, 4).toString());
+//            txtAddress.setText(model.getValueAt(index, 5).toString());
+//            txtContact.setText(model.getValueAt(index, 6).toString());
+//        }
+
+        int baseIndex = tblAccounts.getSelectedRow(); 
+        if (baseIndex != -1) {
+            int displayIndex = tblAccounts.convertRowIndexToModel(baseIndex); 
+
+            TableModel model = tblAccounts.getModel();
+            txtID.setText(model.getValueAt(displayIndex, 0).toString());
+            txtUsername.setText(model.getValueAt(displayIndex, 1).toString());
+            txtFullname.setText(model.getValueAt(displayIndex, 2).toString());
+            txtEmail.setText(model.getValueAt(displayIndex, 3).toString());
+            txtPassword.setText(model.getValueAt(displayIndex, 4).toString());
+            txtAddress.setText(model.getValueAt(displayIndex, 5).toString());
+            txtContact.setText(model.getValueAt(displayIndex, 6).toString());
+}
+
          
     }//GEN-LAST:event_tblAccountsMouseClicked
 
@@ -450,24 +465,24 @@ public class StaffAccountManager extends javax.swing.JFrame {
         tblAccounts.setModel(controller.getCustomerTable());
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void txtAppointmentSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAppointmentSearchFocusGained
-        if(txtAppointmentSearch.getText().equals("Search...")){
-            txtAppointmentSearch.setText("");
-            txtAppointmentSearch.setForeground(Color.BLACK);
+    private void txtCustomerSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCustomerSearchFocusGained
+        if(txtCustomerSearch.getText().equals("Search...")){
+            txtCustomerSearch.setText("");
+            txtCustomerSearch.setForeground(Color.BLACK);
         }
-    }//GEN-LAST:event_txtAppointmentSearchFocusGained
+    }//GEN-LAST:event_txtCustomerSearchFocusGained
 
-    private void txtAppointmentSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAppointmentSearchFocusLost
-        if(txtAppointmentSearch.getText().equals("")){
-            txtAppointmentSearch.setText("Search...");
-            txtAppointmentSearch.setForeground(Color.GRAY);
+    private void txtCustomerSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCustomerSearchFocusLost
+        if(txtCustomerSearch.getText().equals("")){
+            txtCustomerSearch.setText("Search...");
+            txtCustomerSearch.setForeground(Color.GRAY);
         }
-    }//GEN-LAST:event_txtAppointmentSearchFocusLost
+    }//GEN-LAST:event_txtCustomerSearchFocusLost
 
-    private void txtAppointmentSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAppointmentSearchKeyReleased
-        String query = txtAppointmentSearch.getText();
+    private void txtCustomerSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerSearchKeyReleased
+        String query = txtCustomerSearch.getText();
         tbs.filterTable(query);
-    }//GEN-LAST:event_txtAppointmentSearchKeyReleased
+    }//GEN-LAST:event_txtCustomerSearchKeyReleased
 
     public void clearText(){
         txtID.setText("");
@@ -502,8 +517,8 @@ public class StaffAccountManager extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblAccounts;
     private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextField txtAppointmentSearch;
     private javax.swing.JTextField txtContact;
+    private javax.swing.JTextField txtCustomerSearch;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFullname;
     private javax.swing.JTextField txtID;
