@@ -5,9 +5,13 @@
 package Customer.view;
 
 import Customer.ctrl.CustomerController;
+import Customer.model.Appointment;
 import Customer.model.Customer;
 import Customer.services.CustomerService;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -141,7 +145,25 @@ public class AppointmentBooking extends javax.swing.JFrame {
 
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
         // TODO add your handling code here:
-        
+        try {
+            if (controller == null || currentCustomer == null) {
+                JOptionPane.showMessageDialog(this, "No customer session. Please login again.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String doctorName = (String) cmbDoctor.getSelectedItem();
+            java.util.Date utilDate = DOAChooser.getDate();
+            if (doctorName == null || doctorName.trim().isEmpty() || utilDate == null) {
+                JOptionPane.showMessageDialog(this, "Please select a doctor and a date.", "Validation", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            LocalDate doa = utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Appointment appt = customerService.bookAppointment(currentCustomer, doctorName, doa);
+            JOptionPane.showMessageDialog(this, "Booked with ID: " + appt.getAppointmentId(), "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Booking error", ex);
+            JOptionPane.showMessageDialog(this, "Unexpected error during booking.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnBookActionPerformed
 
     /**

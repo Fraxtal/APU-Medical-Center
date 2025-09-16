@@ -358,34 +358,6 @@ public class CustomerService implements FileService {
     }
 
     
-    private int generateInvoiceId() {
-        int maxId = 0;
-        try {
-            File file = new File(INVOICES_FILE);
-            if (file.exists()) {
-                try (Scanner scanner = new Scanner(file)) {
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine().trim();
-                        if (!line.isEmpty()) {
-                            String[] values = line.split(";");
-                            if (values.length > 0) {
-                                try {
-                                    int id = Integer.parseInt(values[0]);
-                                    maxId = Math.max(maxId, id);
-                                } catch (NumberFormatException e) {
-                                    // Skip invalid lines
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.log(Level.WARNING, "Error generating invoice ID", e);
-        }
-        return maxId + 1;
-    }
-    
     private Invoice parseInvoiceFromLine(String[] values) {
         int invoiceId = Integer.parseInt(values[0].replaceAll("\\D", "")); // supports INV001
         double total = Double.parseDouble(values[1]);
@@ -393,19 +365,6 @@ public class CustomerService implements FileService {
         String appointmentId = values[3].trim(); 
         return new Invoice(invoiceId, total, paymentMethod, appointmentId);
     }
-    
-    private String formatInvoiceForFile(Invoice invoice) {
-        return String.format("%d;%.2f;%s;%s",
-                           invoice.getInvoiceId(),
-                           invoice.getTotal(),
-                           invoice.getPaymentMethod(),
-                           invoice.getAppointmentId());
-    }
-    
-    private LocalDate parseDate(String raw) {
-        return LocalDate.parse(raw.trim(), DTFORMATTER);
-    }
-
     public Appointment getAppointmentById(String appointmentId) {
         try {
             File file = new File(APPOINTMENTS_FILE);
@@ -431,6 +390,60 @@ public class CustomerService implements FileService {
             logger.log(Level.SEVERE, "Error loading appointment by ID", e);
         }
         return null;
+    }
+    
+    public Appointment bookAppointment(Customer customer, String doctorFullName, LocalDate dateOfAppointment) {
+        try {
+            if (customer == null || customer.getId() <= 0 || doctorFullName == null || doctorFullName.trim().isEmpty() || dateOfAppointment == null) {
+                logger.warning("Invalid input for booking appointment");
+                return null;
+            }
+            if (dateOfAppointment.isBefore(LocalDate.now())) {
+                logger.warning("Cannot book appointment in the past");
+                return null;
+            }
+
+            int doctorId = getDoctorIdByName(doctorFullName.trim());
+            if (doctorId <= 0) {
+                logger.warning("Doctor not found: " + doctorFullName);
+                return null;
+            }
+
+            String newAppointmentId = generateAppointmentId();
+            Appointment appt = new Appointment(newAppointmentId,
+                                               dateOfAppointment,
+                                               "PENDING",
+                                               customer.getId(),
+                                               doctorId,
+                                               customer.getFullname() != null ? customer.getFullname() : customer.getUsername(),
+                                               doctorFullName.trim());
+
+            // Persist by appending to appointments file
+            File file = new File(APPOINTMENTS_FILE);
+            file.getParentFile().mkdirs();
+            try (FileWriter writer = new FileWriter(file, true)) {
+                if (file.length() > 0 && !endsWithNewline(file)) {
+                    writer.write("\n");
+                }
+                writer.write(formatAppointmentForFile(appt) + "\n");
+            }
+            logger.info("Appointment booked: " + appt.getAppointmentId());
+            return appt;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error booking appointment", e);
+            return null;
+        }
+    }
+
+    private boolean endsWithNewline(File file) {
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            if (raf.length() == 0) return true;
+            raf.seek(raf.length() - 1);
+            int last = raf.read();
+            return last == '\n' || last == '\r';
+        } catch (IOException e) {
+            return true;
+        }
     }
 
     public boolean submitCustomerComment(int customerId, String subject, String context) {
@@ -485,5 +498,26 @@ public class CustomerService implements FileService {
             return false;
         }
     }
+    
+    private LocalDate parseDate(String input) {
+    if (input == null || input.isBlank()) {
+        return null;
+    }
+    try {
+        // Try strict date format first (yyyy-MM-dd)
+        return LocalDate.parse(input.trim(), DTFORMATTER);
+    } catch (DateTimeParseException e1) {
+        try {
+            // Try parsing as LocalDateTime (yyyy-MM-dd HH:mm:ss)
+            DateTimeFormatter dtTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd[ HH:mm[:ss]]");
+            LocalDateTime ldt = LocalDateTime.parse(input.trim(), dtTimeFormatter);
+            return ldt.toLocalDate();
+        } catch (DateTimeParseException e2) {
+            logger.log(Level.WARNING, "Failed to parse date: " + input, e2);
+            return null;
+        }
+    }
+}
+
 
 }
