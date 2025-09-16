@@ -2,7 +2,6 @@
 package Staff.service;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 public class ManagePayments {
     private static final String invoicesFile = "src/database/invoices.txt";
     private static final String invoiceDetailsFile = "src/database/invoiceDetails.txt";
-    private PDDocument receipt;
     ManageCustomerAccount mca = new ManageCustomerAccount();
     
     public List<String[]> loadInvoices() {
@@ -127,61 +125,6 @@ public class ManagePayments {
         }
         return null;
     }
-    // moved ManageAppointments class
-//    public String returnCustomerIDfromAppId(String appointmentId){
-//        List<String[]> appointments = mca.loadAppointments(); 
-//        for (String[] appointment : appointments) {
-//            if (appointment[0].equalsIgnoreCase(appointmentId)) {
-//                return appointment[5];
-//            }
-//        }
-//        return null;
-//        
-//    }
-    
-    
-    
-//    public PDDocument generateReceipt(){
-//        
-//    }
-    
-//    public void generateReceipt(String customerId, String customerName, String invoiceId ){
-//        List<String[]> invoiceDetails = loadSpecificInvoiceDetails(invoiceId);
-//        String Title = "APU Medical Centre";
-//        String today = (new Date()).toString();
-//        
-//        float x = 50;
-//        float y = 70;   
-//        
-//        PDDocument doc = new PDDocument();
-//        PDPage page = new PDPage(PDRectangle.A4);
-//        doc.addPage(page);
-//        
-//        try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)){
-//            
-//            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 14);
-//            contentStream.beginText();
-//            contentStream.newLineAtOffset(50, 700);
-//            
-//            
-//            contentStream.showText("Hello, Welcome to PDF box11");
-//            contentStream.endText();
-//            doc.save("src/testingground/sample.pdf");
-//            doc.close();
-//        }
-//        catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        }
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        System.out.println("success");
-//   }
     
     public boolean generateReceipt(String customerId, String customerName, String invoiceId) {
         List<String[]> invoiceDetails = loadSpecificInvoiceDetails(invoiceId);
@@ -192,7 +135,7 @@ public class ManagePayments {
         }
 
         String title = "APU Medical Centre";
-        String separator = "-------------------------------------------------------------";
+        String separator = "-----------------------------------------------------------------------------------------------------------";
         String today = new Date().toString();
 
         PDDocument doc = new PDDocument();
@@ -203,6 +146,11 @@ public class ManagePayments {
         float yStart = page.getMediaBox().getHeight() - xMargin;
         float yMargin = yStart;
         float lineHeight = 18;
+        
+        float xItem = xMargin;
+        float xQuantity = xItem + 200;    
+        float xPricePer = xQuantity + 80;
+        float xTotalPrice = xPricePer + 110;
 
         try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
             contentStream.beginText();
@@ -211,7 +159,7 @@ public class ManagePayments {
             contentStream.showText(title);
             contentStream.endText();
 
-            yMargin -= lineHeight * 2;
+            yMargin -= lineHeight * 2; //setting newline position
 
             //date
             contentStream.beginText();
@@ -220,7 +168,7 @@ public class ManagePayments {
             contentStream.showText("Date: " + today);
             contentStream.endText();
 
-            yMargin -= lineHeight;
+            yMargin -= lineHeight; //setting newline position
 
             //customer info
             contentStream.beginText();
@@ -228,7 +176,7 @@ public class ManagePayments {
             contentStream.showText("Customer ID: " + customerId + "   Name: " + customerName);
             contentStream.endText();
 
-            yMargin -= lineHeight;
+            yMargin -= lineHeight; //setting newline position
 
             //invoice id
             contentStream.beginText();
@@ -236,7 +184,7 @@ public class ManagePayments {
             contentStream.showText("Invoice ID: " + invoiceId);
             contentStream.endText();
 
-            yMargin -= lineHeight * 1.5;
+            yMargin -= lineHeight * 1.5; //setting newline position
 
             //separator
             contentStream.beginText();
@@ -244,13 +192,31 @@ public class ManagePayments {
             contentStream.showText(separator);
             contentStream.endText();
 
-            yMargin -= lineHeight;
+            yMargin -= lineHeight; //setting newline position
 
-            // Table headers
+            //Table headers
             contentStream.beginText();
             contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
-            contentStream.newLineAtOffset(xMargin, yMargin);
-            contentStream.showText(String.format("%-20s %-10s %-10s %-10s", "Item", "Qty", "Price", "Total"));
+            contentStream.newLineAtOffset(xItem, yMargin);
+            contentStream.showText("Item");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+            contentStream.newLineAtOffset(xQuantity, yMargin);
+            contentStream.showText("Quantity");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+            contentStream.newLineAtOffset(xPricePer, yMargin);
+            contentStream.showText("Price Per Item");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+            contentStream.newLineAtOffset(xTotalPrice, yMargin);
+            contentStream.showText("Total");
             contentStream.endText();
 
             yMargin -= lineHeight;
@@ -275,10 +241,29 @@ public class ManagePayments {
                 subtotal += Double.parseDouble(totalPrice);
 
                 contentStream.beginText();
-                contentStream.newLineAtOffset(xMargin, yMargin);
-                contentStream.showText(String.format("%-20s %-10s %-10s %-10s", itemName, quantity, pricePer, totalPrice));
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(xItem, yMargin);
+                contentStream.showText(itemName);
                 contentStream.endText();
 
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(xQuantity, yMargin);
+                contentStream.showText(quantity);
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(xPricePer, yMargin);
+                contentStream.showText(pricePer);
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(xTotalPrice, yMargin);
+                contentStream.showText(totalPrice);
+                contentStream.endText();
+                
                 yMargin -= lineHeight;
 
                 if (yMargin < xMargin + lineHeight * 4) {
@@ -289,10 +274,9 @@ public class ManagePayments {
                 }
             }
 
-            yMargin -= lineHeight;
-
             //separator
             contentStream.beginText();
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
             contentStream.newLineAtOffset(xMargin, yMargin);
             contentStream.showText(separator);
             contentStream.endText();
@@ -312,7 +296,7 @@ public class ManagePayments {
         }
 
         try {
-            doc.save("src/receipts/Invoice_" + invoiceId + ".pdf");
+            doc.save("src/receipts/Receipt_" + invoiceId + ".pdf");
             doc.close();
         } 
         catch (IOException e) {
@@ -320,7 +304,7 @@ public class ManagePayments {
             return false; 
         }
 
-    return true; 
-}
+        return true; 
+    }   
 
 }

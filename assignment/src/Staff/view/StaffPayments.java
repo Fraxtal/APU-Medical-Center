@@ -43,7 +43,6 @@ public class StaffPayments extends javax.swing.JFrame {
         tblInvoice = new javax.swing.JTable();
         lblSubtotal = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
         btnPayNFInalize = new javax.swing.JButton();
         btnReceipt = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -85,8 +84,6 @@ public class StaffPayments extends javax.swing.JFrame {
         lblSubtotal.setText("RM xx");
         lblSubtotal.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblSubtotal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jButton2.setText("Confirm");
 
         btnPayNFInalize.setText("Pay and Finalize");
         btnPayNFInalize.addActionListener(new java.awt.event.ActionListener() {
@@ -176,18 +173,14 @@ public class StaffPayments extends javax.swing.JFrame {
                             .addComponent(jScrollPane1)))
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(txtReturn)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtReturn)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanelPaymentLayout.setVerticalGroup(
             jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelPaymentLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtReturn)
-                    .addComponent(jButton2))
+                .addComponent(txtReturn)
                 .addGap(37, 37, 37)
                 .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
@@ -407,7 +400,6 @@ public class StaffPayments extends javax.swing.JFrame {
     private javax.swing.JButton btnPayNFInalize;
     private javax.swing.JButton btnReceipt;
     private javax.swing.JComboBox<String> cmbPayment;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
