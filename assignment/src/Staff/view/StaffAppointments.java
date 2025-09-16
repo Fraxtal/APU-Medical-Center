@@ -359,6 +359,7 @@ public class StaffAppointments extends javax.swing.JFrame {
         switch (success) {
             case 0:
                 JOptionPane.showMessageDialog(this, "Appointment sucessfullly updated.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                tblAppointments.setModel(controller.getAppointmentTable());
                 break;
             case 1:
                 JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -381,7 +382,7 @@ public class StaffAppointments extends javax.swing.JFrame {
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        tblAppointments.setModel(controller.getAppointmentTable());
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -433,10 +434,10 @@ public class StaffAppointments extends javax.swing.JFrame {
         String customerName = txtCustomerName.getText();
         
         int success = controller.validateAppointmentBooking(appointmentDate, status, doctorId, doctorName, customerId, customerName);
-        
         switch (success) {
             case 0:
                 JOptionPane.showMessageDialog(this, "Appointment sucessfullly booked.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                
                 break;
             case 1:
                 JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -494,19 +495,19 @@ public class StaffAppointments extends javax.swing.JFrame {
         tbs.filterTable(query);
     }//GEN-LAST:event_txtAppointmentSearchKeyReleased
 
-    private void txtAppointmentSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAppointmentSearchFocusGained
-        if(txtAppointmentSearch.getText().equals("Search...")){
-            txtAppointmentSearch.setText("");
-            txtAppointmentSearch.setForeground(Color.BLACK);
-        }
-    }//GEN-LAST:event_txtAppointmentSearchFocusGained
-
     private void txtAppointmentSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAppointmentSearchFocusLost
         if(txtAppointmentSearch.getText().equals("")){
             txtAppointmentSearch.setText("Search...");
             txtAppointmentSearch.setForeground(Color.GRAY);
         }
     }//GEN-LAST:event_txtAppointmentSearchFocusLost
+
+    private void txtAppointmentSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAppointmentSearchFocusGained
+        if(txtAppointmentSearch.getText().equals("Search...")){
+            txtAppointmentSearch.setText("");
+            txtAppointmentSearch.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_txtAppointmentSearchFocusGained
 
     public void clearText(){
         txtAppointmentId.setText("");

@@ -53,8 +53,8 @@ public class StaffController {
         String[] colName = {"Appointment ID", "Appointment Date", "Status", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name"};
         
         DefaultTableModel pastAppointmentModel = new DefaultTableModel(colName, 0);
-        for (String[] appointments : pastAppointmentData){
-            pastAppointmentModel.addRow(appointments);
+        for (String[] pastAppointments : pastAppointmentData){
+            pastAppointmentModel.addRow(pastAppointments);
         }
         
         return pastAppointmentModel;

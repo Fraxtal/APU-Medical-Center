@@ -45,7 +45,7 @@ public class ManageAppointments {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(appointmentsFile))) {
             for (String appointment : newData) {
                 bw.write(appointment);
-                bw.newLine();
+                bw.newLine();   
             }
         } 
         catch (Exception e) {
@@ -55,11 +55,31 @@ public class ManageAppointments {
         return true;
     }
     
+//    public boolean addAppointment(String appointmentDate, String status, String doctorId, String doctorName, String customerId, String customerName) {
+//        String newAppId = newAppointmentId();
+//        String newAppointment = String.join(";", newAppId, appointmentDate, status, doctorId, doctorName, customerId, customerName);
+//        try (FileWriter fw = new FileWriter(appointmentsFile, true)) {
+//            fw.write(newAppointment + System.lineSeparator());
+//        }
+//        catch (IOException ioE) {
+//            System.out.println("Encountered an error while writing the appointments file");
+//            return false;
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        
+//        return true;
+//    }
+    
     public boolean addAppointment(String appointmentDate, String status, String doctorId, String doctorName, String customerId, String customerName) {
         String newAppId = newAppointmentId();
         String newAppointment = String.join(";", newAppId, appointmentDate, status, doctorId, doctorName, customerId, customerName);
-        try (FileWriter fw = new FileWriter(appointmentsFile, true)) {
-            fw.write(newAppointment + System.lineSeparator());
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(appointmentsFile, true))) {
+            bw.write(newAppointment);
+            bw.newLine();
+            bw.flush();
         }
         catch (IOException ioE) {
             System.out.println("Encountered an error while writing the appointments file");

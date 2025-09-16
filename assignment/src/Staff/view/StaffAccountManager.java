@@ -433,7 +433,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
         String pass = txtPassword.getText();
         String address = txtAddress.getText();
         String contact = txtContact.getText();
-        
+        tblAccounts.setModel(controller.getCustomerTable());
         int success = controller.validateAccountAdd(username, fullname, email, pass, address, contact);
         
         if (success == 3) {
@@ -462,7 +462,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-        tblAccounts.setModel(controller.getCustomerTable());
+        
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void txtCustomerSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCustomerSearchFocusGained
