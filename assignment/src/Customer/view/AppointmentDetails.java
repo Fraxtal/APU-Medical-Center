@@ -116,16 +116,22 @@ public class AppointmentDetails extends javax.swing.JFrame {
         });
 
         tbAptID.setEditable(false);
+        tbAptID.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         tbDoa.setEditable(false);
+        tbDoa.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         tbStatus.setEditable(false);
+        tbStatus.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         tbDoctor.setEditable(false);
+        tbDoctor.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         tbInvTotal.setEditable(false);
+        tbInvTotal.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         tbInvMethod.setEditable(false);
+        tbInvMethod.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         InvDetails.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         InvDetails.setModel(new javax.swing.table.DefaultTableModel(
@@ -157,6 +163,7 @@ public class AppointmentDetails extends javax.swing.JFrame {
 
         tbFeedback.setEditable(false);
         tbFeedback.setColumns(20);
+        tbFeedback.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         tbFeedback.setRows(5);
         jScrollPane2.setViewportView(tbFeedback);
 

@@ -53,13 +53,17 @@ public class CustomerComment extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel2.setText("Comment Centre");
 
+        jLabel3.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel3.setText("Subject: ");
 
+        jLabel4.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel4.setText("Context: ");
 
+        cmbSubject.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         cmbSubject.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "General Experience", "Clinic Experience", "Management Experience", "Doctor's Experience" }));
         cmbSubject.setToolTipText("");
 
+        btnSubmit.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnSubmit.setText("Submit");
         btnSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,6 +72,7 @@ public class CustomerComment extends javax.swing.JFrame {
         });
 
         tbContext.setColumns(20);
+        tbContext.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         tbContext.setLineWrap(true);
         tbContext.setRows(8);
         tbContext.setToolTipText("Context of Comment");
@@ -95,7 +100,7 @@ public class CustomerComment extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(167, 167, 167)
                         .addComponent(btnSubmit)))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,7 +117,7 @@ public class CustomerComment extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnSubmit)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();

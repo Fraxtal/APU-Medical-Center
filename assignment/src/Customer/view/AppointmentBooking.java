@@ -63,8 +63,12 @@ public class AppointmentBooking extends javax.swing.JFrame {
             }
         });
 
+        cmbDoctor.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jLabel2.setText("Doctor: ");
 
+        jLabel3.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jLabel3.setText("Date of Appointment: ");
 
         btnBook.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
@@ -124,7 +128,7 @@ public class AppointmentBooking extends javax.swing.JFrame {
                 .addComponent(btnBook)
                 .addGap(18, 18, 18)
                 .addComponent(btnReturn)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();

@@ -117,6 +117,7 @@ public class AppointmentHistory extends javax.swing.JFrame {
             tbleAppointments.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        btnReturn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnReturn.setText("Return");
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,7 +153,7 @@ public class AppointmentHistory extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnReturn)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
