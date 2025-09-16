@@ -22,6 +22,7 @@ public class StaffAppointments extends javax.swing.JFrame {
         ckbxPast.setSelected(false);
         tblAppointments.setModel(controller.getAppointmentTable());
         tblDoctors.setModel(controller.getDoctorTable());
+        tbs = new TableSearchHandler(tblAppointments);
         txtCustomerId.requestFocusInWindow();
     }
 
@@ -224,7 +225,7 @@ public class StaffAppointments extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblAppointments);
 
-        ckbxPast.setText("error");
+        ckbxPast.setText("Past Appointments");
         ckbxPast.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ckbxPastActionPerformed(evt);
@@ -283,19 +284,18 @@ public class StaffAppointments extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel10)
+                                .addGap(84, 84, 84)
+                                .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(ckbxPast))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                             .addComponent(jScrollPane2))
                         .addGap(38, 38, 38))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnReturn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ckbxPast)
-                        .addGap(28, 28, 28))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnReturn)
+                            .addComponent(jLabel1))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,12 +303,12 @@ public class StaffAppointments extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAppointments)
-                    .addComponent(btnReturn)
-                    .addComponent(ckbxPast))
+                    .addComponent(btnReturn))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ckbxPast)
                             .addComponent(jLabel10)
                             .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -359,6 +359,7 @@ public class StaffAppointments extends javax.swing.JFrame {
         switch (success) {
             case 0:
                 JOptionPane.showMessageDialog(this, "Appointment sucessfullly updated.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                tblAppointments.setModel(controller.getAppointmentTable());
                 break;
             case 1:
                 JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -381,7 +382,7 @@ public class StaffAppointments extends javax.swing.JFrame {
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        updateTable();
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -395,19 +396,33 @@ public class StaffAppointments extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void tblAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAppointmentsMouseClicked
-        int baseIndex = tblAppointments.getSelectedRow(); 
-        if (baseIndex != -1) {
-            int displayIndex = tblAppointments.convertRowIndexToModel(baseIndex); 
+//        int index = tblAppointments.getSelectedRow();
+//        TableModel Appmodel = tblAppointments.getModel();
+//        if (index != -1){
+//            txtAppointmentId.setText(Appmodel.getValueAt(index, 0).toString());
+//            calendarAppointment.setDate(mca.parseStrToDate(Appmodel.getValueAt(index, 1).toString()));
+//            cmbStatus.setSelectedItem(Appmodel.getValueAt(index, 2).toString());
+//            txtDoctorId.setText(Appmodel.getValueAt(index, 3).toString());
+//            txtDoctorName.setText(Appmodel.getValueAt(index, 4).toString());
+//            txtCustomerId.setText(Appmodel.getValueAt(index, 5).toString());
+//            txtCustomerName.setText(Appmodel.getValueAt(index, 6).toString());
+//
+//        }
 
-            TableModel Appmodel = tblAppointments.getModel();
-            txtAppointmentId.setText(Appmodel.getValueAt(displayIndex, 0).toString());
-            calendarAppointment.setDate(mca.parseStrToDate(Appmodel.getValueAt(displayIndex, 1).toString()));
-            cmbStatus.setSelectedItem(Appmodel.getValueAt(displayIndex, 2).toString());
-            txtDoctorId.setText(Appmodel.getValueAt(displayIndex, 3).toString());
-            txtDoctorName.setText(Appmodel.getValueAt(displayIndex, 4).toString());
-            txtCustomerId.setText(Appmodel.getValueAt(displayIndex, 5).toString());
-            txtCustomerName.setText(Appmodel.getValueAt(displayIndex, 6).toString());
-        }
+    int baseIndex = tblAppointments.getSelectedRow(); 
+    if (baseIndex != -1) {
+        int displayIndex = tblAppointments.convertRowIndexToModel(baseIndex); 
+
+        TableModel Appmodel = tblAppointments.getModel();
+        txtAppointmentId.setText(Appmodel.getValueAt(displayIndex, 0).toString());
+        calendarAppointment.setDate(mca.parseStrToDate(Appmodel.getValueAt(displayIndex, 1).toString()));
+        cmbStatus.setSelectedItem(Appmodel.getValueAt(displayIndex, 2).toString());
+        txtDoctorId.setText(Appmodel.getValueAt(displayIndex, 3).toString());
+        txtDoctorName.setText(Appmodel.getValueAt(displayIndex, 4).toString());
+        txtCustomerId.setText(Appmodel.getValueAt(displayIndex, 5).toString());
+        txtCustomerName.setText(Appmodel.getValueAt(displayIndex, 6).toString());
+    }
+
     }//GEN-LAST:event_tblAppointmentsMouseClicked
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -442,8 +457,7 @@ public class StaffAppointments extends javax.swing.JFrame {
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        //tblAppointments.setModel(controller.getAppointmentTable());
-        updateTable();
+        tblAppointments.setModel(controller.getAppointmentTable());
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void tblDoctorsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDoctorsMouseClicked
@@ -478,7 +492,6 @@ public class StaffAppointments extends javax.swing.JFrame {
 
     private void txtAppointmentSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAppointmentSearchKeyReleased
         String query = txtAppointmentSearch.getText();
-        tbs = new TableSearchHandler(tblAppointments);
         tbs.filterTable(query);
     }//GEN-LAST:event_txtAppointmentSearchKeyReleased
 
@@ -505,13 +518,6 @@ public class StaffAppointments extends javax.swing.JFrame {
         txtDoctorId.setText("");
         txtDoctorName.setText("");
     }
-    
-    public void updateTable() {
-        tblAppointments.setModel(controller.getAppointmentTable());
-        tbs = new TableSearchHandler(tblAppointments);
-    }
-
-    
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new StaffAppointments().setVisible(true));
     }
