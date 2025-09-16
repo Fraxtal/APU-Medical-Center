@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
-/**
- * Customer model representing a customer entity
- * Demonstrates OOP concepts: Inheritance, Encapsulation, Polymorphism
- * This class focuses on data representation and basic business rules
- */
 public class Customer extends User implements Serializable {
     
     private String password;

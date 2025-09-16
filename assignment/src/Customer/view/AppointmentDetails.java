@@ -354,7 +354,7 @@ public class AppointmentDetails extends javax.swing.JFrame {
                 String feedback = customerService.getDoctorFeedbackForAppointment(apptId);
                 tbFeedback.setLineWrap(true);
                 tbFeedback.setWrapStyleWord(true);
-                tbFeedback.setText(feedback != null ? feedback : "No feedback has been provided\nby the doctor.");
+                tbFeedback.setText(feedback != null ? feedback : "No feedback has been provided by the doctor.");
             }
         } catch (Exception e) {
             logger.severe(() -> "Error loading appointment details: " + e.getMessage());
