@@ -19,42 +19,47 @@ import javax.swing.table.TableRowSorter;
 public class viewFeedback {
     private DefaultTableModel model;
     private TableRowSorter<DefaultTableModel> sorter;
-    private int feedbackIdCounter;
 
     public viewFeedback(DefaultTableModel model) {
         this.model = model;
         this.sorter = new TableRowSorter<>(model);
-        this.feedbackIdCounter = 1;
     }
 
     public TableRowSorter<DefaultTableModel> getSorter() {
         return sorter;
     }
 
-    public void loadFeedbacks(String filePath) {
-        model.setRowCount(0);
+    public void loadScheduledAppointments(String filePath) {
+        model.setRowCount(0); // Clear existing data
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
+            int feedbackId = 1; // Start with ID 1
+            
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 String[] data = line.split(";", -1);
-
-            // feedbacks.txt has 7 fields
+            
+                // Ensure there are enough data fields (7 columns from appointments.txt)
                 if (data.length >= 7) {
-                    model.addRow(new Object[]{
-                        data[0], // Feedback ID
-                        data[1], // Appointment ID
-                        data[2], // Doctor ID
-                        data[3], // Doctor Name
-                        data[4], // Customer ID
-                        data[5], // Customer Name
-                        data[6]  // Feedback message
-                    });
+                    String status = data[2].trim();
+                    
+                    // Only add appointments with "Scheduled" status
+                    if ("Scheduled".equalsIgnoreCase(status)) {
+                        model.addRow(new Object[]{
+                            String.valueOf(feedbackId++), // Auto-generated Feedback ID
+                            data[0], // Appointment ID
+                            data[3], // Doctor ID
+                            data[4], // Doctor Name
+                            data[5], // Customer ID
+                            data[6], // Customer Name
+                            "No feedback yet" // Default feedback text
+                        });
+                    }
                 }
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error loading feedbacks: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error loading scheduled appointments: " + e.getMessage());
         }
     }
 }

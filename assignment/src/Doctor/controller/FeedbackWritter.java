@@ -37,7 +37,7 @@ public class FeedbackWritter {
                     String customerId = parts[5].trim();
                     String customerName = parts[6].trim();
 
-                    if (status.equalsIgnoreCase("Completed")) {
+                    if (status.equalsIgnoreCase("Scheduled")) {
                         // Increment feedbackId
                         lastId++;
                         // Placeholder feedback message (can be replaced by user input)

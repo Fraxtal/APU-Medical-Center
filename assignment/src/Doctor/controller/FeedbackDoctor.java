@@ -57,7 +57,31 @@ public class FeedbackDoctor {
             e.printStackTrace(); // Handle any exceptions
         }
     }
-
+    public void saveFeedbackToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (int row = 0; row < model.getRowCount(); row++) {
+                // Get all column values
+                String feedbackId = model.getValueAt(row, 0).toString();
+                String appointmentId = model.getValueAt(row, 1).toString();
+                String doctorId = model.getValueAt(row, 2).toString();
+                String doctorName = model.getValueAt(row, 3).toString();
+                String customerId = model.getValueAt(row, 4).toString();
+                String customerName = model.getValueAt(row, 5).toString();
+                String feedback = model.getValueAt(row, 6).toString();
+                
+                // Write in the correct format with semicolon delimiter
+                String line = feedbackId + ";" + appointmentId + ";" + doctorId + ";" + 
+                             doctorName + ";" + customerId + ";" + customerName + ";" + feedback;
+                
+                writer.write(line);
+                writer.newLine(); // New line for the next row
+            }
+            System.out.println("Feedback data saved to: " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle any exceptions
+            System.err.println("Error saving feedback data: " + e.getMessage());
+        }
+    }
     // Optionally, a method to set a new file path
     public void setFilePath(String filePath) {
         this.filePath = filePath;

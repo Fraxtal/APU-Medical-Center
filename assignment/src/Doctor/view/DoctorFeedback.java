@@ -34,34 +34,31 @@ public class DoctorFeedback extends javax.swing.JFrame {
     private TableRowSorter<DefaultTableModel> sorter;
     private TableSearchHandler searchHandler;
 
-    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorFeedback.class.getName());
 
-    /**
-     * Creates new form Test
-     */
     public DoctorFeedback() {
         initComponents();
         setupTable();
         String filePath = "src\\database\\feedbacks.txt";
         feedbackDoctor = new FeedbackDoctor(model, filePath);
-        loadFeedbacks();
+        loadScheduledAppointments(); // Changed from loadFeedbacks()
         searchHandler = new TableSearchHandler(FeedbackTable);
-     
-
     }
+    
     private void setupTable() {
         String[] cols = {"Feedback ID", "Appointment ID", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name", "Feedback"};
         int[] w = {120, 100, 120, 150, 150, 100, 150};
 
-        model = new DefaultTableModel(cols, 0) { // Use the class-level model variable
+        model = new DefaultTableModel(cols, 0) {
             public boolean isCellEditable(int r, int c) {
-                return c != 0; // Make cells editable except the first column
+                return c == 6; // Make only the Feedback column editable
             }
         };
     
-        FeedbackTable.setModel(model); // Set the model for the table
+        FeedbackTable.setModel(model);
         FeedbackTable.setAutoCreateRowSorter(true);
+        
+        // Initialize viewfeedback after model is created
         viewfeedback = new viewFeedback(model);
         sorter = viewfeedback.getSorter();
         FeedbackTable.setRowSorter(sorter);
@@ -73,42 +70,19 @@ public class DoctorFeedback extends javax.swing.JFrame {
     
         DefaultTableCellRenderer c = new DefaultTableCellRenderer();
         c.setHorizontalAlignment(SwingConstants.CENTER);
-        cm.getColumn(6).setCellRenderer(c);
+        // Center align multiple columns if needed
+        for (int i = 0; i < 6; i++) { // Center first 6 columns
+            cm.getColumn(i).setCellRenderer(c);
+        }
     
         FeedbackTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+    }
+    
+    private void loadScheduledAppointments() {
+        String filePath = "src\\database\\appointments.txt";
+        viewfeedback.loadScheduledAppointments(filePath);
+    }
 
-    }
-    private void saveFeedbacks(String filePath) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            for (int i = 0; i < model.getRowCount(); i++) {
-                String feedbackId = model.getValueAt(i, 0).toString();
-                String appointmentId = model.getValueAt(i, 1).toString();
-                String doctorId = model.getValueAt(i, 2).toString();
-                String doctorName = model.getValueAt(i, 3).toString();
-                String customerId = model.getValueAt(i, 4).toString();
-                String customerName = model.getValueAt(i, 5).toString();
-                String feedback = model.getValueAt(i, 6).toString();
-            
-                String row = feedbackId + ";" + appointmentId + ";" + doctorId + ";" +
-                            doctorName + ";" + customerId + ";" + customerName + ";" +
-                            feedback;
-
-                bw.write(row);
-                bw.newLine();
-            }
-            JOptionPane.showMessageDialog(this, "Feedbacks saved successfully.");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving feedbacks: " + e.getMessage());
-        }
-    }
-    
-    
-    private void loadFeedbacks()
-    {
-        String filePath ="src\\database\\feedbacks.txt";
-        viewfeedback.loadFeedbacks(filePath);
-    }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -284,8 +258,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
     }//GEN-LAST:event_EditbtnActionPerformed
 
     private void SavebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavebtnActionPerformed
-        String filePath = "src\\database\\feedbacks.txt";
-        saveFeedbacks(filePath);        // TODO add your handling code here:
+        feedbackDoctor.saveFeedbackToFile();        // TODO add your handling code here:
     }//GEN-LAST:event_SavebtnActionPerformed
 
     private void FeedbackSearchtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FeedbackSearchtxtActionPerformed
