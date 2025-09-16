@@ -15,16 +15,19 @@ import Manager.View.View;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
+import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
+import java.util.stream.Stream;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,6 +39,7 @@ import javax.swing.JOptionPane;
 public class Controller {
     Model model;
     View view;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
     
     public Controller(Model model, View view)
     {
@@ -45,9 +49,10 @@ public class Controller {
     
     public String[] GetYearList(int colIndex, String file)
     {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<String[]> content = model.ReadFile(file);
         return content.stream()
-                .map(row -> String.valueOf(LocalDate.parse(row[colIndex]).getYear()))
+                .map(row -> String.valueOf(LocalDate.parse(row[colIndex], formatter).getYear()))
                 .distinct()
                 .sorted(Comparator.reverseOrder())
                 .toArray(String[]::new);
@@ -59,7 +64,7 @@ public class Controller {
         {
             List<String[]> content = model.ReadFile("feedbacks");
             return content.stream()
-                    .filter(r -> r[0].equalsIgnoreCase(view.GetTableRow(row).get(0)))
+                    .filter(r -> r[1].equalsIgnoreCase(view.GetTableRow(row).get(0)))
                     .map(r -> r[6])
                     .toArray(String[]::new);
         }
@@ -70,23 +75,23 @@ public class Controller {
     {
         if (row != -1)
         {
-            List<String[]> content = model.ReadFile("comments");
+            List<String[]> content = model.GetData();
             return content.stream()
-                    .filter(r -> r[1].equalsIgnoreCase(view.GetTableRow(row).get(0)))
+                    .filter(r -> r[0].equalsIgnoreCase(view.GetTableRow(row).get(0)))
                     .findFirst()
                     .map(r -> r[3])
                     .orElse("");
         }
-        return "";
+        return null;
     }
     
-    public String[] GetUserDetail(int row, String role)
+    public String[] GetUserDetail(int row)
     {
         if (row != -1)
         {
             List<String[]> content = model.ReadFile("users");
             return content.stream()
-                    .filter(r -> r[0].equalsIgnoreCase(view.GetTableRow(row).get("customer".equals(role) ? 1 : 2)))
+                    .filter(r -> r[0].equalsIgnoreCase(view.GetTableRow(row).get(1)))
                     .findFirst()
                     .orElse(null);
         }
@@ -124,7 +129,7 @@ public class Controller {
     {
         List<String[]> filtered = model.GetData().stream()
             .filter(row -> {
-                return Arrays.stream(row).anyMatch(item -> item.contains(keyword));
+                return Arrays.stream(row).anyMatch(item -> item.toLowerCase().contains(keyword.toLowerCase()));
             })
             .toList();
         return filtered;
@@ -164,11 +169,28 @@ public class Controller {
         view.LoadDisplay(model.ReadFileAndSaveInBuffer(file));
     }
     
+    public void RoleFilteredUpdateDisplay(String file, String role)
+    {
+        List<String[]> filtered = model.ReadFileAndSaveInBuffer(file).stream()
+                .filter(row -> role.equalsIgnoreCase(row[6]))
+                .map(row -> new String[]{row[0], row [1], row[2]})
+                .toList();
+        view.LoadDisplay(filtered);
+    }
+    
+    public void FirstThreeUpdateDisplay(String file)
+    {
+        List<String[]> firstThree = model.ReadFileAndSaveInBuffer(file).stream()
+                .map(row -> new String[]{row[0], row [1], row[2]})
+                .toList();
+        view.LoadDisplay(firstThree);
+    }
+    
     public void SaveReport(ManagerReports MR, String type, int year)
     {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save as ...");
-        fileChooser.setSelectedFile(new File("report-"+Model.getCurrentDate()+"."+type));
+        fileChooser.setSelectedFile(new File("report-"+Model.GetCurrentDateTime()+"."+type));
         
         if (fileChooser.showSaveDialog(MR) == JFileChooser.APPROVE_OPTION)
         {
@@ -247,13 +269,13 @@ public class Controller {
         Comparator<Map.Entry<String, DataMonth>> comparator;
         switch (key)
         {
-            case "month" -> comparator = Comparator.comparing(entry -> LocalDate.parse(entry.getKey()));   
+            case "month" -> comparator = Comparator.comparing(entry -> YearMonth.parse(entry.getKey(), formatter));   
             case "appointment" -> comparator = Comparator.comparingInt(entry -> entry.getValue().appointment());
             case "income" -> comparator = Comparator.comparingDouble(entry -> entry.getValue().income());
-            default -> throw new IllegalArgumentException("Invalid sort key: " + key);
+            default -> comparator = Comparator.comparing(entry -> YearMonth.parse(entry.getKey(), formatter));
         }
         return dataset.monthlyData().entrySet().stream()
-                        .sorted(comparator) 
+                        .sorted(comparator.reversed()) 
                         .map(kv -> new String[]{
                             kv.getKey(),
                             String.valueOf(kv.getValue().appointment()),
@@ -270,11 +292,11 @@ public class Controller {
             case "name" -> comparator = Comparator.comparing(entry -> entry.getValue().name());   
             case "appointment" -> comparator = Comparator.comparingInt(entry -> entry.getValue().appointment());
             case "income" -> comparator = Comparator.comparingDouble(entry -> entry.getValue().income());
-            default -> throw new IllegalArgumentException("Invalid sort key: " + key);
+            default -> comparator = Comparator.comparing(entry -> YearMonth.parse(entry.getKey(), formatter));
         }
          
         return dataset.doctorData().entrySet().stream()
-                        .sorted(comparator) 
+                        .sorted(comparator.reversed()) 
                         .map(kv -> new String[]{
                             kv.getKey(),
                             String.valueOf(kv.getValue().name()),

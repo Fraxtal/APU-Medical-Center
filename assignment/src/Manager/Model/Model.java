@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
@@ -39,10 +40,10 @@ public class Model{
         
     }
     
-    public static String getCurrentDate()
+    public static String GetCurrentDateTime()
     {
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd__hh-mm-ss");
         String formattedDate = now.format(formatter);
         return formattedDate;
     }
@@ -78,7 +79,6 @@ public class Model{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return data;
     }
     

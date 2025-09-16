@@ -7,6 +7,7 @@ package Manager.View;
 import Manager.Controller.Controller;
 import Manager.Model.Model;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -76,6 +77,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
 
         jTable2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTable2.setModel(tableModel);
+        jTable1.setDefaultEditor(Object.class, null);
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable2MouseClicked(evt);
@@ -91,8 +93,8 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
 
         jTextField1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField1KeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
             }
         });
 
@@ -100,6 +102,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jLabel9.setText("Search by :");
 
         jTable1.setModel(tableModelDetail);
+        jTable1.setDefaultEditor(Object.class, null);
         jScrollPane1.setViewportView(jTable1);
 
         jMenu2.setText("Session");
@@ -208,10 +211,6 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-        controller.SearchRow(jTextField1.getText());
-    }//GEN-LAST:event_jTextField1KeyTyped
-
     private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
         this.dispose();
     }//GEN-LAST:event_jMenuItem5MouseReleased
@@ -242,6 +241,10 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         frame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem1MouseReleased
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        LoadDisplay(controller.SearchRow(jTextField1.getText()));
+    }//GEN-LAST:event_jTextField1KeyReleased
 
     /**
      * @param args the command line arguments

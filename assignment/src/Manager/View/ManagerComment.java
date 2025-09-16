@@ -49,11 +49,7 @@ public class ManagerComment extends javax.swing.JFrame implements View{
             "Date Created", 
             "Role"});
         
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setActionCommand("customer");
-        jRadioButton2.setActionCommand("staff");
-        
-        controller.UpdateDisplay("users");
+        controller.FirstThreeUpdateDisplay("comments");
     }
 
     /**
@@ -75,8 +71,6 @@ public class ManagerComment extends javax.swing.JFrame implements View{
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -94,6 +88,7 @@ public class ManagerComment extends javax.swing.JFrame implements View{
 
         jTable2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTable2.setModel(tableModel);
+        jTable1.setDefaultEditor(Object.class, null);
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable2MouseClicked(evt);
@@ -105,12 +100,12 @@ public class ManagerComment extends javax.swing.JFrame implements View{
         jLabel1.setText("Staff & Doctor List");
 
         jLabel2.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        jLabel2.setText("Display Detail of :");
+        jLabel2.setText("Customer Detail :");
 
         jTextField1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField1KeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
             }
         });
 
@@ -124,25 +119,8 @@ public class ManagerComment extends javax.swing.JFrame implements View{
         jLabel3.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel3.setText("Comment");
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jRadioButton1.setText("Customer");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jRadioButton2.setText("Mentioned Staff");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
-            }
-        });
-
         jTable1.setModel(tableModelDetail);
+        jTable1.setDefaultEditor(Object.class, null);
         jScrollPane1.setViewportView(jTable1);
 
         jMenu2.setText("Session");
@@ -221,12 +199,7 @@ public class ManagerComment extends javax.swing.JFrame implements View{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton2))
+                    .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -249,10 +222,7 @@ public class ManagerComment extends javax.swing.JFrame implements View{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jRadioButton1)
-                            .addComponent(jRadioButton2))
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -260,10 +230,6 @@ public class ManagerComment extends javax.swing.JFrame implements View{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-        controller.SearchRow(jTextField1.getText());
-    }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
         this.dispose();
@@ -296,13 +262,9 @@ public class ManagerComment extends javax.swing.JFrame implements View{
         this.dispose();
     }//GEN-LAST:event_jMenuItem1MouseReleased
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        DisplayDetail();
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
-
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        DisplayDetail();
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        LoadDisplay(controller.SearchRow(jTextField1.getText()));
+    }//GEN-LAST:event_jTextField1KeyReleased
 
     /**
      * @param args the command line arguments
@@ -343,8 +305,6 @@ public class ManagerComment extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -356,10 +316,10 @@ public class ManagerComment extends javax.swing.JFrame implements View{
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
-    public void DisplayDetail()
+    private void DisplayDetail()
     {
         tableModelDetail.setColumnCount(1);
-        String[] col = controller.GetUserDetail(jTable1.getSelectedRow(), buttonGroup1.getSelection().getActionCommand());
+        String[] col = controller.GetUserDetail(jTable2.getSelectedRow());
         if (col != null && col.length > 0)
         {
             tableModelDetail.addColumn("Data", col);
