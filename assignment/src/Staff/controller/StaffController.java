@@ -232,9 +232,9 @@ public class StaffController {
             return 1;
         }
          
-         if (!Arrays.asList(paymentTypes).contains(paymentMethod)){
+        if (!Arrays.asList(paymentTypes).contains(paymentMethod)){
              return 2;
-         }
+        }
         
         if (!mp.updateInvoicePayment(invoiceId, paymentMethod)){
             return 3;
@@ -256,6 +256,7 @@ public class StaffController {
         return null;
     }
     
+    //implemented in StaffPayments
     public String validateAppIdtoCustomerName(String appointmentId){
         if(!ma.checkAppointmentIdExists(appointmentId)){
             return null;
@@ -270,5 +271,27 @@ public class StaffController {
         }
         
         return null;
+    }
+    
+    public int validateGenerateReceipt(String appointmentId, String invoiceId, String paymentMethod){
+        if (!Arrays.asList(paymentTypes).contains(paymentMethod)){
+             return 1;
+        }
+        
+        String customerId = ma.returnCustomerIDfromAppId(appointmentId);
+        if(customerId == null){
+            return 2;
+        }
+        
+        String customerName = mp.returnCustomerNamefromId(customerId);
+        if (customerName == null){
+            return 2;
+        }
+        
+        if(!mp.generateReceipt(customerId, customerName, invoiceId)){
+            return 3;
+        }
+        
+        return 0;
     }
 }

@@ -275,7 +275,7 @@ public class StaffPayments extends javax.swing.JFrame {
         int currentRow = tblInvoice.getSelectedRow();
         
         if (currentRow == -1){
-            JOptionPane.showMessageDialog(this, "Please select a record to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a n invoice to update.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -313,7 +313,7 @@ public class StaffPayments extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Invalid Payment Method.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             case 3:
-                JOptionPane.showMessageDialog(this, "Error occured while updating invoices", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error occured while updating invoices.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
@@ -324,12 +324,39 @@ public class StaffPayments extends javax.swing.JFrame {
 
     private void btnReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReceiptActionPerformed
         int currentRow = tblInvoice.getSelectedRow();
-        String paymentMethod = tblInvoice.getValueAt(currentRow, 2).toString().trim();
-        if (!paymentMethod.equalsIgnoreCase("Cash") || !paymentMethod.equalsIgnoreCase("Credit")){
-            JOptionPane.showMessageDialog(this, "Invoice still unpaid", "Error", JOptionPane.ERROR_MESSAGE);
+        
+        if (currentRow == -1){
+            JOptionPane.showMessageDialog(this, "Select an invoice to print.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         
+        String invoiceId = txtInvoiceId.getText();
+        String appointmentId = tblInvoice.getValueAt(currentRow, 3).toString();
+        String paymentMethod = tblInvoice.getValueAt(currentRow, 2).toString();
         
+//        if (!paymentMethod.equalsIgnoreCase("Cash") || !paymentMethod.equalsIgnoreCase("Credit")){
+//            JOptionPane.showMessageDialog(this, "Invoice still unpaid", "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+        
+//        int option = JOptionPane.showConfirmDialog(this, "Print Receipt?", "Confirmation",JOptionPane.YES_NO_OPTION);
+
+        int success = controller.validateGenerateReceipt(appointmentId, invoiceId, paymentMethod);
+        
+        switch (success){
+            case 0:
+                JOptionPane.showMessageDialog(this, "Receipt successfully generated.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case 1:
+                JOptionPane.showMessageDialog(this, "Invoice has not been paid.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(this, "Customer not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            case 3:
+                JOptionPane.showMessageDialog(this, "Error occured while generating receipt.", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+        }
+
     }//GEN-LAST:event_btnReceiptActionPerformed
 
     private void txtInvoiceSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceSearchKeyReleased
