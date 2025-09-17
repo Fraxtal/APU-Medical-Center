@@ -417,7 +417,7 @@ public class CustomerService implements FileService {
                                                doctorId,
                                                customer.getFullname() != null ? customer.getFullname() : customer.getUsername(),
                                                doctorFullName.trim());
-
+            
             // Persist by appending to appointments file
             File file = new File(APPOINTMENTS_FILE);
             file.getParentFile().mkdirs();
