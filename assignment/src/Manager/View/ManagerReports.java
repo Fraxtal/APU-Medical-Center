@@ -83,12 +83,12 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTable1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTable1.setModel(tableModel);
+        jTable1.setDefaultEditor(Object.class, null);
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
@@ -118,8 +118,8 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jRadioButton1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jRadioButton1.setText("Month");
         jRadioButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jRadioButton1MousePressed(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jRadioButton1MouseReleased(evt);
             }
         });
 
@@ -127,8 +127,8 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jRadioButton2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jRadioButton2.setText("Doctor");
         jRadioButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jRadioButton2MousePressed(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jRadioButton2MouseReleased(evt);
             }
         });
 
@@ -256,17 +256,13 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenu1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         jMenuItem7.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jMenuItem7.setText("Export as .txt");
+        jMenuItem7.setText("Full Report as .txt");
         jMenuItem7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jMenuItem7MouseReleased(evt);
             }
         });
         jMenu1.add(jMenuItem7);
-
-        jMenuItem8.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jMenuItem8.setText("Export as .pdf");
-        jMenu1.add(jMenuItem8);
 
         jMenuBar1.add(jMenu1);
 
@@ -326,25 +322,13 @@ public class ManagerReports extends javax.swing.JFrame implements View{
                 buttonGroup3.getSelection().getActionCommand());
     }//GEN-LAST:event_jButton5MouseReleased
 
-    private void jRadioButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton1MousePressed
-        jRadioButton3.setActionCommand("month");
-        jRadioButton3.setText("Month");
-        jRadioButton4.setActionCommand("appointment");
-        jRadioButton4.setText("Appointment");
-        jRadioButton5.setActionCommand("income");
-        jRadioButton5.setText("Income");
-        jRadioButton6.setVisible(false);
-    }//GEN-LAST:event_jRadioButton1MousePressed
+    private void jRadioButton2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton2MouseReleased
+        RadioButtonUpdate();
+    }//GEN-LAST:event_jRadioButton2MouseReleased
 
-    private void jRadioButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton2MousePressed
-        jRadioButton3.setActionCommand("id");
-        jRadioButton3.setText("Doctor ID");
-        jRadioButton4.setActionCommand("name");
-        jRadioButton4.setText("Doctor Name");
-        jRadioButton5.setActionCommand("appointment");
-        jRadioButton5.setText("Appointment");
-        jRadioButton6.setVisible(true);
-    }//GEN-LAST:event_jRadioButton2MousePressed
+    private void jRadioButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton1MouseReleased
+        RadioButtonUpdate();
+    }//GEN-LAST:event_jRadioButton1MouseReleased
 
     /**
      * @param args the command line arguments
@@ -389,7 +373,6 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
@@ -402,6 +385,34 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
+    private void RadioButtonUpdate()
+    {
+        switch (buttonGroup2.getSelection().getActionCommand())
+        {
+            case "month" ->
+            {
+                jRadioButton3.setActionCommand("month");
+                jRadioButton3.setText("Month");
+                jRadioButton4.setActionCommand("appointment");
+                jRadioButton4.setText("Appointment");
+                jRadioButton5.setActionCommand("income");
+                jRadioButton5.setText("Income");
+                jRadioButton6.setVisible(false);
+            }
+            
+            case "doctor" ->
+            {
+                jRadioButton3.setActionCommand("id");
+                jRadioButton3.setText("Doctor ID");
+                jRadioButton4.setActionCommand("name");
+                jRadioButton4.setText("Doctor Name");
+                jRadioButton5.setActionCommand("appointment");
+                jRadioButton5.setText("Appointment");
+                jRadioButton6.setVisible(true);
+            }
+        }
+    }
+    
     @Override
     public void ShowErrorDialog(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
