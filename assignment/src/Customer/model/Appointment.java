@@ -62,37 +62,11 @@ public class Appointment extends BaseEntity {
     public void setDoctorName(String doctorName) { this.doctorName = doctorName; }
     
     /**
-     * Method to validate appointment data - demonstrates encapsulation
-     * Implements abstract method from BaseEntity
-     */
-    @Override
-    public boolean isValid() {
-        return appointmentId != null && !appointmentId.trim().isEmpty() && 
-               customerId > 0 && 
-               doctorId > 0 &&
-               customerName != null && !customerName.trim().isEmpty() &&
-               doctorName != null && !doctorName.trim().isEmpty() &&
-               dateOfAppointment != null && 
-               status != null && !status.trim().isEmpty();
-    }
-    
-    /**
      * Method to check if appointment is in the past - demonstrates business logic
      */
     public boolean isPastAppointment() {
         if (dateOfAppointment == null) return false;
         return dateOfAppointment.isBefore(LocalDate.now());
-    }
-    
-    @Override
-    public String getSummary() {
-        return String.format("Appointment #%d - %s with %s on %s (%s)", 
-                           appointmentId, customerName, doctorName, 
-                           dateOfAppointment, status);
-    }
-    
-    public String getDisplayString() {
-        return getSummary(); // Reuse the summary method
     }
     
     @Override

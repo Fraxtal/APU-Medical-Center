@@ -7,6 +7,7 @@ package Customer.view;
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
 import Customer.services.CustomerService;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -43,22 +44,40 @@ public class CustomerComment extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         cmbSubject = new javax.swing.JComboBox<>();
-        tbContext = new javax.swing.JTextField();
         btnSubmit = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbContext = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel2.setText("Comment Centre");
 
+        jLabel3.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel3.setText("Subject: ");
 
+        jLabel4.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel4.setText("Context: ");
 
+        cmbSubject.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         cmbSubject.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "General Experience", "Clinic Experience", "Management Experience", "Doctor's Experience" }));
         cmbSubject.setToolTipText("");
 
+        btnSubmit.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
+
+        tbContext.setColumns(20);
+        tbContext.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        tbContext.setLineWrap(true);
+        tbContext.setRows(8);
+        tbContext.setToolTipText("Context of Comment");
+        tbContext.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(tbContext);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,11 +96,11 @@ public class CustomerComment extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cmbSubject, 0, 213, Short.MAX_VALUE)
-                            .addComponent(tbContext)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(167, 167, 167)
                         .addComponent(btnSubmit)))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,15 +113,45 @@ public class CustomerComment extends javax.swing.JFrame {
                     .addComponent(cmbSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tbContext, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnSubmit)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        String subject = (String) cmbSubject.getSelectedItem();
+        String context = tbContext.getText();
+
+        if (subject == null || subject.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a subject.", "Validation", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (context == null || context.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter your comment.", "Validation", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (controller == null) {
+            JOptionPane.showMessageDialog(this, "Controller not initialized.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean ok = controller.submitComment(subject.trim(), context.trim());
+        if (ok) {
+            JOptionPane.showMessageDialog(this, "Comment submitted successfully.");
+            tbContext.setText("");
+            cmbSubject.setSelectedIndex(0);
+            this.setVisible(false);
+            controller.showCustomerDashboard();
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to submit comment. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,6 +184,7 @@ public class CustomerComment extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField tbContext;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea tbContext;
     // End of variables declaration//GEN-END:variables
 }

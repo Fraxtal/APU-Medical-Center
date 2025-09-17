@@ -44,7 +44,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnUserProfile.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnUserProfile.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnUserProfile.setText("My Profile");
         btnUserProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -52,7 +52,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnBookApt.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnBookApt.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnBookApt.setText("Book Appointment");
         btnBookApt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -60,7 +60,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnAptHistory.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnAptHistory.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnAptHistory.setText("My Appointments");
         btnAptHistory.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAptHistory.setHideActionText(true);
@@ -70,7 +70,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnLogout.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnLogout.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnLogout.setText("Logout");
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,7 +81,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
         jLabel1.setText("Customer Dashboard");
 
-        btnComment.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnComment.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnComment.setText("Comment Centre");
         btnComment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,7 +100,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addComponent(btnLogout)
                 .addGap(87, 87, 87))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(149, Short.MAX_VALUE)
+                .addContainerGap(146, Short.MAX_VALUE)
                 .addComponent(btnBookApt)
                 .addGap(68, 68, 68)
                 .addComponent(btnAptHistory)

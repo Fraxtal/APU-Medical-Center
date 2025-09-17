@@ -3,8 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Customer.view;
-
+import javax.swing.table.DefaultTableModel;
 import Customer.ctrl.CustomerController;
+import Customer.model.Appointment;
+import Customer.model.Customer;
+import Customer.model.Invoice;
+import Customer.services.CustomerService;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+//import com.itextpdf.text.*;
+//import com.itextpdf.text.pdf.*;
+//import com.itextpdf.text.pdf.draw.LineSeparator;
 
 /**
  *
@@ -13,11 +22,19 @@ import Customer.ctrl.CustomerController;
 public class AppointmentDetails extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AppointmentDetails.class.getName());
-
+    
+    private String currentAppointmentId;
     private CustomerController controller;
-
+    private CustomerService customerService;
+    private Customer currentCustomer;
     public void setController(CustomerController controller) {
         this.controller = controller;
+    }
+    
+    public void setCurrentCustomer(Customer customer) {
+        this.currentCustomer = customer;
+        this.customerService = new CustomerService();
+        loadAppointmentDetails();
     }
     
     public AppointmentDetails() {
@@ -40,11 +57,21 @@ public class AppointmentDetails extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         btnPrint = new javax.swing.JButton();
         btnReturn = new javax.swing.JButton();
+        tbAptID = new javax.swing.JTextField();
+        tbDoa = new javax.swing.JTextField();
+        tbStatus = new javax.swing.JTextField();
+        tbDoctor = new javax.swing.JTextField();
+        tbInvTotal = new javax.swing.JTextField();
+        tbInvMethod = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        InvDetails = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbFeedback = new javax.swing.JTextArea();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,14 +96,16 @@ public class AppointmentDetails extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel7.setText("Invoice Total: ");
 
-        jLabel8.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
-        jLabel8.setText("Invoice Details: ");
-
         jLabel9.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel9.setText("Invoice Method: ");
 
         btnPrint.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnPrint.setText("Print Invoice");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
 
         btnReturn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnReturn.setText("Return");
@@ -86,39 +115,114 @@ public class AppointmentDetails extends javax.swing.JFrame {
             }
         });
 
+        tbAptID.setEditable(false);
+        tbAptID.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+
+        tbDoa.setEditable(false);
+        tbDoa.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+
+        tbStatus.setEditable(false);
+        tbStatus.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+
+        tbDoctor.setEditable(false);
+        tbDoctor.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+
+        tbInvTotal.setEditable(false);
+        tbInvTotal.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+
+        tbInvMethod.setEditable(false);
+        tbInvMethod.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+
+        InvDetails.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        InvDetails.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Item Name", "Quantity", "Price Per", "Price Total"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(InvDetails);
+        if (InvDetails.getColumnModel().getColumnCount() > 0) {
+            InvDetails.getColumnModel().getColumn(0).setResizable(false);
+            InvDetails.getColumnModel().getColumn(1).setResizable(false);
+            InvDetails.getColumnModel().getColumn(2).setResizable(false);
+            InvDetails.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        tbFeedback.setEditable(false);
+        tbFeedback.setColumns(20);
+        tbFeedback.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        tbFeedback.setRows(5);
+        jScrollPane2.setViewportView(tbFeedback);
+
+        jLabel10.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        jLabel10.setText("Invoice Details: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(178, 178, 178)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tbAptID, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addGap(12, 12, 12)
-                                    .addComponent(jLabel7))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8)))))
-                    .addComponent(jLabel1))
-                .addContainerGap(34, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnPrint)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReturn)
-                .addGap(36, 36, 36))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel6))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(tbDoa)
+                                        .addComponent(tbStatus)
+                                        .addComponent(tbDoctor, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(33, 33, 33)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel9)
+                                        .addComponent(jLabel7))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tbInvTotal)
+                                        .addComponent(tbInvMethod)))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnPrint)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnReturn)
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addGap(293, 293, 293)))))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,29 +231,45 @@ public class AppointmentDetails extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(tbAptID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(tbDoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(tbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(tbDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(tbInvTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(tbInvMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel8)))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPrint)
                     .addComponent(btnReturn))
-                .addGap(33, 33, 33))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -160,6 +280,27 @@ public class AppointmentDetails extends javax.swing.JFrame {
         this.setVisible(false);
         controller.showCustomerDashboard();
     }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Save Appointment Details as PDF");
+        fc.setFileFilter(new FileNameExtensionFilter("PDF Files", "pdf"));
+//        if (fc.showSaveDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
+//            java.io.File f = fc.getSelectedFile();
+//            if (!f.getName().toLowerCase().endsWith(".pdf")) {
+//                f = new java.io.File(f.getParentFile(), f.getName() + ".pdf");
+//            }
+//            try {
+//                exportAppointmentDetailsToPdf(f);
+//                javax.swing.JOptionPane.showMessageDialog(this, "Saved: " + f.getAbsolutePath());
+//            } catch (Exception e) {
+//                logger.severe(() -> "PDF export failed: " + e.getMessage());
+//                javax.swing.JOptionPane.showMessageDialog(this, "Failed to export PDF: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
+        System.out.println("Under Development");
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     /**
      * @param args the command line arguments
@@ -186,18 +327,240 @@ public class AppointmentDetails extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new AppointmentDetails().setVisible(true));
     }
 
+
+    public void loadAppointmentDetailsById(String appointmentId) {
+        this.currentAppointmentId = appointmentId;
+        loadAppointmentDetails();
+    }
+
+    private void loadAppointmentDetails() {
+        if (currentAppointmentId == null || customerService == null) {
+            return;
+        }
+
+        try {
+            Appointment appointment = customerService.getAppointmentById(currentAppointmentId);
+            if (appointment != null) {
+                tbAptID.setText(appointment.getAppointmentId());
+                tbDoa.setText(appointment.getDateOfAppointment().toString());
+                tbStatus.setText(appointment.getStatus());
+                tbDoctor.setText(appointment.getDoctorName());
+
+                String apptId = currentAppointmentId;
+
+                Invoice invoice = customerService.getInvoiceByAppointmentId(apptId);
+                if (invoice != null) {
+                    tbInvTotal.setText(String.format("RM %.2f", invoice.getTotal()));
+                    tbInvMethod.setText(invoice.getPaymentMethod());
+                    loadInvoiceDetailsTable(String.format("INV%03d", invoice.getInvoiceId()));
+                } else {
+                    tbInvTotal.setText("No invoice found");
+                    tbInvMethod.setText("N/A");
+                }
+
+                String feedback = customerService.getDoctorFeedbackForAppointment(apptId);
+                tbFeedback.setLineWrap(true);
+                tbFeedback.setWrapStyleWord(true);
+                tbFeedback.setText(feedback != null ? feedback : "No feedback has been provided by the doctor.");
+            }
+        } catch (Exception e) {
+            logger.severe(() -> "Error loading appointment details: " + e.getMessage());
+        }
+    }
+
+    private void loadInvoiceDetailsTable(String invoiceId) {
+        try {
+            Object[][] tableData = customerService.getInvoiceDetailsForDisplay(invoiceId);
+            String[] columnNames = {"Item Name", "Quantity", "Price Per", "Price Total"};
+
+            DefaultTableModel model = new DefaultTableModel(tableData, columnNames) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            InvDetails.setModel(model);
+        } catch (Exception e) {
+            logger.severe(() -> "Error loading invoice details: " + e.getMessage());
+        }
+    }
+
+//    private static class FooterPageEvent extends PdfPageEventHelper {
+//        @Override
+//        public void onEndPage(PdfWriter writer, Document document) {
+//            PdfPTable footer = new PdfPTable(3);
+//            try {
+//                footer.setWidths(new float[]{1, 1, 1});
+//                footer.setTotalWidth(document.right() - document.left());
+//                footer.getDefaultCell().setBorder(Rectangle.TOP);
+//                footer.getDefaultCell().setBorderColor(new BaseColor(200,200,200));
+//                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
+//                footer.addCell(new Phrase("APU Medical Centre", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD)));
+//                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+//                footer.addCell(new Phrase("Official Copy", new Font(Font.FontFamily.HELVETICA, 9)));
+//                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+//                footer.addCell(new Phrase(String.format("Page %d", writer.getPageNumber()), new Font(Font.FontFamily.HELVETICA, 9)));
+//                footer.writeSelectedRows(0, -1, document.left(), document.bottom() - 2, writer.getDirectContent());
+//            } catch (DocumentException e) {
+//                // ignore
+//            }
+//        }
+//    }
+//
+//    private void exportAppointmentDetailsToPdf(java.io.File outFile) throws Exception {
+//        // Fonts
+//        Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+//        Font subTitleFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+//        Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);
+//        Font smallGray = new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, new BaseColor(110,110,110));
+//
+//        Document doc = new Document(PageSize.A4, 50, 50, 72, 60);
+//        PdfWriter writer = PdfWriter.getInstance(doc, new java.io.FileOutputStream(outFile));
+//        writer.setPageEvent(new FooterPageEvent());
+//        doc.open();
+//
+//        // Header block
+//        PdfPTable header = new PdfPTable(1);
+//        header.setWidthPercentage(100);
+//        PdfPCell h1 = new PdfPCell(new Phrase("APU MEDICAL CENTRE", titleFont));
+//        h1.setBorder(Rectangle.NO_BORDER);
+//        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//        header.addCell(h1);
+//
+//        PdfPCell h2 = new PdfPCell(new Phrase("Outpatient Appointment Summary", subTitleFont));
+//        h2.setBorder(Rectangle.NO_BORDER);
+//        h2.setHorizontalAlignment(Element.ALIGN_CENTER);
+//        header.addCell(h2);
+//
+//        PdfPCell h3 = new PdfPCell(new Phrase("No. 1, Jalan APU, 57000 Kuala Lumpur | +60 3-1234 5678 | apu-medical@example.com", smallGray));
+//        h3.setBorder(Rectangle.NO_BORDER);
+//        h3.setHorizontalAlignment(Element.ALIGN_CENTER);
+//        header.addCell(h3);
+//
+//        doc.add(header);
+//        doc.add(Chunk.NEWLINE);
+//
+//        // Meta line
+//        Paragraph meta = new Paragraph("Generated on: " + java.time.LocalDateTime.now(), smallGray);
+//        meta.setAlignment(Element.ALIGN_RIGHT);
+//        doc.add(meta);
+//
+//        // Divider
+//        LineSeparator sep = new LineSeparator();
+//        sep.setLineColor(new BaseColor(200,200,200));
+//        doc.add(new Chunk(sep));
+//        doc.add(Chunk.NEWLINE);
+//
+//        // Appointment + Patient info
+//        PdfPTable info = new PdfPTable(2);
+//        info.setWidths(new float[]{2.5f, 7.5f});
+//        info.setWidthPercentage(100);
+//        addLabelValue(info, "Appointment ID", tbAptID.getText());
+//        addLabelValue(info, "Date of Appointment", tbDoa.getText());
+//        addLabelValue(info, "Status", tbStatus.getText());
+//        addLabelValue(info, "Doctor In Charge", tbDoctor.getText());
+//        // if you have the patient name/email available, include here
+//        // addLabelValue(info, "Patient Name", currentCustomer != null ? currentCustomer.getFullname() : "");
+//        doc.add(info);
+//        doc.add(Chunk.NEWLINE);
+//
+//        // Feedback
+//        Paragraph fbTitle = new Paragraph("Doctor's Feedback", subTitleFont);
+//        doc.add(fbTitle);
+//        PdfPTable fb = new PdfPTable(1);
+//        fb.setWidthPercentage(100);
+//        PdfPCell fbCell = new PdfPCell(new Phrase(tbFeedback.getText() == null ? "" : tbFeedback.getText(), normalFont));
+//        fbCell.setPadding(8f);
+//        fbCell.setBackgroundColor(new BaseColor(250,250,250));
+//        fb.addCell(fbCell);
+//        doc.add(fb);
+//        doc.add(Chunk.NEWLINE);
+//
+//        // Invoice summary
+//        Paragraph invTitle = new Paragraph("Invoice Summary", subTitleFont);
+//        doc.add(invTitle);
+//        PdfPTable invSummary = new PdfPTable(2);
+//        invSummary.setWidths(new float[]{2.5f, 7.5f});
+//        invSummary.setWidthPercentage(60);
+//        addLabelValue(invSummary, "Invoice Total", tbInvTotal.getText());
+//        addLabelValue(invSummary, "Payment Method", tbInvMethod.getText());
+//        doc.add(invSummary);
+//        doc.add(Chunk.NEWLINE);
+//
+//        // Invoice line items table (from JTable)
+//        Paragraph itemsTitle = new Paragraph("Invoice Line Items", subTitleFont);
+//        doc.add(itemsTitle);
+//
+//        PdfPTable items = new PdfPTable(InvDetails.getColumnCount());
+//        items.setWidthPercentage(100);
+//
+//        // headers
+//        for (int c = 0; c < InvDetails.getColumnCount(); c++) {
+//            PdfPCell hc = new PdfPCell(new Phrase(InvDetails.getColumnName(c), subTitleFont));
+//            hc.setHorizontalAlignment(Element.ALIGN_CENTER);
+//            hc.setBackgroundColor(new BaseColor(235, 235, 235));
+//            hc.setPadding(6f);
+//            items.addCell(hc);
+//        }
+//        // rows
+//        for (int r = 0; r < InvDetails.getRowCount(); r++) {
+//            for (int c = 0; c < InvDetails.getColumnCount(); c++) {
+//                Object val = InvDetails.getValueAt(r, c);
+//                PdfPCell rc = new PdfPCell(new Phrase(val == null ? "" : val.toString(), normalFont));
+//                rc.setPadding(6f);
+//                if (c == 1 || c == 2 || c == 3) rc.setHorizontalAlignment(Element.ALIGN_RIGHT);
+//                items.addCell(rc);
+//            }
+//        }
+//        doc.add(items);
+//
+//        doc.add(Chunk.NEWLINE);
+//        doc.add(new Chunk(sep));
+//
+//        // Disclaimer
+//        Paragraph disclaimer = new Paragraph("This document is computer-generated and does not require a physical signature.", smallGray);
+//        disclaimer.setAlignment(Element.ALIGN_CENTER);
+//        doc.add(disclaimer);
+//
+//        doc.close();
+//    }
+//
+//    private void addLabelValue(PdfPTable table, String label, String value) {
+//        PdfPCell l = new PdfPCell(new Phrase(label, new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD)));
+//        l.setBorder(Rectangle.NO_BORDER);
+//        l.setPadding(4f);
+//        l.setBackgroundColor(new BaseColor(248,248,248));
+//        table.addCell(l);
+//
+//        PdfPCell v = new PdfPCell(new Phrase(value == null ? "" : value, new Font(Font.FontFamily.HELVETICA, 10)));
+//        v.setBorder(Rectangle.NO_BORDER);
+//        v.setPadding(4f);
+//        table.addCell(v);
+//    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable InvDetails;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnReturn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField tbAptID;
+    private javax.swing.JTextField tbDoa;
+    private javax.swing.JTextField tbDoctor;
+    private javax.swing.JTextArea tbFeedback;
+    private javax.swing.JTextField tbInvMethod;
+    private javax.swing.JTextField tbInvTotal;
+    private javax.swing.JTextField tbStatus;
     // End of variables declaration//GEN-END:variables
 }

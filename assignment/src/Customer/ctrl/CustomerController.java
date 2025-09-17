@@ -4,10 +4,7 @@ import Customer.model.Appointment;
 import Customer.model.Customer;
 import Customer.model.Invoice;
 import Customer.services.CustomerService;
-import Customer.view.AppointmentBooking;
-import Customer.view.AppointmentHistory;
-import Customer.view.CustomerComment;
-import Customer.view.CustomerDashboard;
+import Customer.view.*;
 import User.UserProfile;
 import User.Homepage;
 import java.time.LocalDate;
@@ -77,9 +74,6 @@ public class CustomerController {
         cc.setVisible(true);
     }
     
-    /**
-     * Navigate to Appointment Booking
-     */
     public void showAppointmentBooking() {
         if (currentCustomer == null) {
             logger.warning("No customer logged in");
@@ -106,6 +100,22 @@ public class CustomerController {
         history.setVisible(true);
     }
     
+    public void showAppointmentDetails(String appointmentId) {
+        if (currentCustomer == null) {
+            logger.warning("No customer logged in");
+            return;
+        }
+        if (appointmentId == null || appointmentId.trim().isEmpty()) {
+            logger.warning("No appointmentId provided for details view");
+            return;
+        }
+        AppointmentDetails details = new AppointmentDetails();
+        details.setController(this);
+        details.setCurrentCustomer(currentCustomer);
+        details.loadAppointmentDetailsById(appointmentId.trim());
+        details.setVisible(true);
+    }
+    
     /**
      * Navigate to User Profile
      */
@@ -127,41 +137,6 @@ public class CustomerController {
         currentCustomer = null;
         Homepage homepage = new Homepage();
         homepage.setVisible(true);
-    }
-    
-    /**
-     * Book a new appointment - demonstrates input validation and business logic coordination
-     */
-    public boolean bookAppointment(int doctorId, String doctorName, LocalDate date) {
-        if (currentCustomer == null) {
-            logger.warning("No customer logged in");
-            return false;
-        }
-        
-        if (!currentCustomer.canBookAppointment()) {
-            logger.warning("Customer has reached maximum pending appointments limit");
-            return false;
-        }
-        
-        if (!validateAppointmentInput(doctorId, doctorName, date)) {
-            return false;
-        }
-        
-        Appointment appointment = new Appointment(
-            currentCustomer.getId(),
-            doctorId,
-            currentCustomer.getFullname(),
-            doctorName,
-            date
-        );
-        boolean success = customerService.bookAppointment(appointment);
-        
-        if (success) {
-            currentCustomer.addAppointment(appointment);
-            logger.info("Appointment booked successfully for customer: " + currentCustomer.getId());
-        }
-        
-        return success;
     }
     
     private boolean validateAppointmentInput(int doctorId, String doctorName, LocalDate date) {
@@ -263,7 +238,7 @@ public class CustomerController {
         return true;
     }
     
-    public List<Invoice> getInvoicesForAppointment(int appointmentId) {
+    public List<Invoice> getInvoicesForAppointment(String appointmentId) {
         if (currentCustomer == null) {
             logger.warning("No customer logged in");
             return List.of();
@@ -278,4 +253,13 @@ public class CustomerController {
             currentCustomer.setAppointments(appointments);
         }
     }
+    
+    public boolean submitComment(String subject, String context) {
+        if (currentCustomer == null) {
+            logger.warning("No customer logged in");
+            return false;
+        }
+        return customerService.submitCustomerComment(currentCustomer.getId(), subject, context);
+    }
+
 }
