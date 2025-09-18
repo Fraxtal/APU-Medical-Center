@@ -49,7 +49,7 @@ public class Controller {
     
     public String[] GetYearList(int colIndex, String file)
     {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List<String[]> content = model.ReadFile(file);
         return content.stream()
                 .map(row -> String.valueOf(LocalDate.parse(row[colIndex], formatter).getYear()))
@@ -186,11 +186,11 @@ public class Controller {
         view.LoadDisplay(firstThree);
     }
     
-    public void SaveReport(ManagerReports MR, String type, int year)
+    public void SaveReport(ManagerReports MR, int year)
     {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save as ...");
-        fileChooser.setSelectedFile(new File("report-"+Model.GetCurrentDateTime()+"."+type));
+        fileChooser.setSelectedFile(new File("report-"+Model.GetCurrentDateTime()+".txt"));
         
         if (fileChooser.showSaveDialog(MR) == JFileChooser.APPROVE_OPTION)
         {
@@ -198,19 +198,9 @@ public class Controller {
             
             try
             {
-                switch (type)
-                {
-                    case "txt" -> {
-                        ReportGenerator r = new ReportGenerator();
-                        r.GenerateTXTReport(fileToSave, year);
-                        JOptionPane.showMessageDialog(MR, "File saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    }
-
-//                    case "pdf" -> {
-//                        ReportGenerator.generatePDFReport(fileToSave);
-//                        JOptionPane.showMessageDialog(MR, "File saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-//                    }
-                } 
+                ReportGenerator r = new ReportGenerator();
+                r.GenerateTXTReport(fileToSave, year);
+                JOptionPane.showMessageDialog(MR, "File saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             catch (IOException ex)
             {
@@ -296,7 +286,7 @@ public class Controller {
         }
          
         return dataset.doctorData().entrySet().stream()
-                        .sorted(comparator.reversed()) 
+                        .sorted(key.equals("id") ? comparator : comparator.reversed()) 
                         .map(kv -> new String[]{
                             kv.getKey(),
                             String.valueOf(kv.getValue().name()),

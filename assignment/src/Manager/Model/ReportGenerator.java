@@ -7,6 +7,7 @@ package Manager.Model;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -47,12 +48,12 @@ public class ReportGenerator extends Model {
     ) {}
     
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
-    private final DateTimeFormatter readFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter readFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     protected final String textTemplates = 
             """
             =======================================================================
-                                    %s
+                                        %s
             =======================================================================
             
             -----------------------------------------------------------------------
@@ -78,7 +79,7 @@ public class ReportGenerator extends Model {
         Map<String, List<String>> doctorAppointments = appointment.stream()
             .filter(row -> row.length == 7)
             .filter(row -> row[2].trim().equalsIgnoreCase("completed"))
-            .filter(row -> LocalDateTime.parse(row[1].trim(), readFormatter).getYear() == year)
+            .filter(row -> LocalDate.parse(row[1].trim(), readFormatter).getYear() == year)
             .collect(Collectors.groupingBy(
                     row -> row[3].trim(),
                     Collectors.mapping(row -> row[0].trim(),
@@ -120,10 +121,10 @@ public class ReportGenerator extends Model {
     {
         Map<String, String> appointmentDate = appointment.stream()
                 .filter(row -> row.length == 7)
-                .filter(row -> LocalDateTime.parse(row[1].trim(), readFormatter).getYear() == year)
+                .filter(row -> LocalDate.parse(row[1].trim(), readFormatter).getYear() == year)
                 .collect(Collectors.toMap(
                     row -> row[0],
-                    row -> LocalDateTime.parse(row[1].trim(), readFormatter).toLocalDate().format(formatter)
+                    row -> LocalDate.parse(row[1].trim(), readFormatter).format(formatter)
                 ));
         
         Map<String, DataMonth> monthlyData = invoice.stream()
@@ -153,7 +154,7 @@ public class ReportGenerator extends Model {
     public Map<String, Integer> GetAppointmentCount(int year, List<String[]> appointment) 
     {
         Map<String, Integer> apptCount = appointment.stream()
-                .filter(row -> LocalDateTime.parse(row[1].trim(), readFormatter).getYear() == year)
+                .filter(row -> LocalDate.parse(row[1].trim(), readFormatter).getYear() == year)
                 .filter(row -> row[2].trim().equalsIgnoreCase("completed") || row[2].trim().equalsIgnoreCase("cancelled"))
                 .collect(Collectors.groupingBy(
                         row -> row[2].trim().toLowerCase(),
