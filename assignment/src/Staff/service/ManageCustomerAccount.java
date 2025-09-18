@@ -1,9 +1,12 @@
 package Staff.service;
 
+import Customer.services.CustomerService;
 import java.io.*;
 import java.lang.System.Logger.Level;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +18,11 @@ public class ManageCustomerAccount {
     private static final String usersFile = "src/database/users.txt";
     private static final String appointmentsFile = "src/database/appointments.txt";
     private static final String invoicesFile = "src/database/invoices.txt";
-    public List<String[]> customersList;
+    private static final String invoiceDetailsFile = "src/database/invoiceDetails.txt";
+    //private List<String[]> customersList;
+    private List<String[]> appointmentsList;
+    private List<String[]> invoicesList;
+    private List<String[]> invoiceDetailsList;
     
     public List<String[]> loadUsers() {
         List<String[]> userdata = new ArrayList<>();
@@ -27,14 +34,14 @@ public class ManageCustomerAccount {
                 String[] data = line.split(";");
                 if (data.length >= 9) {
                     int customerId = Integer.parseInt(data[0]);
-                    String username = data[1];
-                    String fullname = data[2];
-                    String email = data[3];
-                    String password = data[4];
-                    String address = data[5];
-                    String contactNum = data[6];
-                    String dateCreated = data[7];
-                    String role = data[8];
+//                    String username = data[1];
+//                    String fullname = data[2];
+//                    String email = data[3];
+//                    String password = data[4];
+//                    String address = data[5];
+//                    String contactNum = data[6];
+//                    String dateCreated = data[7];
+//                    String role = data[8];
                     
                     userdata.add(data);
                 }
@@ -49,7 +56,11 @@ public class ManageCustomerAccount {
     
     public List<String[]> loadCustomers() {
         //return loadUsers().stream().filter(data -> "Customer".equalsIgnoreCase(data[8])).toList();
-        return this.customersList = loadUsers().stream().filter(data -> data[8].trim().equalsIgnoreCase("Customer")).toList();
+        return loadUsers().stream().filter(data -> data[8].trim().equalsIgnoreCase("Customer")).toList();
+    }
+    
+    public List<String[]> loadDoctors() {
+        return loadUsers().stream().filter(data -> "Doctor".equalsIgnoreCase(data[8])).toList();
     }
     
     public boolean saveUsers(List<String> newData) {
@@ -66,7 +77,7 @@ public class ManageCustomerAccount {
         return true;
     }
     
-    public boolean updateCustomer(int id, String username, String fullname, String email, String pass, String address, String contact) {
+    public boolean updateCustomer(String customerId, String username, String fullname, String email, String pass, String address, String contact) {
         List<String> lines = new ArrayList<>();
         boolean found = false;
 
@@ -75,7 +86,7 @@ public class ManageCustomerAccount {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) continue;
                 String[] values = line.trim().split(";");
-                if (values.length >= 9 && Integer.parseInt(values[0]) == id) {
+                if (values.length >= 9 && values[0].equals(customerId)) {
                     values[1] = username;
                     values[2] = fullname;
                     values[3] = email;
@@ -98,7 +109,7 @@ public class ManageCustomerAccount {
         return false;
     }
     
-    public boolean deleteCustomer(int id) {
+    public boolean deleteCustomer(String customerId) {
         List<String> lines = new ArrayList<>();
         boolean found = false;
 
@@ -107,7 +118,7 @@ public class ManageCustomerAccount {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) continue;
                 String[] values = line.trim().split(";");
-                if (values.length >= 9 && Integer.parseInt(values[0]) == id) {
+                if (values.length >= 9 && values[0].equals(customerId)) {
                     found = true;
                     continue;
                 }
@@ -142,34 +153,6 @@ public class ManageCustomerAccount {
         return true;
     }
     
-    private int generateCustomerId() {
-        int maxId = 0;
-        try {
-            File file = new File(usersFile);
-            if (file.exists()) {
-                try (Scanner scanner = new Scanner(file)) {
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine().trim();
-                        if (!line.isEmpty()) {
-                            String[] values = line.split(";");
-                            if (values.length > 0) {
-                                try {
-                                    int id = Integer.parseInt(values[0]);
-                                    maxId = Math.max(maxId, id);
-                                } catch (NumberFormatException e) {
-                                    // Skip invalid lines
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return maxId + 1;
-    }
-    
     public boolean checkEmailExists(String email) {
         List<String[]> users = loadUsers(); 
         for (String[] user : users) {
@@ -190,53 +173,82 @@ public class ManageCustomerAccount {
         return false;
     }
     
-    public boolean checkIdExists(int id) {
-        List<String[]> users = loadUsers(); 
-        for (String[] user : users) {
-            if (user[0].equals(String.valueOf(id))) {
-                return true;
+    public boolean checkUserIdExists(String id) {
+        try {
+            List<String[]> users = loadUsers();
+            for (String[] user : users) {
+                if (user[0].equals(id)) {
+                    return true;
+                }
             }
         }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        
+        return false;
+    }
+    
+    public boolean checkEmailLinkedUserId(String userId, String email){
+        try {
+            List<String[]> users = loadUsers();
+            for (String[] user : users) {
+                if (user[0].equals(userId) && user[3].equalsIgnoreCase(email)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        
+        return false;
+    }
+    
+    public boolean checkContactLinkedUserId(String userId, String contact){
+        try {
+            List<String[]> users = loadUsers();
+            for (String[] user : users) {
+                if (user[0].equals(userId) && user[6].equalsIgnoreCase(contact)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        
         return false;
     }
     
     public int newCustomerId(){
-        List<String[]> customers = loadCustomers();
         int currentMaxId = 0;
-        for (String[] customer : customers){
-            if (customer.length > 8){
-                int id = Integer.parseInt(customer[0]);
-                currentMaxId = Math.max(currentMaxId, id);
-            }
-        }
-        return currentMaxId + 1;
-    }
-    
-    public List<String[]> loadAppointments() {
-        List<String[]> appointmentData = new ArrayList<>();
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(usersFile))){
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.isEmpty()) continue;
-                String[] data = line.split(";");
-                if (data.length >= 9) {
-                    int appointmentId = Integer.parseInt(data[0]);
-                    String appointmentDate = data[1];
-                    String status = data[2];
-                    String doctorId = data[3];
-                    String doctorName = data[4];
-                    String customerId = data[5];
-                    String customerName = data[6];
-                    
-                    appointmentData.add(data);
+        try{
+            List<String[]> customers = loadCustomers();
+            for (String[] customer : customers){
+                if (customer.length > 8){
+                    int id = Integer.parseInt(customer[0]);
+                    currentMaxId = Math.max(currentMaxId, id);
                 }
-                
             }
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        return appointmentData;
+        return currentMaxId + 1;
     }
+    
+    public Date parseStrToDate(String date){
+        try {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
 }
