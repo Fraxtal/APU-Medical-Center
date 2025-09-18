@@ -297,7 +297,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     }//GEN-LAST:event_jMenuItem5MouseReleased
 
     private void jMenuItem7MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem7MouseReleased
-        controller.SaveReport(this, "txt", Integer.parseInt(jComboBox1.getSelectedItem().toString()));
+        controller.SaveReport(this, Integer.parseInt(jComboBox1.getSelectedItem().toString()));
     }//GEN-LAST:event_jMenuItem7MouseReleased
 
     private void jMenuItem6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem6MouseReleased

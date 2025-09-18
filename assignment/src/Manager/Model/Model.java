@@ -43,7 +43,7 @@ public class Model{
     public static String GetCurrentDateTime()
     {
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd__hh-mm-ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MMMM dd  hh.mm.ss a");
         String formattedDate = now.format(formatter);
         return formattedDate;
     }
@@ -117,12 +117,4 @@ public class Model{
             WriteFile("users");
         }
     }
-    
-//    public String getCurrentDate()
-//    {
-//        LocalDate now = LocalDate.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-//        String formattedDate = now.format(formatter);
-//        return formattedDate;
-//    }
 }
