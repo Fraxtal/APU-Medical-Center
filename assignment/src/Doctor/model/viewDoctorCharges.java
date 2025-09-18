@@ -77,7 +77,7 @@ public class viewDoctorCharges {
                 
                 String[] data = line.split(";", -1);
                 
-                // invoiceDetails.txt has 7 fields: InvoiceDetailsID, Item, Quantity, PricePer, Total, InvoiceID, AppointmentID
+               
                 if (data.length >= 7) {
                     // Trim all values
                     for (int i = 0; i < data.length; i++) {
@@ -106,9 +106,6 @@ public class viewDoctorCharges {
         }
     }
 
-    /**
-     * Refresh the appointment data (call this if appointments might have changed)
-     */
     public void refreshAppointmentData() {
         appointmentData.clear();
         loadAppointmentStatuses();

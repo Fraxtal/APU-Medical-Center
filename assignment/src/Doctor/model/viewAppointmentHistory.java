@@ -94,8 +94,7 @@ public class viewAppointmentHistory {
 
     private String[] findCommentByCustomerId(String customerId) {
         for (String[] comment : commentDataList) {
-            // Based on your example: "2;10001;Clinic Experience;Appreciated the thorough check-up..."
-            // comment[0] = comment ID, comment[1] = customer ID, comment[2] = subject, comment[3] = context
+            //  comment[1] = customer ID, comment[2] = subject, comment[3] = context
             if (comment[1].equals(customerId)) {
                 return new String[]{comment[2], comment[3]};
             }
@@ -130,7 +129,7 @@ public class viewAppointmentHistory {
                 if (data.length >= 4) {
                     commentDataList.add(data);
                 } else if (data.length == 3) {
-                    // Handle case where there might be missing CommentID
+                    
                     commentDataList.add(new String[]{"", data[0], data[1], data[2]});
                 }
             }

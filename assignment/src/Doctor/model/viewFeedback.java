@@ -95,12 +95,12 @@ public class viewFeedback {
                 if (line.trim().isEmpty()) continue;
                 String[] data = line.split(";", -1);
                 if (data.length >= 7 && data[1].equals(appointmentId)) {
-                    return data[6]; // Return existing feedback
+                    return data[6]; 
                 }
             }
         } catch (IOException e) {
             // File might not exist yet
         }
         return "No feedback yet";
-    }//  create new feedback entries from scheduled appointments
+    }
 }
