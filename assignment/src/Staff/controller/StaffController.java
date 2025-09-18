@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -15,8 +16,9 @@ public class StaffController {
     private ManageAppointments ma;
     private ManagePayments mp;
     
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    private static String[] paymentTypes = {"Cash", "Credit"};
+    static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    static String[] paymentTypes = {"Cash", "Credit"};
+    
     
     public StaffController() {
         this.mca = new ManageCustomerAccount();
@@ -239,7 +241,6 @@ public class StaffController {
         if (!mp.updateInvoicePayment(invoiceId, paymentMethod)){
             return 3;
         }
-        
         return 0;
     }
     

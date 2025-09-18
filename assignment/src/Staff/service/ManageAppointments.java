@@ -1,13 +1,12 @@
-
 package Staff.service;
+
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageAppointments {
+public class ManageAppointments{
     private static final String appointmentsFile = "src/database/appointments.txt";
-   // private List<String[]> appointmentsList;
     
     public List<String[]> loadAppointments() {
         List<String[]> appointmentData = new ArrayList<>();
@@ -18,13 +17,13 @@ public class ManageAppointments {
                 if (line.isEmpty()) continue;
                 String[] data = line.split(";");
                 if (data.length >= 7) {
-                    String appointmentId = data[0];
-                    String appointmentDate = data[1];
-                    String status = data[2];
-                    String doctorId = data[3];
-                    String doctorName = data[4];
-                    String customerId = data[5];
-                    String customerName = data[6];
+//                    String appointmentId = data[0];
+//                    String appointmentDate = data[1];
+//                    String status = data[2];
+//                    String doctorId = data[3];
+//                    String doctorName = data[4];
+//                    String customerId = data[5];
+//                    String customerName = data[6];
                     
                     appointmentData.add(data);
                 }
@@ -55,31 +54,11 @@ public class ManageAppointments {
         return true;
     }
     
-//    public boolean addAppointment(String appointmentDate, String status, String doctorId, String doctorName, String customerId, String customerName) {
-//        String newAppId = newAppointmentId();
-//        String newAppointment = String.join(";", newAppId, appointmentDate, status, doctorId, doctorName, customerId, customerName);
-//        try (FileWriter fw = new FileWriter(appointmentsFile, true)) {
-//            fw.write(newAppointment + System.lineSeparator());
-//        }
-//        catch (IOException ioE) {
-//            System.out.println("Encountered an error while writing the appointments file");
-//            return false;
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//        
-//        return true;
-//    }
-    
     public boolean addAppointment(String appointmentDate, String status, String doctorId, String doctorName, String customerId, String customerName) {
         String newAppId = newAppointmentId();
         String newAppointment = String.join(";", newAppId, appointmentDate, status, doctorId, doctorName, customerId, customerName);
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(appointmentsFile, true))) {
-            bw.write(newAppointment);
-            bw.newLine();
-            bw.flush();
+        try (FileWriter fw = new FileWriter(appointmentsFile, true)) {
+            fw.write(newAppointment + System.lineSeparator());
         }
         catch (IOException ioE) {
             System.out.println("Encountered an error while writing the appointments file");

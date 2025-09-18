@@ -12,7 +12,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
-public class ManagePayments {
+public class ManagePayments{
     private static final String invoicesFile = "src/database/invoices.txt";
     private static final String invoiceDetailsFile = "src/database/invoiceDetails.txt";
     ManageCustomerAccount mca = new ManageCustomerAccount();
@@ -26,10 +26,10 @@ public class ManagePayments {
                 if (line.isEmpty()) continue;
                 String[] data = line.split(";");
                 if (data.length >= 4) {
-                    String invoicesId = data[0];
-                    String subtotal = data[1];
-                    String paymentMethod = data[2];
-                    String appointmentId = data[3];
+//                    String invoicesId = data[0];
+//                    String subtotal = data[1];
+//                    String paymentMethod = data[2];
+//                    String appointmentId = data[3];
                     
                     invoicesData.add(data);
                 }
@@ -65,13 +65,13 @@ public class ManagePayments {
                 if (line.isEmpty()) continue;
                 String[] data = line.split(";");
                 if (data.length >= 7) {
-                    String invoiceDetailId = data[0];
-                    String itemName = data[1];
-                    String quantity = data[2];
-                    String pricePer = data[3];
-                    String priceTotal = data[4];
-                    String invoiceId = data[5];
-                    String appointmentId = data[6];
+//                    String invoiceDetailId = data[0];
+//                    String itemName = data[1];
+//                    String quantity = data[2];
+//                    String pricePer = data[3];
+//                    String priceTotal = data[4];
+//                    String invoiceId = data[5];
+//                    String appointmentId = data[6];
                     
                     invoiceDetailsData.add(data);
                 }

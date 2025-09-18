@@ -359,18 +359,6 @@ public class StaffAccountManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void tblAccountsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountsMouseClicked
-//        int index = tblAccounts.getSelectedRow();
-//        TableModel model = tblAccounts.getModel();
-//        if (index != -1){
-//            txtID.setText(model.getValueAt(index, 0).toString());
-//            txtUsername.setText(model.getValueAt(index, 1).toString());
-//            txtFullname.setText(model.getValueAt(index, 2).toString());
-//            txtEmail.setText(model.getValueAt(index, 3).toString());
-//            txtPassword.setText(model.getValueAt(index, 4).toString());
-//            txtAddress.setText(model.getValueAt(index, 5).toString());
-//            txtContact.setText(model.getValueAt(index, 6).toString());
-//        }
-
         int baseIndex = tblAccounts.getSelectedRow(); 
         if (baseIndex != -1) {
             int displayIndex = tblAccounts.convertRowIndexToModel(baseIndex); 

@@ -268,17 +268,18 @@ public class StaffPayments extends javax.swing.JFrame {
         int currentRow = tblInvoice.getSelectedRow();
         
         if (currentRow == -1){
-            JOptionPane.showMessageDialog(this, "Please select a n invoice to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select an invoice to update.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         String invoiceID = txtInvoiceId.getText();
-        String paymentMethod = cmbPayment.getSelectedItem().toString();
+        String currentPaymentMethod = tblInvoice.getValueAt(currentRow, 2).toString();
+        String newPaymentMethod = cmbPayment.getSelectedItem().toString();
         String subtotal = tblInvoice.getValueAt(currentRow, 1).toString();
         String appointmentId = tblInvoice.getValueAt(currentRow, 3).toString();
         String customerName = controller.validateAppIdtoCustomerName(appointmentId);
         
-        if (!paymentMethod.isEmpty()){
+        if (!currentPaymentMethod.isEmpty()){
             int option = JOptionPane.showConfirmDialog(this, "Invoice has already been paid for. \nUpdate Payment Method?", "Confirmation",JOptionPane.YES_NO_OPTION);
             if (option != JOptionPane.YES_OPTION) {
                 return;
@@ -286,14 +287,14 @@ public class StaffPayments extends javax.swing.JFrame {
         }
 
         int option = JOptionPane.showConfirmDialog(this, "Confirm Payment?"  + "\n\nCustomer: " + customerName + "\nAppointment ID: " + 
-                appointmentId + "\nInvoice ID: " + invoiceID + "\nPayment Method: " + paymentMethod + "\nTotal Price: " + subtotal, 
+                appointmentId + "\nInvoice ID: " + invoiceID + "\nPayment Method: " + newPaymentMethod + "\nTotal Price: " + subtotal, 
                     "Confirmation",JOptionPane.YES_NO_OPTION);
 
         if (option != JOptionPane.YES_OPTION) {
             return;
         }
         
-        int success = controller.validateInvoiceUpdate(invoiceID, paymentMethod);
+        int success = controller.validateInvoiceUpdate(invoiceID, newPaymentMethod);
         
         switch (success){
             case 0:
