@@ -89,13 +89,15 @@ public class viewAppointmentHistory {
                 return feedback[6]; // feedback[6] is the feedback text
             }
         }
-        return "";
+        return "No feedback available";
     }
 
     private String[] findCommentByCustomerId(String customerId) {
         for (String[] comment : commentDataList) {
-            if (comment[1].equals(customerId)) { // comment[1] is customer ID
-                return new String[]{comment[2], comment[3]}; // comment[2] is subject, comment[3] is context
+            // Based on your example: "2;10001;Clinic Experience;Appreciated the thorough check-up..."
+            // comment[0] = comment ID, comment[1] = customer ID, comment[2] = subject, comment[3] = context
+            if (comment[1].equals(customerId)) {
+                return new String[]{comment[2], comment[3]};
             }
         }
         return new String[]{"", ""};
@@ -124,13 +126,16 @@ public class viewAppointmentHistory {
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 String[] data = line.split(";", -1);
+                // Expecting format: CommentID;CustomerID;Subject;Context
                 if (data.length >= 4) {
                     commentDataList.add(data);
+                } else if (data.length == 3) {
+                    // Handle case where there might be missing CommentID
+                    commentDataList.add(new String[]{"", data[0], data[1], data[2]});
                 }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error loading comment file: " + e.getMessage());
         }
     }
-
 }

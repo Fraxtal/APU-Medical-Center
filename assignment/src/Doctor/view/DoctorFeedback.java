@@ -41,7 +41,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
         setupTable();
         String filePath = "src\\database\\feedbacks.txt";
         feedbackDoctor = new FeedbackDoctor(model, filePath);
-        loadScheduledAppointments(); // Changed from loadFeedbacks()
+        loadFeedbacks();
         searchHandler = new TableSearchHandler(FeedbackTable);
     }
     
@@ -78,10 +78,11 @@ public class DoctorFeedback extends javax.swing.JFrame {
         FeedbackTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
     }
     
-    private void loadScheduledAppointments() {
-        String filePath = "src\\database\\appointments.txt";
+    private void loadFeedbacks() {
+        String filePath = "src\\database\\appointments.txt"; // Load from appointments.txt
         viewfeedback.loadScheduledAppointments(filePath);
     }
+    
 
 
     /**

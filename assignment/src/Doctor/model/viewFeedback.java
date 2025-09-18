@@ -34,26 +34,29 @@ public class viewFeedback {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
-            int feedbackId = 1; // Start with ID 1
+            int feedbackId = getNextFeedbackId(); // Get the next available ID
             
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 String[] data = line.split(";", -1);
             
-                // Ensure there are enough data fields (7 columns from appointments.txt)
                 if (data.length >= 7) {
                     String status = data[2].trim();
+                    String appointmentId = data[0];
                     
                     // Only add appointments with "Scheduled" status
                     if ("Scheduled".equalsIgnoreCase(status)) {
+                        // Check if feedback already exists for this appointment
+                        String existingFeedback = findExistingFeedback(appointmentId);
+                        
                         model.addRow(new Object[]{
                             String.valueOf(feedbackId++), // Auto-generated Feedback ID
-                            data[0], // Appointment ID
+                            appointmentId, // Appointment ID
                             data[3], // Doctor ID
                             data[4], // Doctor Name
                             data[5], // Customer ID
                             data[6], // Customer Name
-                            "No feedback yet" // Default feedback text
+                            existingFeedback // Use existing feedback if available
                         });
                     }
                 }
@@ -62,4 +65,42 @@ public class viewFeedback {
             JOptionPane.showMessageDialog(null, "Error loading scheduled appointments: " + e.getMessage());
         }
     }
+
+    private int getNextFeedbackId() {
+        int maxId = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader("src\\database\\feedbacks.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] data = line.split(";", -1);
+                if (data.length >= 1) {
+                    try {
+                        int id = Integer.parseInt(data[0]);
+                        if (id > maxId) maxId = id;
+                    } catch (NumberFormatException e) {
+                        // Ignore invalid IDs
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // File might not exist, start from 1
+        }
+        return maxId + 1;
+    }
+
+    private String findExistingFeedback(String appointmentId) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src\\database\\feedbacks.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] data = line.split(";", -1);
+                if (data.length >= 7 && data[1].equals(appointmentId)) {
+                    return data[6]; // Return existing feedback
+                }
+            }
+        } catch (IOException e) {
+            // File might not exist yet
+        }
+        return "No feedback yet";
+    }//  create new feedback entries from scheduled appointments
 }
