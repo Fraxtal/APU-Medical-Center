@@ -1,3 +1,0 @@
-1;A0001;20000;Dr.Sophia;10000;Chris;eat medicine on time
-2;A0003;20001;Dr.Kim;10003;Alvin;exercise more
-3;A0002;20001;Dr.Kim;10001;Alice;Drink more water
