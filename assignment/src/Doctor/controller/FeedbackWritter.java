@@ -21,6 +21,7 @@ public class FeedbackWritter {
 
         try (BufferedReader br = new BufferedReader(new FileReader(appointmentsFile));
              BufferedWriter bw = new BufferedWriter(new FileWriter(feedbacksFile, true))) { // append mode
+            
 
             // Find last feedbackId from feedbacks.txt
             int lastId = getLastFeedbackId(feedbacksFile);
@@ -37,10 +38,10 @@ public class FeedbackWritter {
                     String customerId = parts[5].trim();
                     String customerName = parts[6].trim();
 
-                    if (status.equalsIgnoreCase("Completed")) {
+                    if (status.equalsIgnoreCase("Scheduled")) {
                         // Increment feedbackId
                         lastId++;
-                        // Placeholder feedback message (can be replaced by user input)
+                        // Placeholder feedback message
                         String feedbackMessage = "No feedback yet.";
 
                         String feedbackEntry = lastId + ";" +
@@ -63,7 +64,7 @@ public class FeedbackWritter {
         }
     }
 
-    // Utility to get the last feedbackId from feedbacks.txt
+    
     private static int getLastFeedbackId(String feedbacksFile) {
         int lastId = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(feedbacksFile))) {

@@ -37,9 +37,9 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         searchHandler = new TableSearchHandler(AppointmentHistoryTable);
     }
     private void setupTable() {
-           
-        String[] cols = {"Appointment ID", "Date of Appointment", "Status", "Doctor ID", "Doctor Name", "Customer ID", "Customer Name"};
-        int[] w = {120, 100, 120, 150, 150, 100, 150};
+        String[] cols = {"Appointment ID", "Date of Appointment", "Status", "Doctor ID", "Doctor Name", 
+                     "Customer ID", "Customer Name", "Feedback", "Subject", "Context"};
+        int[] w = {120, 100, 120, 150, 150, 100, 150, 200, 150, 250};
     
         model = new DefaultTableModel(cols, 0) {
             public boolean isCellEditable(int r, int c) { return c != 0; }
@@ -59,7 +59,11 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
 
         DefaultTableCellRenderer center = new DefaultTableCellRenderer();
         center.setHorizontalAlignment(SwingConstants.CENTER);
-        cm.getColumn(6).setCellRenderer(center);
+    // Center align specific columns if needed
+        cm.getColumn(0).setCellRenderer(center); // Appointment ID
+        cm.getColumn(2).setCellRenderer(center); // Status
+        cm.getColumn(3).setCellRenderer(center); // Doctor ID
+        cm.getColumn(5).setCellRenderer(center); // Customer ID
     
         AppointmentHistoryTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 
@@ -92,13 +96,13 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
 
         AppointmentHistoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Appointment ID", "Status", "Customer ID", "Customer Name", "Doctor ID", "Doctor Name", "Feedback", "Comment"
+                "Appointment ID", "Status", "Customer ID", "Customer Name", "Doctor ID", "Doctor Name", "Feedback", "Subject", "Context"
             }
         ));
         jScrollPane2.setViewportView(AppointmentHistoryTable);

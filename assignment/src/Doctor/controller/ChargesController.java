@@ -86,11 +86,6 @@ public class ChargesController {
         String detailId = generateInvoiceDetailId();
     
     // Add to table
-//      model.addRow(new Object[]{
-//            detailId, item, quantity, pricePer, total, invoiceId, appointmentId
-//        });  
-    
-    // Also save to invoiceDetails.txt
         saveToInvoiceDetailsFile(detailId, item, quantity, pricePer, total, invoiceId, appointmentId);
      
     }
@@ -116,19 +111,16 @@ public class ChargesController {
 
     public void deleteCharge(int selectedRow) {
         if (selectedRow != -1) {
-            // Get the detail ID before deleting for file removal
             String detailId = model.getValueAt(selectedRow, 0).toString();
             
-            // Remove from table
             model.removeRow(selectedRow);
-            
-            // Also remove from invoiceDetails.txt
+                    
             removeFromInvoiceDetailsFile(detailId);
         }
     }
 
     private void removeFromInvoiceDetailsFile(String detailId) {
-        // Read all lines, exclude the one with the matching detailId, then rewrite the file
+
         List<String> lines = new ArrayList<>();
         
         try (BufferedReader reader = new BufferedReader(new FileReader(invoiceDetailsFilePath))) {
@@ -144,7 +136,7 @@ public class ChargesController {
             return;
         }
         
-        // Write back all lines except the deleted one
+  
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(invoiceDetailsFilePath))) {
             for (String line : lines) {
                 writer.write(line);
@@ -211,15 +203,13 @@ public class ChargesController {
                 int id = Integer.parseInt(model.getValueAt(i, 0).toString());
                 if (id > maxId) maxId = id;
             } catch (NumberFormatException e) {
-                // Skip non-numeric IDs
+                
             }
         }
         return String.format("%03d", maxId + 1);
     }
 
     private String getAppointmentIdForInvoice(String invoiceId) {
-        // Implement your logic to get appointment ID from invoice ID
-        // This is a placeholder - replace with your actual logic
         return "001";
     }
     

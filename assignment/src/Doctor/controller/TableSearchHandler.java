@@ -26,11 +26,11 @@ public class TableSearchHandler {
     }
 
     // Apply filter
-    public void filterTable(String query) {
-        if (query == null || query.trim().isEmpty()) {
+    public void filterTable(String searchTerm) {
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
             sorter.setRowFilter(null); // Show all
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query)); // Case insensitive
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTerm)); 
         }
     }
 

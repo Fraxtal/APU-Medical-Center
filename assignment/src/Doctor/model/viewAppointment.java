@@ -34,8 +34,8 @@ public void loadFromTxt(String filePath) {
             String[] data = line.split(";", -1);
             
             // Ensure there are enough data fields
-            if (data.length >= 7) { // Changed from 8 to 7
-                String status = data[2]; // Fetching the status
+            if (data.length >= 7) { 
+                String status = data[2]; 
 
                 // Only add the row if the status is "Scheduled"
                 if ("Scheduled".equalsIgnoreCase(status)) {

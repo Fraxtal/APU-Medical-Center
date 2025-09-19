@@ -150,7 +150,7 @@ public class DoctorCharges extends javax.swing.JFrame {
             }
         });
 
-        Backbtn.setText("Back");
+        Backbtn.setText("back");
         Backbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackbtnActionPerformed(evt);
