@@ -153,8 +153,36 @@ public class User {
     }
    
     
-    public void updateUserInformation() {
-
+    public boolean updateProfile(String username, String fullname, String email, String address, String contact, String password) {
+        try {
+            ArrayList<ArrayList<String>> allData = loadUserDB();
+            
+            for (ArrayList<String> record : allData) {
+                if (record.size() >= 9 && Integer.parseInt(record.get(0)) == this.id) {
+                    record.set(1, username);
+                    record.set(2, fullname);
+                    record.set(3, email);
+                    record.set(4, password);
+                    record.set(5, address);
+                    record.set(6, contact);
+                    break;
+                }
+            }
+            
+            try (FileWriter writer = new FileWriter("src\\database\\users.txt")) {
+                for (ArrayList<String> record : allData) {
+                    writer.write(String.join(";", record) + "\n");
+                }
+            }
+            
+            this.username = username;
+            this.fullname = fullname;
+            this.email = email;
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error updating profile: " + e.getMessage());
+            return false;
+        }
     }
     
     public int getId() { return id; }
