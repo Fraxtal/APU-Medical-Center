@@ -9,9 +9,11 @@ import Customer.model.Customer;
 import User.User;
 
 public class CustomerTest {
+    
+//This is a class to test the functions of Customer
     public static void main(String[] args) {
             // Login as John Doe using the actual database
-            User loggedInUser = User.login("john_doe", "password123");
+            User loggedInUser = User.login("jane_smith", "password456");
             
             if (loggedInUser instanceof Customer) {
                 Customer johnDoe = (Customer) loggedInUser;
