@@ -9,11 +9,13 @@ import Customer.model.Appointment;
 import Customer.model.Customer;
 import Customer.model.Invoice;
 import Customer.services.CustomerService;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-//import com.itextpdf.text.*;
-//import com.itextpdf.text.pdf.*;
-//import com.itextpdf.text.pdf.draw.LineSeparator;
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.*;
 
 /**
  *
@@ -26,13 +28,11 @@ public class AppointmentDetails extends javax.swing.JFrame {
     private String currentAppointmentId;
     private CustomerController controller;
     private CustomerService customerService;
-    private Customer currentCustomer;
     public void setController(CustomerController controller) {
         this.controller = controller;
     }
     
     public void setCurrentCustomer(Customer customer) {
-        this.currentCustomer = customer;
         this.customerService = new CustomerService();
         loadAppointmentDetails();
     }
@@ -286,20 +286,19 @@ public class AppointmentDetails extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Save Appointment Details as PDF");
         fc.setFileFilter(new FileNameExtensionFilter("PDF Files", "pdf"));
-//        if (fc.showSaveDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-//            java.io.File f = fc.getSelectedFile();
-//            if (!f.getName().toLowerCase().endsWith(".pdf")) {
-//                f = new java.io.File(f.getParentFile(), f.getName() + ".pdf");
-//            }
-//            try {
-//                exportAppointmentDetailsToPdf(f);
-//                javax.swing.JOptionPane.showMessageDialog(this, "Saved: " + f.getAbsolutePath());
-//            } catch (Exception e) {
-//                logger.severe(() -> "PDF export failed: " + e.getMessage());
-//                javax.swing.JOptionPane.showMessageDialog(this, "Failed to export PDF: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
-        System.out.println("Under Development");
+        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File f = fc.getSelectedFile();
+            if (!f.getName().toLowerCase().endsWith(".pdf")) {
+                f = new File(f.getParentFile(), f.getName() + ".pdf");
+            }
+            try {
+                exportAppointmentDetailsToPdf(f);
+                javax.swing.JOptionPane.showMessageDialog(this, "Saved: " + f.getAbsolutePath());
+            } catch (Exception e) {
+                logger.severe(() -> "PDF export failed: " + e.getMessage());
+                javax.swing.JOptionPane.showMessageDialog(this, "Failed to export PDF: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnPrintActionPerformed
 
     /**
@@ -386,158 +385,127 @@ public class AppointmentDetails extends javax.swing.JFrame {
         }
     }
 
-//    private static class FooterPageEvent extends PdfPageEventHelper {
-//        @Override
-//        public void onEndPage(PdfWriter writer, Document document) {
-//            PdfPTable footer = new PdfPTable(3);
-//            try {
-//                footer.setWidths(new float[]{1, 1, 1});
-//                footer.setTotalWidth(document.right() - document.left());
-//                footer.getDefaultCell().setBorder(Rectangle.TOP);
-//                footer.getDefaultCell().setBorderColor(new BaseColor(200,200,200));
-//                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
-//                footer.addCell(new Phrase("APU Medical Centre", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD)));
-//                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-//                footer.addCell(new Phrase("Official Copy", new Font(Font.FontFamily.HELVETICA, 9)));
-//                footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
-//                footer.addCell(new Phrase(String.format("Page %d", writer.getPageNumber()), new Font(Font.FontFamily.HELVETICA, 9)));
-//                footer.writeSelectedRows(0, -1, document.left(), document.bottom() - 2, writer.getDirectContent());
-//            } catch (DocumentException e) {
-//                // ignore
-//            }
-//        }
-//    }
-//
-//    private void exportAppointmentDetailsToPdf(java.io.File outFile) throws Exception {
-//        // Fonts
-//        Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
-//        Font subTitleFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
-//        Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);
-//        Font smallGray = new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, new BaseColor(110,110,110));
-//
-//        Document doc = new Document(PageSize.A4, 50, 50, 72, 60);
-//        PdfWriter writer = PdfWriter.getInstance(doc, new java.io.FileOutputStream(outFile));
-//        writer.setPageEvent(new FooterPageEvent());
-//        doc.open();
-//
-//        // Header block
-//        PdfPTable header = new PdfPTable(1);
-//        header.setWidthPercentage(100);
-//        PdfPCell h1 = new PdfPCell(new Phrase("APU MEDICAL CENTRE", titleFont));
-//        h1.setBorder(Rectangle.NO_BORDER);
-//        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        header.addCell(h1);
-//
-//        PdfPCell h2 = new PdfPCell(new Phrase("Outpatient Appointment Summary", subTitleFont));
-//        h2.setBorder(Rectangle.NO_BORDER);
-//        h2.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        header.addCell(h2);
-//
-//        PdfPCell h3 = new PdfPCell(new Phrase("No. 1, Jalan APU, 57000 Kuala Lumpur | +60 3-1234 5678 | apu-medical@example.com", smallGray));
-//        h3.setBorder(Rectangle.NO_BORDER);
-//        h3.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        header.addCell(h3);
-//
-//        doc.add(header);
-//        doc.add(Chunk.NEWLINE);
-//
-//        // Meta line
-//        Paragraph meta = new Paragraph("Generated on: " + java.time.LocalDateTime.now(), smallGray);
-//        meta.setAlignment(Element.ALIGN_RIGHT);
-//        doc.add(meta);
-//
-//        // Divider
-//        LineSeparator sep = new LineSeparator();
-//        sep.setLineColor(new BaseColor(200,200,200));
-//        doc.add(new Chunk(sep));
-//        doc.add(Chunk.NEWLINE);
-//
-//        // Appointment + Patient info
-//        PdfPTable info = new PdfPTable(2);
-//        info.setWidths(new float[]{2.5f, 7.5f});
-//        info.setWidthPercentage(100);
-//        addLabelValue(info, "Appointment ID", tbAptID.getText());
-//        addLabelValue(info, "Date of Appointment", tbDoa.getText());
-//        addLabelValue(info, "Status", tbStatus.getText());
-//        addLabelValue(info, "Doctor In Charge", tbDoctor.getText());
-//        // if you have the patient name/email available, include here
-//        // addLabelValue(info, "Patient Name", currentCustomer != null ? currentCustomer.getFullname() : "");
-//        doc.add(info);
-//        doc.add(Chunk.NEWLINE);
-//
-//        // Feedback
-//        Paragraph fbTitle = new Paragraph("Doctor's Feedback", subTitleFont);
-//        doc.add(fbTitle);
-//        PdfPTable fb = new PdfPTable(1);
-//        fb.setWidthPercentage(100);
-//        PdfPCell fbCell = new PdfPCell(new Phrase(tbFeedback.getText() == null ? "" : tbFeedback.getText(), normalFont));
-//        fbCell.setPadding(8f);
-//        fbCell.setBackgroundColor(new BaseColor(250,250,250));
-//        fb.addCell(fbCell);
-//        doc.add(fb);
-//        doc.add(Chunk.NEWLINE);
-//
-//        // Invoice summary
-//        Paragraph invTitle = new Paragraph("Invoice Summary", subTitleFont);
-//        doc.add(invTitle);
-//        PdfPTable invSummary = new PdfPTable(2);
-//        invSummary.setWidths(new float[]{2.5f, 7.5f});
-//        invSummary.setWidthPercentage(60);
-//        addLabelValue(invSummary, "Invoice Total", tbInvTotal.getText());
-//        addLabelValue(invSummary, "Payment Method", tbInvMethod.getText());
-//        doc.add(invSummary);
-//        doc.add(Chunk.NEWLINE);
-//
-//        // Invoice line items table (from JTable)
-//        Paragraph itemsTitle = new Paragraph("Invoice Line Items", subTitleFont);
-//        doc.add(itemsTitle);
-//
-//        PdfPTable items = new PdfPTable(InvDetails.getColumnCount());
-//        items.setWidthPercentage(100);
-//
-//        // headers
-//        for (int c = 0; c < InvDetails.getColumnCount(); c++) {
-//            PdfPCell hc = new PdfPCell(new Phrase(InvDetails.getColumnName(c), subTitleFont));
-//            hc.setHorizontalAlignment(Element.ALIGN_CENTER);
-//            hc.setBackgroundColor(new BaseColor(235, 235, 235));
-//            hc.setPadding(6f);
-//            items.addCell(hc);
-//        }
-//        // rows
-//        for (int r = 0; r < InvDetails.getRowCount(); r++) {
-//            for (int c = 0; c < InvDetails.getColumnCount(); c++) {
-//                Object val = InvDetails.getValueAt(r, c);
-//                PdfPCell rc = new PdfPCell(new Phrase(val == null ? "" : val.toString(), normalFont));
-//                rc.setPadding(6f);
-//                if (c == 1 || c == 2 || c == 3) rc.setHorizontalAlignment(Element.ALIGN_RIGHT);
-//                items.addCell(rc);
-//            }
-//        }
-//        doc.add(items);
-//
-//        doc.add(Chunk.NEWLINE);
-//        doc.add(new Chunk(sep));
-//
-//        // Disclaimer
-//        Paragraph disclaimer = new Paragraph("This document is computer-generated and does not require a physical signature.", smallGray);
-//        disclaimer.setAlignment(Element.ALIGN_CENTER);
-//        doc.add(disclaimer);
-//
-//        doc.close();
-//    }
-//
-//    private void addLabelValue(PdfPTable table, String label, String value) {
-//        PdfPCell l = new PdfPCell(new Phrase(label, new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD)));
-//        l.setBorder(Rectangle.NO_BORDER);
-//        l.setPadding(4f);
-//        l.setBackgroundColor(new BaseColor(248,248,248));
-//        table.addCell(l);
-//
-//        PdfPCell v = new PdfPCell(new Phrase(value == null ? "" : value, new Font(Font.FontFamily.HELVETICA, 10)));
-//        v.setBorder(Rectangle.NO_BORDER);
-//        v.setPadding(4f);
-//        table.addCell(v);
-//    }
+    private void exportAppointmentDetailsToPdf(File outFile) throws Exception {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            try (PDPageContentStream cs = new PDPageContentStream(document, page)) {
+
+                // Fonts
+                PDFont bold = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+                PDFont normal = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+
+                float y = 750, margin = 50;
+                float pageWidth = page.getMediaBox().getWidth() - 2 * margin;
+
+                // Header
+                printLine(cs, bold, 16, 200, y, "APU MEDICAL CENTRE");
+                y -= 20;
+                printLine(cs, normal, 11, 180, y, "Outpatient Appointment Summary");
+                y -= 30;
+                printLine(cs, normal, 9, 400, y, "Generated on: " +
+                        LocalDateTime.now().toString().substring(0, 19));
+
+                // Line
+                y -= 20;
+                cs.moveTo(margin, y); cs.lineTo(550, y); cs.stroke();
+
+                // Appointment details
+                y = printPair(cs, margin, y - 30, "Appointment ID:", tbAptID.getText(), bold, normal);
+                y = printPair(cs, margin, y - 20, "Date of Appointment:", tbDoa.getText(), bold, normal);
+                y = printPair(cs, margin, y - 20, "Status:", tbStatus.getText(), bold, normal);
+                y = printPair(cs, margin, y - 20, "Doctor In Charge:", tbDoctor.getText(), bold, normal);
+
+                // Feedback
+                y -= 40;
+                printLine(cs, bold, 11, margin, y, "Doctor's Feedback");
+                y = printWrapped(cs, normal, 10, margin, y - 20, tbFeedback.getText(), pageWidth, 15);
+
+                // Invoice summary
+                y -= 20;
+                printLine(cs, bold, 11, margin, y, "Invoice Summary");
+                y = printPair(cs, margin, y - 20, "Invoice Total:", tbInvTotal.getText(), bold, normal);
+                y = printPair(cs, margin, y - 20, "Payment Method:", tbInvMethod.getText(), bold, normal);
+
+                // Invoice line items
+                y -= 40;
+                printLine(cs, bold, 11, margin, y, "Invoice Line Items");
+                y -= 20;
+
+                float[] colWidths = {120, 80, 80, 100};
+
+                // Table headers
+                float x = margin;
+                for (int c = 0; c < InvDetails.getColumnCount(); c++) {
+                    printLine(cs, bold, 10, x, y, InvDetails.getColumnName(c));
+                    x += colWidths[c];
+                }
+
+                // Table rows
+                y -= 15;
+                for (int r = 0; r < InvDetails.getRowCount(); r++) {
+                    x = margin;
+                    for (int c = 0; c < InvDetails.getColumnCount(); c++) {
+                        Object val = InvDetails.getValueAt(r, c);
+                        printLine(cs, normal, 10, x, y, val == null ? "" : String.valueOf(val));
+                        x += colWidths[c];
+                    }
+                    y -= 15;
+                }
+
+                // Footer
+                printWrapped(cs, normal, 9, 150, 50,
+                        "This document is computer-generated and does not require a physical signature.",
+                        400, 12);
+            }
+            document.save(outFile);
+        }
+    }
+
+    //
+    // === Helpers ===
+    //
+    private void printLine(PDPageContentStream cs, PDFont font, float size,
+                           float x, float y, String text) throws IOException {
+        cs.beginText();
+        cs.setFont(font, size);
+        cs.newLineAtOffset(x, y);
+        cs.showText(text == null ? "" : text);
+        cs.endText();
+    }
+
+    private float printPair(PDPageContentStream cs, float x, float y,
+                            String label, String value,
+                            PDFont bold, PDFont normal) throws IOException {
+        printLine(cs, bold, 10, x, y, label);
+        printLine(cs, normal, 10, x + 150, y, value == null ? "" : value);
+        return y;
+    }
+
+    private float printWrapped(PDPageContentStream cs, PDFont font, float size,
+                               float x, float y, String text,
+                               float maxWidth, float lineHeight) throws IOException {
+        if (text == null || text.isEmpty()) return y;
+        String[] words = text.split("\\s+");
+        StringBuilder line = new StringBuilder();
+        for (String word : words) {
+            String testLine = line + (line.isEmpty() ? "" : " ") + word;
+            float w = font.getStringWidth(testLine) / 1000 * size;
+            if (w > maxWidth) {
+                printLine(cs, font, size, x, y, line.toString());
+                y -= lineHeight;
+                line = new StringBuilder(word);
+            } else {
+                line = new StringBuilder(testLine);
+            }
+        }
+        if (!line.isEmpty()) {
+            printLine(cs, font, size, x, y, line.toString());
+            y -= lineHeight;
+        }
+        return y;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable InvDetails;
