@@ -52,6 +52,7 @@ public class Controller {
         if (view != null) 
         {
         view.Dispose();
+        model.FlushData();
         }
         switch (frame)
         {
@@ -81,7 +82,6 @@ public class Controller {
             default -> {
             }
         }
-        model.FlushData();
     }
     
     public String[] GetYearList(int colIndex, String file)
@@ -172,32 +172,65 @@ public class Controller {
         return filtered;
     }
     
-    public void AddUser(String[] data)
+    public void AddUser(List<String> data)
     {
-        model.AddUser(data);
+        try
+        {
+            model.AddUser(data);
+            if (view instanceof ManagerUserManagement frame)
+            {
+                frame.ShowSuccessDialog("The changes applied.");
+            }
+        }
+        catch (Exception ex)
+        {
+            view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
+        }
     }
     
     public void EditUser(int index, String[] data)
     {
-        if (index > -1)
+        try
         {
-            model.EditUser(index, data);
+            if (index > -1)
+            {
+                model.EditUser(index, data);
+                if (view instanceof ManagerUserManagement frame)
+                {
+                    frame.ShowSuccessDialog("The changes applied.");
+                }
+            }
+            else
+            {
+                view.ShowErrorDialog("Null selection! Please select a row before editing");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            view.ShowErrorDialog("Null selection! Please select a row before editing");
+            view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
         }
     }
     
     public void DeleteUser(int index)
-    {
-        if (index > -1)
+    {        
+        try
         {
-            model.DeleteUser(index);
+            if (index > -1)
+            {
+                model.DeleteUser(index);
+                if (view instanceof ManagerUserManagement frame)
+                {
+                    frame.ShowSuccessDialog("The changes applied.");
+                }
+            }
+            else
+            {
+                view.ShowErrorDialog("Null selection! Please select a row before deleting");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            view.ShowErrorDialog("Null selection! Please select a row before deleting");
+            view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
         }
     }
     
