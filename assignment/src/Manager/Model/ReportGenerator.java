@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -18,13 +17,11 @@ import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.groupingBy;
-
 /**
  *
  * @author weiha
  */
-public class ReportGenerator extends Model {
+public class ReportGenerator extends ManagerModel {
     
     public record DataDoctor(
         String name,

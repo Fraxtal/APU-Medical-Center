@@ -6,6 +6,7 @@ package User;
 
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
+import Manager.Model.ManagerModel;
 
 
 /**
@@ -136,7 +137,14 @@ public class UserLogin extends javax.swing.JFrame {
             
             this.setVisible(false);
             controller.showCustomerDashboard();
-            } else {
+            }
+        else if (loggedInUser instanceof ManagerModel) {
+            ManagerModel d = (ManagerModel) loggedInUser;
+            Manager.Controller.Controller controller = new Manager.Controller.Controller(d);
+            
+            this.setVisible(false);
+            controller.ShowFrame(Manager.Controller.Controller.FrameType.UserManagement);
+        } else {
                 System.err.println("Login failed or user is not a Customer");
             }
         
