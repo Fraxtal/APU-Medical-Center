@@ -4,27 +4,23 @@
  */
 package Manager.Model;
 
+import User.User;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.util.List;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
-import javax.swing.JFileChooser;
 
 /**
  *
  * @author weiha
  */
-public class Model{
+public class ManagerModel extends User{
     private final Map<String, Path> files = 
             Map.of("users", Path.of("src/database/users.txt"),
                     "appointments",Path.of("src/database/appointments.txt"),
@@ -33,11 +29,22 @@ public class Model{
                     "invoices",Path.of("src/database/invoices.txt"),
                     "invoiceDetails",Path.of("src/database/invoiceDetails.txt"));
     
+    private String password, address, contact, dateCreated;
+    
     private List<String[]> bufferData;
     
-    public Model()
+    public ManagerModel()
     {
         
+    }
+    
+    public ManagerModel(int id, String username, String fullname, String email, String password, String address, String contact, String dateCreated)
+    {
+        super(id, username, fullname, email);
+        this.password = password;
+        this.address = address;
+        this.contact = contact;
+        this.dateCreated = dateCreated;
     }
     
     public static String GetCurrentDateTime()
@@ -51,6 +58,11 @@ public class Model{
     public List<String[]> GetData()
     {
         return bufferData;
+    }
+    
+    public void FlushData()
+    {
+        bufferData.clear();
     }
     
     public List<String[]> ReadFileAndSaveInBuffer(String key)
@@ -116,5 +128,42 @@ public class Model{
             bufferData.remove(index);
             WriteFile("users");
         }
+    }
+
+    public String GetPassword() 
+    {
+        return password;
+    }
+
+    public void SetPassword(String password) 
+    {
+        this.password = password;
+    }
+
+    public String GetAddress() 
+    {
+        return address;
+    }
+
+    public void SetAddress(String address) 
+    {
+        this.address = address;
+    }
+
+    public String GetContact() 
+    {
+        return contact;
+    }
+
+    public void SetContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String GetDateCreated() {
+        return dateCreated;
+    }
+
+    public void SetDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

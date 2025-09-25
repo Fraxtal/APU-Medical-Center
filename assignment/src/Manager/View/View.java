@@ -5,7 +5,6 @@
 package Manager.View;
 
 import java.util.List;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,4 +15,5 @@ public interface View {
     public void LoadDisplay(List<String[]> content);   
     public void ShowErrorDialog(String message);
     public List<String> GetTableRow(int index);
+    public void Dispose();
 }

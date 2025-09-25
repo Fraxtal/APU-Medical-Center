@@ -5,9 +5,7 @@
 package Manager.View;
 
 import Manager.Controller.Controller;
-import Manager.Model.Model;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -20,18 +18,17 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManagerAppointment.class.getName());
     private final Controller controller;
-    private final Model model;
     private final DefaultTableModel tableModel = new DefaultTableModel();
     private final DefaultTableModel tableModelDetail = new DefaultTableModel();
     
     /**
      * Creates new form ManagerAppoinments
+     * @param controller
      */
-    public ManagerAppointment() {
+    public ManagerAppointment(Controller controller) {
         initComponents();
         
-        model = new Model();
-        controller = new Controller(this.model, this);
+        this.controller = controller;
         
         tableModel.setColumnIdentifiers(new String[]{
             "Appointment ID", 
@@ -41,8 +38,6 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
             "Doctor Name",
             "Customer ID",
             "Customer Name"});
-        
-        controller.UpdateDisplay("appointments");
     }
 
     /**
@@ -64,7 +59,6 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -107,15 +101,6 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
 
         jMenu2.setText("Session");
         jMenu2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-
-        jMenuItem6.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jMenuItem6.setText("Log Out");
-        jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem6MouseReleased(evt);
-            }
-        });
-        jMenu2.add(jMenuItem6);
 
         jMenuItem5.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jMenuItem5.setText("Quit Application");
@@ -220,56 +205,21 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         tableModelDetail.addColumn("", (controller.GetFeedback(jTable2.getSelectedRow())));
     }//GEN-LAST:event_jTable2MouseClicked
 
-    private void jMenuItem6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem6MouseReleased
-        //LOGOUT
-    }//GEN-LAST:event_jMenuItem6MouseReleased
-
     private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
-        ManagerUserManagement frame = new ManagerUserManagement();
-        frame.setVisible(true);
-        this.dispose();
+        controller.ShowFrame(Controller.FrameType.UserManagement);
     }//GEN-LAST:event_jMenuItem3MouseReleased
 
     private void jMenuItem4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseReleased
-        ManagerReports frame = new ManagerReports();
-        frame.setVisible(true);
-        this.dispose();
+        controller.ShowFrame(Controller.FrameType.Report);
     }//GEN-LAST:event_jMenuItem4MouseReleased
 
     private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
-        ManagerComment frame = new ManagerComment();
-        frame.setVisible(true);
-        this.dispose();
+        controller.ShowFrame(Controller.FrameType.Comment);
     }//GEN-LAST:event_jMenuItem1MouseReleased
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         LoadDisplay(controller.SearchRow(jTextField1.getText()));
     }//GEN-LAST:event_jTextField1KeyReleased
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ManagerAppointment().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -282,7 +232,6 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
@@ -293,17 +242,20 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void ShowErrorDialog(String message) {
+    public void ShowErrorDialog(String message) 
+    {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
-    public void InitializeTableModel(String[] columnName) {
+    public void InitializeTableModel(String[] columnName) 
+    {
         tableModel.setColumnIdentifiers(columnName);
     }
     
     @Override
-    public void LoadDisplay(List<String[]> content) {
+    public void LoadDisplay(List<String[]> content) 
+    {
         tableModel.setRowCount(0);
         for (String[] row : content)
         {
@@ -312,7 +264,8 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     }
 
     @Override
-    public List<String> GetTableRow(int index) {
+    public List<String> GetTableRow(int index) 
+    {
         List<String> rowValue = new ArrayList<>();
         for (int i = 0; i < jTable2.getColumnCount(); i++)
         {
@@ -320,5 +273,11 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
             rowValue.add(value == null ? "" : value.toString());
         }
         return rowValue;
+    }
+    
+    @Override
+    public void Dispose()
+    {
+        this.dispose();
     }
 }
