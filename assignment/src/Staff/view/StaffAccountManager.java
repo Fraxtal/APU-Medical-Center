@@ -2,7 +2,7 @@ package Staff.view;
 
 import Doctor.controller.TableSearchHandler;
 import Staff.controller.StaffController;
-import Staff.service.ManageCustomerAccount;
+import Staff.model.ManageCustomerAccount;
 import java.awt.Color;
 import java.io.File;
 import java.util.Arrays;

@@ -1,13 +1,12 @@
 package Staff.controller;
 
-import Staff.service.ManageAppointments;
-import Staff.service.ManageCustomerAccount;
-import Staff.service.ManagePayments;
+import Staff.model.ManageAppointments;
+import Staff.model.ManageCustomerAccount;
+import Staff.model.ManagePayments;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 

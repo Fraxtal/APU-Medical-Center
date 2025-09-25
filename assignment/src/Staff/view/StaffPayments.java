@@ -6,7 +6,7 @@ package Staff.view;
 
 import Doctor.controller.TableSearchHandler;
 import Staff.controller.StaffController;
-import Staff.service.ManageCustomerAccount;
+import Staff.model.ManageCustomerAccount;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
