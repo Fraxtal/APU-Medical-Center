@@ -430,7 +430,7 @@ public class AppointmentDetails extends javax.swing.JFrame {
 
                 // Invoice line items
                 y -= 40;
-                printLine(cs, bold, 11, margin, y, "Invoice Line Items");
+                printLine(cs, bold, 11, margin, y, "Charges and Medicinal Prescription");
                 y -= 20;
 
                 float[] colWidths = {120, 80, 80, 100};
