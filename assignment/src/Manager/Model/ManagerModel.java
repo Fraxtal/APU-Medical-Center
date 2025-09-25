@@ -11,9 +11,11 @@ import java.util.List;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -108,9 +110,13 @@ public class ManagerModel extends User{
         }
     }
     
-    public void AddUser(String[] row)
+    public void AddUser(List<String> row)
     {
-        bufferData.add(row);
+        int id = Integer.parseInt(bufferData.getLast()[0]) + 1;
+        LocalDate date = LocalDate.now();
+        row.addFirst(String.valueOf(id));
+        row.add(7, date.toString());
+        bufferData.add(row.toArray(String[]::new));
         WriteFile("users");
     }
     

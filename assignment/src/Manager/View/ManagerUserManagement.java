@@ -79,6 +79,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jLabel10 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
         jTextField8 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -187,6 +188,14 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jTextField8.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTextField8.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
+        jButton4.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jButton4.setText("Clear");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -231,12 +240,14 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
                         .addGap(12, 12, 12)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(6, 6, 6)
                         .addComponent(jButton2)
-                        .addGap(6, 6, 6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,11 +290,15 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(108, 108, 108)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(70, 70, 70)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                    .addComponent(jButton4))
+                .addGap(8, 8, 8))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -387,13 +402,14 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String[] formData = new String[textGroup.length + 1];
+        List<String> formData = new ArrayList<>();
 
-        for (int i = 0; i < textGroup.length; i++) {
-            formData[i] = textGroup[i].getText();
+        for (int i = 1; i < 7; i++) {
+            System.out.println(i);
+            formData.add(textGroup[i].getText());
         }
 
-        formData[textGroup.length] = jComboBox1.getSelectedItem().toString();
+        formData.add(jComboBox1.getSelectedItem().toString());
         
         controller.AddUser(formData);
         controller.UpdateDisplay("users");
@@ -450,10 +466,15 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         controller.ShowFrame(Controller.FrameType.Comment);
     }//GEN-LAST:event_jMenuItem2MouseReleased
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        ClearFields();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -495,6 +516,11 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
             textField.setText("");
         }
         jComboBox1.setSelectedIndex(0);
+    }
+    
+    public void ShowSuccessDialog(String message)
+    {
+        JOptionPane.showMessageDialog(this, message, "Action Done", JOptionPane.INFORMATION_MESSAGE);
     }
     
     @Override

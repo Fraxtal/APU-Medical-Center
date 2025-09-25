@@ -93,15 +93,6 @@
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jMenuItem7MouseReleased"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem1">
-              <Properties>
-                <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="Full Report as .pdf"/>
-              </Properties>
-              <Events>
-                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jCheckBoxMenuItem1MouseReleased"/>
-              </Events>
-            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>

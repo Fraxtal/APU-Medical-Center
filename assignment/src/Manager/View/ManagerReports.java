@@ -79,7 +79,6 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -257,15 +256,6 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         });
         jMenu1.add(jMenuItem7);
 
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("Full Report as .pdf");
-        jCheckBoxMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jCheckBoxMenuItem1MouseReleased(evt);
-            }
-        });
-        jMenu1.add(jCheckBoxMenuItem1);
-
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -328,15 +318,10 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         controller.ShowFrame(Controller.FrameType.Comment);
     }//GEN-LAST:event_jMenuItem2MouseReleased
 
-    private void jCheckBoxMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1MouseReleased
-        controller.SaveReport(this, Integer.parseInt(jComboBox1.getSelectedItem().toString()), Controller.FileType.PDF);
-    }//GEN-LAST:event_jCheckBoxMenuItem1MouseReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JButton jButton5;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
