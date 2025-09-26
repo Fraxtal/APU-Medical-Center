@@ -9,13 +9,6 @@ import java.util.List;
 
 public class ManageCustomerAccount {
     private static final String usersFile = "src/database/users.txt";
-    private static final String appointmentsFile = "src/database/appointments.txt";
-    private static final String invoicesFile = "src/database/invoices.txt";
-    private static final String invoiceDetailsFile = "src/database/invoiceDetails.txt";
-    //private List<String[]> customersList;
-    private List<String[]> appointmentsList;
-    private List<String[]> invoicesList;
-    private List<String[]> invoiceDetailsList;
     
     public List<String[]> loadUsers() {
         List<String[]> userdata = new ArrayList<>();
@@ -48,8 +41,7 @@ public class ManageCustomerAccount {
     }
     
     public List<String[]> loadCustomers() {
-        //return loadUsers().stream().filter(data -> "Customer".equalsIgnoreCase(data[8])).toList();
-        return loadUsers().stream().filter(data -> data[8].trim().equalsIgnoreCase("Customer")).toList();
+        return loadUsers().stream().filter(data -> "Customer".equalsIgnoreCase(data[8])).toList();
     }
     
     public List<String[]> loadDoctors() {
