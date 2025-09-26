@@ -7,7 +7,7 @@ package Doctor.view;
 import Doctor.controller.FeedbackDoctor;
 import Doctor.controller.TableSearchHandler;
 import Doctor.view.DoctorMenu;
-import Doctor.model.viewFeedback;
+import Doctor.model.Doctor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -29,7 +29,7 @@ import javax.swing.table.TableRowSorter;
  */
 public class DoctorFeedback extends javax.swing.JFrame {
     private FeedbackDoctor feedbackDoctor;
-    private viewFeedback viewfeedback; // Instance of viewFeedback
+    private Doctor viewdoctor; // Instance of viewDoctor
     private DefaultTableModel model;
     private TableRowSorter<DefaultTableModel> sorter;
     private TableSearchHandler searchHandler;
@@ -59,8 +59,8 @@ public class DoctorFeedback extends javax.swing.JFrame {
         FeedbackTable.setAutoCreateRowSorter(true);
         
         // Initialize viewfeedback after model is created
-        viewfeedback = new viewFeedback(model);
-        sorter = viewfeedback.getSorter();
+        viewdoctor = new Doctor(model);
+        sorter = viewdoctor.getSorter();
         FeedbackTable.setRowSorter(sorter);
     
         TableColumnModel cm = FeedbackTable.getColumnModel();
@@ -80,7 +80,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
     
     private void loadFeedbacks() {
         String filePath = "src\\database\\appointments.txt"; // Load from appointments.txt
-        viewfeedback.loadScheduledAppointments(filePath);
+        viewdoctor.loadFeedbacks(filePath);
     }
     
 
@@ -101,7 +101,6 @@ public class DoctorFeedback extends javax.swing.JFrame {
         Feedbacktxt = new javax.swing.JTextArea();
         backbtn = new javax.swing.JButton();
         Editbtn = new javax.swing.JButton();
-        Savebtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         FeedbackSearchtxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -144,14 +143,6 @@ public class DoctorFeedback extends javax.swing.JFrame {
             }
         });
 
-        Savebtn.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
-        Savebtn.setText("Save");
-        Savebtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SavebtnActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel1.setText("Feedback");
 
@@ -185,10 +176,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
                                 .addComponent(backbtn)))
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(Editbtn)
-                                .addGap(39, 39, 39)
-                                .addComponent(Savebtn))
+                            .addComponent(Editbtn)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(41, 41, 41)
@@ -221,8 +209,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(backbtn)
-                    .addComponent(Editbtn)
-                    .addComponent(Savebtn))
+                    .addComponent(Editbtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -257,10 +244,6 @@ public class DoctorFeedback extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Feedback updated successfully.");
         }     
     }//GEN-LAST:event_EditbtnActionPerformed
-
-    private void SavebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavebtnActionPerformed
-        feedbackDoctor.saveFeedbackToFile();        // TODO add your handling code here:
-    }//GEN-LAST:event_SavebtnActionPerformed
 
     private void FeedbackSearchtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FeedbackSearchtxtActionPerformed
         // TODO add your handling code here:
@@ -301,7 +284,6 @@ public class DoctorFeedback extends javax.swing.JFrame {
     private javax.swing.JTextField FeedbackSearchtxt;
     private javax.swing.JTable FeedbackTable;
     private javax.swing.JTextArea Feedbacktxt;
-    private javax.swing.JButton Savebtn;
     private javax.swing.JButton backbtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

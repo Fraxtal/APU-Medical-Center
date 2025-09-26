@@ -6,7 +6,7 @@ package Doctor.view;
 
 import Doctor.controller.TableSearchHandler;
 import Doctor.view.DoctorMenu;
-import Doctor.model.viewAppointment;
+import Doctor.model.Doctor;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import javax.swing.table.TableRowSorter;
 public class DoctorAppointment extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorAppointment.class.getName());
-    private viewAppointment viewappointment;
+    private Doctor viewdoctor;
     private TableRowSorter<DefaultTableModel> sorter;
     private TableSearchHandler searchHandler;
     private DefaultTableModel model; 
@@ -53,8 +53,8 @@ public class DoctorAppointment extends javax.swing.JFrame {
         AppointmentTable.setModel(model);
         AppointmentTable.setAutoCreateRowSorter(true);
     
-        viewappointment = new viewAppointment(model);
-        sorter = viewappointment.getSorter();
+        viewdoctor = new Doctor(model);
+        sorter = viewdoctor.getSorter();
         AppointmentTable.setRowSorter(sorter);
 
         TableColumnModel cm = AppointmentTable.getColumnModel();
@@ -74,7 +74,7 @@ public class DoctorAppointment extends javax.swing.JFrame {
     private void loadAppointments()
     {
         String filePath ="src\\database\\appointments.txt";
-        viewappointment.loadFromTxt(filePath);
+        viewdoctor.loadScheduledAppointments(filePath);
     }
     /**
      * This method is called from within the constructor to initialize the form.
