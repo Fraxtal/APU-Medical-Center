@@ -6,7 +6,7 @@ package Staff.view;
 
 import Doctor.controller.TableSearchHandler;
 import Staff.controller.StaffController;
-import Staff.service.ManageCustomerAccount;
+import Staff.model.ManageCustomerAccount;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -52,6 +52,7 @@ public class StaffPayments extends javax.swing.JFrame {
         txtReturn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtInvoiceSearch = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,6 +140,10 @@ public class StaffPayments extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel7.setText("Invoice Payment");
+        jLabel7.setName("lbl_title"); // NOI18N
+
         javax.swing.GroupLayout jPanelPaymentLayout = new javax.swing.GroupLayout(jPanelPayment);
         jPanelPayment.setLayout(jPanelPaymentLayout);
         jPanelPaymentLayout.setHorizontalGroup(
@@ -161,27 +166,31 @@ public class StaffPayments extends javax.swing.JFrame {
                                     .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(txtInvoiceId, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                         .addComponent(cmbPayment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addComponent(jLabel3))
-                        .addGap(89, 89, 89)
-                        .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanelPaymentLayout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtInvoiceSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel6)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)))
-                    .addGroup(jPanelPaymentLayout.createSequentialGroup()
+                            .addComponent(jLabel3)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPaymentLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(txtReturn)))
+                        .addComponent(txtReturn)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(89, 89, 89)
+                .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanelPaymentLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtInvoiceSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanelPaymentLayout.setVerticalGroup(
             jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelPaymentLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtReturn)
-                .addGap(37, 37, 37)
+                .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtReturn))
+                .addGap(16, 16, 16)
                 .addGroup(jPanelPaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelPaymentLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
@@ -237,18 +246,6 @@ public class StaffPayments extends javax.swing.JFrame {
     }//GEN-LAST:event_txtReturnActionPerformed
 
     private void tblInvoiceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInvoiceMouseClicked
-//        int index = tblInvoice.getSelectedRow();
-//        TableModel invoiceModel = tblInvoice.getModel();
-//        if (index != -1){
-//            String invoiceId = invoiceModel.getValueAt(index, 0).toString();
-//            
-//            txtInvoiceId.setText(invoiceId);
-//            lblSubtotal.setText("RM" + invoiceModel.getValueAt(index, 1).toString());
-//            cmbPayment.setSelectedItem(invoiceModel.getValueAt(index, 2).toString());
-//            
-//            tblInvoiceDetails.setModel(controller.getSpecificInvoiceDetailTable(invoiceId));
-//        }
-
         int baseIndex = tblInvoice.getSelectedRow();
         if (baseIndex != -1) {
             int displayIndex = tblInvoice.convertRowIndexToModel(baseIndex); 
@@ -326,13 +323,7 @@ public class StaffPayments extends javax.swing.JFrame {
         
         String invoiceId = txtInvoiceId.getText();
         String appointmentId = tblInvoice.getValueAt(currentRow, 3).toString();
-        String paymentMethod = tblInvoice.getValueAt(currentRow, 2).toString();
-        
-//        if (!paymentMethod.equalsIgnoreCase("Cash") || !paymentMethod.equalsIgnoreCase("Credit")){
-//            JOptionPane.showMessageDialog(this, "Invoice still unpaid", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-        
-//        int option = JOptionPane.showConfirmDialog(this, "Print Receipt?", "Confirmation",JOptionPane.YES_NO_OPTION);
+        String paymentMethod = tblInvoice.getValueAt(currentRow, 2).toString();        
 
         int success = controller.validateGenerateReceipt(appointmentId, invoiceId, paymentMethod);
         
@@ -372,28 +363,8 @@ public class StaffPayments extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtInvoiceSearchFocusLost
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
+    public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new StaffPayments().setVisible(true));
     }
 
@@ -407,6 +378,7 @@ public class StaffPayments extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanelPayment;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

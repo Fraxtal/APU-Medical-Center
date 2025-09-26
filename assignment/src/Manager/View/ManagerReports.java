@@ -5,11 +5,9 @@
 package Manager.View;
 
 import Manager.Controller.Controller;
-import Manager.Model.Model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,16 +19,15 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManagerReports.class.getName());
     private final Controller controller;
-    private final Model model;
     private final DefaultTableModel tableModel = new DefaultTableModel();
     /**
      * Creates new form ManagerReports
+     * @param controller
      */
-    public ManagerReports() {
+    public ManagerReports(Controller controller) {
         initComponents();
 
-        model = new Model();
-        controller = new Controller(this.model, this);
+        this.controller = controller;
         
         jComboBox1.removeAllItems();
         Arrays.stream(controller.GetYearList(1, "appointments")).forEach(item -> jComboBox1.addItem(item));
@@ -74,7 +71,6 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jRadioButton6 = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -204,15 +200,6 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenu2.setText("Session");
         jMenu2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
-        jMenuItem6.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jMenuItem6.setText("Log Out");
-        jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem6MouseReleased(evt);
-            }
-        });
-        jMenu2.add(jMenuItem6);
-
         jMenuItem5.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jMenuItem5.setText("Quit Application");
         jMenuItem5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -238,6 +225,11 @@ public class ManagerReports extends javax.swing.JFrame implements View{
 
         jMenuItem2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jMenuItem2.setText("View Comment");
+        jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem2MouseReleased(evt);
+            }
+        });
         jMenu5.add(jMenuItem2);
         jMenu5.add(jSeparator1);
 
@@ -297,23 +289,15 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     }//GEN-LAST:event_jMenuItem5MouseReleased
 
     private void jMenuItem7MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem7MouseReleased
-        controller.SaveReport(this, Integer.parseInt(jComboBox1.getSelectedItem().toString()));
+        controller.SaveReport(this, Integer.parseInt(jComboBox1.getSelectedItem().toString()), Controller.FileType.TXT);
     }//GEN-LAST:event_jMenuItem7MouseReleased
 
-    private void jMenuItem6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem6MouseReleased
-        //LogOUT
-    }//GEN-LAST:event_jMenuItem6MouseReleased
-
     private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
-        ManagerAppointment frame = new ManagerAppointment();
-        frame.setVisible(true);
-        this.dispose();
+        controller.ShowFrame(Controller.FrameType.Appointment);
     }//GEN-LAST:event_jMenuItem1MouseReleased
 
     private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
-        ManagerUserManagement frame = new ManagerUserManagement();
-        frame.setVisible(true);
-        this.dispose();
+        controller.ShowFrame(Controller.FrameType.UserManagement);
     }//GEN-LAST:event_jMenuItem3MouseReleased
 
     private void jButton5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseReleased
@@ -330,30 +314,9 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         RadioButtonUpdate();
     }//GEN-LAST:event_jRadioButton1MouseReleased
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ManagerReports().setVisible(true));
-    }
+    private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
+        controller.ShowFrame(Controller.FrameType.Comment);
+    }//GEN-LAST:event_jMenuItem2MouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup2;
@@ -371,7 +334,6 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
@@ -414,17 +376,20 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     }
     
     @Override
-    public void ShowErrorDialog(String message) {
+    public void ShowErrorDialog(String message) 
+    {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
-    public void InitializeTableModel(String[] columnName) {
+    public void InitializeTableModel(String[] columnName) 
+    {
         tableModel.setColumnIdentifiers(columnName);
     }
 
     @Override
-    public void LoadDisplay(List<String[]> content) {
+    public void LoadDisplay(List<String[]> content) 
+    {
         tableModel.setRowCount(0);
         for (String[] row : content)
         {
@@ -433,7 +398,8 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     }
 
     @Override
-    public List<String> GetTableRow(int index) {
+    public List<String> GetTableRow(int index) 
+    {
         List<String> rowValue = new ArrayList<>();
         for (int i = 0; i < jTable1.getColumnCount(); i++)
         {
@@ -441,5 +407,11 @@ public class ManagerReports extends javax.swing.JFrame implements View{
             rowValue.add(value == null ? "" : value.toString());
         }
         return rowValue;
+    }
+    
+    @Override
+    public void Dispose()
+    {
+        this.dispose();
     }
 }

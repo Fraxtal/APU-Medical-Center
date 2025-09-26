@@ -4,13 +4,16 @@
  */
 package Manager.Controller;
 
-import Manager.Model.Model;
+import Manager.Model.ManagerModel;
 import Manager.Model.ReportGenerator;
 import Manager.Model.ReportGenerator.DataDoctor;
 import Manager.Model.ReportGenerator.DataMonth;
 import Manager.Model.ReportGenerator.DoctorReportData;
 import Manager.Model.ReportGenerator.MonthlyReportData;
+import Manager.View.ManagerAppointment;
+import Manager.View.ManagerComment;
 import Manager.View.ManagerReports;
+import Manager.View.ManagerUserManagement;
 import Manager.View.View;
 import java.io.File;
 import java.io.IOException;
@@ -21,15 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
-import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.groupingBy;
-import java.util.stream.Stream;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,22 +35,61 @@ import javax.swing.JOptionPane;
  * @author weiha
  */
 public class Controller {
-    Model model;
-    View view;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+    private final ManagerModel model;
+    private View view;
+    private final DateTimeFormatter formatter;
+    public enum FrameType {UserManagement, Report, Appointment, Comment};
+    public enum FileType {TXT, PDF};
     
-    public Controller(Model model, View view)
+    public Controller(ManagerModel model)
     {
+        this.formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         this.model = model;
-        this.view = view;
+    }
+    
+    public void ShowFrame(FrameType frame)
+    {   
+        if (view != null) 
+        {
+        view.Dispose();
+        model.FlushData();
+        }
+        switch (frame)
+        {
+            case UserManagement -> {
+                ManagerUserManagement newPage = new ManagerUserManagement(this);
+                view = newPage;
+                newPage.setVisible(true);
+                UpdateDisplay("users");
+            }
+            case Report -> {
+                ManagerReports newPage = new ManagerReports(this);
+                view = newPage;
+                newPage.setVisible(true);
+            }
+            case Appointment -> {
+                ManagerAppointment newPage = new ManagerAppointment(this);
+                view = newPage;
+                newPage.setVisible(true);
+                UpdateDisplay("appointments");
+            }
+            case Comment -> {
+                ManagerComment newPage = new ManagerComment(this);
+                view = newPage;
+                newPage.setVisible(true);
+                FirstThreeUpdateDisplay("comments");
+            }
+            default -> {
+            }
+        }
     }
     
     public String[] GetYearList(int colIndex, String file)
     {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter tempFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List<String[]> content = model.ReadFile(file);
         return content.stream()
-                .map(row -> String.valueOf(LocalDate.parse(row[colIndex], formatter).getYear()))
+                .map(row -> String.valueOf(LocalDate.parse(row[colIndex], tempFormatter).getYear()))
                 .distinct()
                 .sorted(Comparator.reverseOrder())
                 .toArray(String[]::new);
@@ -135,32 +172,65 @@ public class Controller {
         return filtered;
     }
     
-    public void AddUser(String[] data)
+    public void AddUser(List<String> data)
     {
-        model.AddUser(data);
+        try
+        {
+            model.AddUser(data);
+            if (view instanceof ManagerUserManagement frame)
+            {
+                frame.ShowSuccessDialog("The changes applied.");
+            }
+        }
+        catch (Exception ex)
+        {
+            view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
+        }
     }
     
     public void EditUser(int index, String[] data)
     {
-        if (index > -1)
+        try
         {
-            model.EditUser(index, data);
+            if (index > -1)
+            {
+                model.EditUser(index, data);
+                if (view instanceof ManagerUserManagement frame)
+                {
+                    frame.ShowSuccessDialog("The changes applied.");
+                }
+            }
+            else
+            {
+                view.ShowErrorDialog("Null selection! Please select a row before editing");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            view.ShowErrorDialog("Null selection! Please select a row before editing");
+            view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
         }
     }
     
     public void DeleteUser(int index)
-    {
-        if (index > -1)
+    {        
+        try
         {
-            model.DeleteUser(index);
+            if (index > -1)
+            {
+                model.DeleteUser(index);
+                if (view instanceof ManagerUserManagement frame)
+                {
+                    frame.ShowSuccessDialog("The changes applied.");
+                }
+            }
+            else
+            {
+                view.ShowErrorDialog("Null selection! Please select a row before deleting");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            view.ShowErrorDialog("Null selection! Please select a row before deleting");
+            view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
         }
     }
     
@@ -186,12 +256,12 @@ public class Controller {
         view.LoadDisplay(firstThree);
     }
     
-    public void SaveReport(ManagerReports MR, int year)
+    public void SaveReport(ManagerReports MR, int year, FileType type)
     {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save as ...");
-        fileChooser.setSelectedFile(new File("report-"+Model.GetCurrentDateTime()+".txt"));
-        
+        fileChooser.setSelectedFile(new File("report-"+ManagerModel.GetCurrentDateTime()+"."+type.toString().toLowerCase()));
+
         if (fileChooser.showSaveDialog(MR) == JFileChooser.APPROVE_OPTION)
         {
             File fileToSave = fileChooser.getSelectedFile();

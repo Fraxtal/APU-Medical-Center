@@ -3,12 +3,10 @@ package Staff.view;
 
 import Doctor.controller.TableSearchHandler;
 import Staff.controller.StaffController;
-import Staff.service.ManageCustomerAccount;
+import Staff.model.ManageCustomerAccount;
 import java.awt.Color;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class StaffAppointments extends javax.swing.JFrame {
@@ -19,7 +17,6 @@ public class StaffAppointments extends javax.swing.JFrame {
 
     public StaffAppointments() {
         initComponents();
-        ckbxPast.setSelected(false);
         tblAppointments.setModel(controller.getAppointmentTable());
         tblDoctors.setModel(controller.getDoctorTable());
         tbs = new TableSearchHandler(tblAppointments);
@@ -54,7 +51,6 @@ public class StaffAppointments extends javax.swing.JFrame {
         btnCheck = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAppointments = new javax.swing.JTable();
-        ckbxPast = new javax.swing.JCheckBox();
         btnReturn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDoctors = new javax.swing.JTable();
@@ -225,13 +221,6 @@ public class StaffAppointments extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblAppointments);
 
-        ckbxPast.setText("Error");
-        ckbxPast.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ckbxPastActionPerformed(evt);
-            }
-        });
-
         btnReturn.setText("Return");
         btnReturn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -271,33 +260,27 @@ public class StaffAppointments extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(lblAppointments)))
+                        .addComponent(btnReturn)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblAppointments))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel10)
-                                .addGap(84, 84, 84)
-                                .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                             .addComponent(jScrollPane2))
                         .addGap(38, 38, 38))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnReturn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ckbxPast)
-                        .addGap(29, 29, 29))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,9 +294,7 @@ public class StaffAppointments extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(ckbxPast)
-                        .addGap(18, 18, 18)
+                        .addGap(51, 51, 51)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(txtAppointmentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -397,19 +378,6 @@ public class StaffAppointments extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void tblAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAppointmentsMouseClicked
-//        int index = tblAppointments.getSelectedRow();
-//        TableModel Appmodel = tblAppointments.getModel();
-//        if (index != -1){
-//            txtAppointmentId.setText(Appmodel.getValueAt(index, 0).toString());
-//            calendarAppointment.setDate(mca.parseStrToDate(Appmodel.getValueAt(index, 1).toString()));
-//            cmbStatus.setSelectedItem(Appmodel.getValueAt(index, 2).toString());
-//            txtDoctorId.setText(Appmodel.getValueAt(index, 3).toString());
-//            txtDoctorName.setText(Appmodel.getValueAt(index, 4).toString());
-//            txtCustomerId.setText(Appmodel.getValueAt(index, 5).toString());
-//            txtCustomerName.setText(Appmodel.getValueAt(index, 6).toString());
-//
-//        }
-
     int baseIndex = tblAppointments.getSelectedRow(); 
     if (baseIndex != -1) {
         int displayIndex = tblAppointments.convertRowIndexToModel(baseIndex); 
@@ -470,15 +438,6 @@ public class StaffAppointments extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tblDoctorsMouseClicked
 
-    private void ckbxPastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbxPastActionPerformed
-        if (ckbxPast.isSelected()){
-            tblAppointments.setModel(controller.getPastAppointmentTable());
-        }
-        else{
-            tblAppointments.setModel(controller.getAppointmentTable());
-        }
-    }//GEN-LAST:event_ckbxPastActionPerformed
-
     private void btnCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckActionPerformed
         String customerId = txtCustomerId.getText();
         String customerName = controller.validateCustomerIDtoName(customerId);
@@ -527,7 +486,6 @@ public class StaffAppointments extends javax.swing.JFrame {
     private javax.swing.JButton btnCheck;
     private javax.swing.JButton btnReturn;
     private com.toedter.calendar.JCalendar calendarAppointment;
-    private javax.swing.JCheckBox ckbxPast;
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

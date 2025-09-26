@@ -3,11 +3,6 @@ package Customer.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * Abstract base class demonstrating OOP concepts: Inheritance and Abstraction
- * Provides common functionality for all entities in the system
- * Implements Serializable for data persistence
- */
 public abstract class BaseEntity implements Serializable {
     
     protected int id;
@@ -78,10 +73,5 @@ public abstract class BaseEntity implements Serializable {
         if (obj == null || getClass() != obj.getClass()) return false;
         BaseEntity that = (BaseEntity) obj;
         return id == that.id;
-    }
-    
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(id);
     }
 }

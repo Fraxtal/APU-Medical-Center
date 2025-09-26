@@ -126,7 +126,8 @@ public class CustomerController {
         }
         
         UserProfile profile = new UserProfile();
-        profile.setController(this);
+        profile.setCurrentUser(currentCustomer);
+        profile.setNavigationCallback(() -> showCustomerDashboard());
         profile.setVisible(true);
     }
     

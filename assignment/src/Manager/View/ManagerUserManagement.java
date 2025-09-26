@@ -5,7 +5,6 @@
 package Manager.View;
 
 import Manager.Controller.Controller;
-import Manager.Model.Model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +20,6 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManagerUserManagement.class.getName());
     private final Controller controller;
-    private final Model model;
     private final DefaultTableModel tableModel = new DefaultTableModel();
     private final JTextField[] textGroup;
 
@@ -29,7 +27,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     /**
      * Creates new form ManagerUserManagement
      */
-    public ManagerUserManagement(){
+    public ManagerUserManagement(Controller controller){
         initComponents();
 
         String[] roleItem = {"Manager", "Staff", "Doctor", "Customer"};
@@ -39,10 +37,9 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jComboBox1.removeAllItems();
         Arrays.stream(roleItem).forEach(item -> jComboBox1.addItem(item));
         jComboBox1.setSelectedIndex(0);
-        model = new Model();
-        controller = new Controller(this.model, this);
+
+        this.controller = controller;
         tableModel.setColumnIdentifiers(columnName);
-        controller.UpdateDisplay("users");
     }
 
     /**
@@ -82,9 +79,9 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jLabel10 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
         jTextField8 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -191,6 +188,14 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jTextField8.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTextField8.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
+        jButton4.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jButton4.setText("Clear");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -235,12 +240,14 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
                         .addGap(12, 12, 12)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(6, 6, 6)
                         .addComponent(jButton2)
-                        .addGap(6, 6, 6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,11 +290,15 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(108, 108, 108)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(70, 70, 70)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                    .addComponent(jButton4))
+                .addGap(8, 8, 8))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -309,15 +320,6 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
 
         jMenu2.setText("Session");
         jMenu2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-
-        jMenuItem6.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
-        jMenuItem6.setText("Log Out");
-        jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem6MouseReleased(evt);
-            }
-        });
-        jMenu2.add(jMenuItem6);
 
         jMenuItem5.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jMenuItem5.setText("Quit Application");
@@ -400,13 +402,14 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String[] formData = new String[textGroup.length + 1];
+        List<String> formData = new ArrayList<>();
 
-        for (int i = 0; i < textGroup.length; i++) {
-            formData[i] = textGroup[i].getText();
+        for (int i = 1; i < 7; i++) {
+            System.out.println(i);
+            formData.add(textGroup[i].getText());
         }
 
-        formData[textGroup.length] = jComboBox1.getSelectedItem().toString();
+        formData.add(jComboBox1.getSelectedItem().toString());
         
         controller.AddUser(formData);
         controller.UpdateDisplay("users");
@@ -439,20 +442,12 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     }//GEN-LAST:event_jMenuItem5MouseReleased
 
     private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
-        ManagerAppointment frame = new ManagerAppointment();
-        frame.setVisible(true);
-        this.dispose();
+        controller.ShowFrame(Controller.FrameType.Appointment);
     }//GEN-LAST:event_jMenuItem1MouseReleased
 
     private void jMenuItem4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseReleased
-       ManagerReports frame = new ManagerReports();
-       frame.setVisible(true);
-       this.dispose();
+        controller.ShowFrame(Controller.FrameType.Report);
     }//GEN-LAST:event_jMenuItem4MouseReleased
-
-    private void jMenuItem6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem6MouseReleased
-        // LOG OUT
-    }//GEN-LAST:event_jMenuItem6MouseReleased
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         String[] rowData = controller.FillDetail(jTable1.getSelectedRow());
@@ -468,40 +463,18 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     }//GEN-LAST:event_jTextPane1KeyReleased
 
     private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
-        ManagerComment frame = new ManagerComment();
-        frame.setVisible(true);
-       this.dispose();
+        controller.ShowFrame(Controller.FrameType.Comment);
     }//GEN-LAST:event_jMenuItem2MouseReleased
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ManagerUserManagement().setVisible(true));
-    }
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        ClearFields();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -520,7 +493,6 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -546,37 +518,26 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jComboBox1.setSelectedIndex(0);
     }
     
-//    private void SetTheme()
-//    {
-//        try {
-//            UIManager.LookAndFeelInfo[] test = getInstalledLookAndFeels();
-//            Arrays.stream(test).forEach(r -> System.out.println(r.getName()));
-//            for (UIManager.LookAndFeelInfo info : test)
-//            {
-//                if ("Windows".equals(info.getName()))
-//                {
-//                    UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }            
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void ShowSuccessDialog(String message)
+    {
+        JOptionPane.showMessageDialog(this, message, "Action Done", JOptionPane.INFORMATION_MESSAGE);
+    }
     
     @Override
-    public void ShowErrorDialog(String message) {
+    public void ShowErrorDialog(String message) 
+    {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
-    public void InitializeTableModel(String[] columnName) {
+    public void InitializeTableModel(String[] columnName) 
+    {
         tableModel.setColumnIdentifiers(columnName);
     }
 
     @Override
-    public void LoadDisplay(List<String[]> content) {
+    public void LoadDisplay(List<String[]> content) 
+    {
         tableModel.setRowCount(0);
         for (String[] row : content)
         {
@@ -585,7 +546,8 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     }
 
     @Override
-    public List<String> GetTableRow(int index) {
+    public List<String> GetTableRow(int index) 
+    {
         List<String> rowValue = new ArrayList<>();
         for (int i = 0; i < jTable1.getColumnCount(); i++)
         {
@@ -593,5 +555,11 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
             rowValue.add(value == null ? "" : value.toString());
         }
         return rowValue;
+    }
+    
+    @Override    
+    public void Dispose()
+    {
+        this.dispose();
     }
 }

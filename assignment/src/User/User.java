@@ -1,6 +1,7 @@
 package User;
 
 import Customer.model.Customer;
+import Manager.Model.ManagerModel;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
@@ -78,7 +79,7 @@ public class User {
                     case "customer" -> new Customer(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
 //                    case "staff" -> new Staff(userId, userUsername, userFullname, userEmail);
 //                    case "doctor" -> new Doctor(userId, userUsername, userFullname, userEmail);
-//                    case "manager" -> new Manager(userId, userUsername, userFullname, userEmail);
+                    case "manager" -> new ManagerModel(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
                     default -> throw new IllegalArgumentException("Unknown role: " + role);
                 };
             }
@@ -153,8 +154,36 @@ public class User {
     }
    
     
-    public void updateUserInformation() {
-
+    public boolean updateProfile(String username, String fullname, String email, String address, String contact, String password) {
+        try {
+            ArrayList<ArrayList<String>> allData = loadUserDB();
+            
+            for (ArrayList<String> record : allData) {
+                if (record.size() >= 9 && Integer.parseInt(record.get(0)) == this.id) {
+                    record.set(1, username);
+                    record.set(2, fullname);
+                    record.set(3, email);
+                    record.set(4, password);
+                    record.set(5, address);
+                    record.set(6, contact);
+                    break;
+                }
+            }
+            
+            try (FileWriter writer = new FileWriter("src\\database\\users.txt")) {
+                for (ArrayList<String> record : allData) {
+                    writer.write(String.join(";", record) + "\n");
+                }
+            }
+            
+            this.username = username;
+            this.fullname = fullname;
+            this.email = email;
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error updating profile: " + e.getMessage());
+            return false;
+        }
     }
     
     public int getId() { return id; }
