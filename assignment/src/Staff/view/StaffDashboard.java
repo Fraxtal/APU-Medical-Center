@@ -1,14 +1,16 @@
 package Staff.view;
 
+import Staff.controller.StaffController;
 import User.UserLogin;
 import User.UserProfile;
 
 public class StaffDashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffDashboard.class.getName());
+    private StaffController sc;
 
-
-    public StaffDashboard() {
+    public StaffDashboard(StaffController sc) {
+        this.sc =sc;
         initComponents();
     }
 
@@ -122,19 +124,19 @@ public class StaffDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPActionPerformed
-        StaffPayments sp = new StaffPayments();
+        StaffPayments sp = new StaffPayments(sc);
         sp.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnPActionPerformed
 
     private void btnAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAActionPerformed
-        StaffAppointments sa = new StaffAppointments();
+        StaffAppointments sa = new StaffAppointments(sc);
         sa.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnAActionPerformed
 
     private void btnAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAMActionPerformed
-        StaffAccountManager sam = new StaffAccountManager();
+        StaffAccountManager sam = new StaffAccountManager(sc);
         sam.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnAMActionPerformed
@@ -146,6 +148,7 @@ public class StaffDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProfileActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        this.sc = null;
         UserLogin ul = new UserLogin();
         ul.setVisible(true);
         dispose();
@@ -153,8 +156,7 @@ public class StaffDashboard extends javax.swing.JFrame {
 
 
     public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(() -> new StaffDashboard().setVisible(true));
+//        java.awt.EventQueue.invokeLater(() -> new StaffDashboard().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

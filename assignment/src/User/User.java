@@ -2,6 +2,7 @@ package User;
 
 import Customer.model.Customer;
 import Manager.Model.ManagerModel;
+import Staff.model.Staff;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
@@ -77,7 +78,7 @@ public class User {
                 String role = userRecord.get(8);
                 return switch (role.toLowerCase()) {
                     case "customer" -> new Customer(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
-//                    case "staff" -> new Staff(userId, userUsername, userFullname, userEmail);
+                    case "staff" -> new Staff(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
 //                    case "doctor" -> new Doctor(userId, userUsername, userFullname, userEmail);
                     case "manager" -> new ManagerModel(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
                     default -> throw new IllegalArgumentException("Unknown role: " + role);

@@ -15,11 +15,12 @@ import javax.swing.table.TableModel;
 public class StaffPayments extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffPayments.class.getName());
-    StaffController controller = new StaffController();
+    StaffController controller;
     TableSearchHandler tbs;
     
-    public StaffPayments() {
+    public StaffPayments(StaffController sc) {
         initComponents();
+        this.controller = sc;
         tblInvoice.setModel(controller.getInvoiceTable());
         tbs = new TableSearchHandler(tblInvoice);
         txtInvoiceId.requestFocusInWindow();
@@ -240,7 +241,7 @@ public class StaffPayments extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReturnActionPerformed
-        StaffDashboard sd = new StaffDashboard();
+        StaffDashboard sd = new StaffDashboard(controller);
         sd.setVisible(true);
         dispose();
     }//GEN-LAST:event_txtReturnActionPerformed
@@ -365,7 +366,7 @@ public class StaffPayments extends javax.swing.JFrame {
 
 
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> new StaffPayments().setVisible(true));
+//        java.awt.EventQueue.invokeLater(() -> new StaffPayments().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
