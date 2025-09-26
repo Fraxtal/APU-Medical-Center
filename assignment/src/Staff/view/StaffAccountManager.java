@@ -9,11 +9,12 @@ import javax.swing.table.TableModel;
 
 public class StaffAccountManager extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StaffAccountManager.class.getName());
-    StaffController controller = new StaffController();
+    StaffController controller;
     TableSearchHandler tbs;
 
-    public StaffAccountManager() {
+    public StaffAccountManager(StaffController sc) {
         initComponents();
+        this.controller = sc;
         tblAccounts.setModel(controller.getCustomerTable());
         tbs = new TableSearchHandler(tblAccounts);
         txtUsername.requestFocusInWindow();
@@ -346,7 +347,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        StaffDashboard sd = new StaffDashboard();
+        StaffDashboard sd = new StaffDashboard(controller);
         sd.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnReturnActionPerformed
@@ -476,11 +477,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
     }
 
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> new StaffAccountManager().setVisible(true));
-        System.out.println("Current working directory: " + System.getProperty("user.dir"));
-        
-        
-        
+//        java.awt.EventQueue.invokeLater(() -> new StaffAccountManager().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

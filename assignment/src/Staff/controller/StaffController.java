@@ -3,6 +3,7 @@ package Staff.controller;
 import Staff.model.ManageAppointments;
 import Staff.model.ManageCustomerAccount;
 import Staff.model.ManagePayments;
+import Staff.model.Staff;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -14,12 +15,15 @@ public class StaffController {
     private ManageCustomerAccount mca;
     private ManageAppointments ma;
     private ManagePayments mp;
+    private Staff st;
     
     static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     static String[] paymentTypes = {"Cash", "Credit"};
     
+    public StaffController(){}
     
-    public StaffController() {
+    public StaffController(Staff st) {
+        this.st = st;
         this.mca = new ManageCustomerAccount();
         this.ma = new ManageAppointments();
         this.mp = new ManagePayments();
@@ -258,9 +262,9 @@ public class StaffController {
     
     //implemented in StaffPayments
     public String validateAppIdtoCustomerName(String appointmentId){
-        if(!ma.checkAppointmentIdExists(appointmentId)){
-            return null;
-        }
+//        if(!ma.checkAppointmentIdExists(appointmentId)){
+//            return null;
+//        }
         
         String customerId = ma.returnCustomerIDfromAppId(appointmentId);
         if(customerId != null){
@@ -294,4 +298,5 @@ public class StaffController {
         
         return 0;
     }
+    
 }
