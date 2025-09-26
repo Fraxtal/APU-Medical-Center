@@ -29,7 +29,7 @@ public class FeedbackDoctor {
     // Method to edit feedback in the feedback column
     public void editFeedback(int selectedRow, String feedback) {
         if (model != null && selectedRow >= 0 && selectedRow < model.getRowCount()) {
-            model.setValueAt(feedback, selectedRow, model.getColumnCount() - 1);
+            model.setValueAt(feedback, selectedRow, 6);
             updateTextFile();
         }
     }
@@ -57,7 +57,7 @@ public class FeedbackDoctor {
             String currentAppointmentId = model.getValueAt(row, 1).toString();
             String[] newFeedback = {
                 model.getValueAt(row, 0).toString(), // Feedback ID
-                currentAppointmentId,
+                model.getValueAt(row, 1).toString(), // Appointment ID
                 model.getValueAt(row, 2).toString(), // Doctor ID
                 model.getValueAt(row, 3).toString(), // Doctor Name
                 model.getValueAt(row, 4).toString(), // Customer ID

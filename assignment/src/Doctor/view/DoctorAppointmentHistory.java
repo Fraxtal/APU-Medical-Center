@@ -6,7 +6,7 @@ package Doctor.view;
 
 import Doctor.controller.TableSearchHandler;
 import Doctor.view.DoctorMenu;
-import Doctor.model.viewAppointmentHistory;
+import Doctor.model.Doctor;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -21,7 +21,7 @@ import javax.swing.table.TableRowSorter;
  * @author Kingston Teoh
  */
 public class DoctorAppointmentHistory extends javax.swing.JFrame {
-        private viewAppointmentHistory viewappointmenthistory;
+        private Doctor viewdoctor;
         private TableRowSorter<DefaultTableModel> sorter;
         private TableSearchHandler searchHandler;
         private DefaultTableModel model;        
@@ -48,8 +48,8 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         AppointmentHistoryTable.setModel(model);
         AppointmentHistoryTable.setAutoCreateRowSorter(true);
     
-        viewappointmenthistory = new viewAppointmentHistory(model);
-        sorter = viewappointmenthistory.getSorter();
+        viewdoctor = new Doctor(model);
+        sorter = viewdoctor.getSorter();
         AppointmentHistoryTable.setRowSorter(sorter);
     
         TableColumnModel cm = AppointmentHistoryTable.getColumnModel();
@@ -72,7 +72,7 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
     private void loadAppointments()
     {
         String filePath ="src\\database\\appointments.txt";
-        viewappointmenthistory.loadFromTxt(filePath);
+        viewdoctor.loadAppointmentHistory(filePath);
     }
 
     /**

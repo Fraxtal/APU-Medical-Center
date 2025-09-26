@@ -6,7 +6,7 @@ package Doctor.view;
 
 import Doctor.controller.ChargesController;
 import Doctor.view.DoctorMenu;
-import Doctor.model.viewDoctorCharges;
+import Doctor.model.Doctor;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -58,8 +58,8 @@ public class DoctorCharges extends javax.swing.JFrame {
     }
     private void loadCharges() {
         String filePath = "src\\database\\InvoiceDetails.txt";
-        viewDoctorCharges viewCharges = new viewDoctorCharges(model);
-        viewCharges.loadCharges(filePath);
+        Doctor viewdoctor = new Doctor(model);
+        viewdoctor.loadCharges(filePath);
     }
     private boolean validateInput() {
         if (AppointmentIDtxt.getText().trim().isEmpty()) { // Appointment ID field
