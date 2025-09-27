@@ -1,7 +1,5 @@
 package User;
 
-import Customer.model.Customer;
-import Manager.Model.ManagerModel;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
@@ -65,7 +63,7 @@ public class User {
         }
     }
 
-    public static User login(String input, String password) {
+    public static ArrayList<String> login(String input, String password) {
 
         ArrayList<ArrayList<String>> data = loadUserDB(); // Load data
 
@@ -74,14 +72,7 @@ public class User {
                     || userRecord.get(3).equals(input.trim()); // email (assuming index 3)
 
             if (credentialMatches && userRecord.get(4).equals(password)) { // assuming password at index 4
-                String role = userRecord.get(8);
-                return switch (role.toLowerCase()) {
-                    case "customer" -> new Customer(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
-//                    case "staff" -> new Staff(userId, userUsername, userFullname, userEmail);
-//                    case "doctor" -> new Doctor(userId, userUsername, userFullname, userEmail);
-                    case "manager" -> new ManagerModel(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
-                    default -> throw new IllegalArgumentException("Unknown role: " + role);
-                };
+               return userRecord; 
             }
         }
         throw new SecurityException("Invalid credentials");

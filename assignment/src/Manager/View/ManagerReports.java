@@ -77,8 +77,11 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem2 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -241,6 +244,16 @@ public class ManagerReports extends javax.swing.JFrame implements View{
             }
         });
         jMenu5.add(jMenuItem3);
+        jMenu5.add(jSeparator2);
+
+        jMenuItem4.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jMenuItem4.setText("Edit Own Profile");
+        jMenuItem4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem4MouseReleased(evt);
+            }
+        });
+        jMenu5.add(jMenuItem4);
 
         jMenuBar1.add(jMenu5);
 
@@ -255,6 +268,15 @@ public class ManagerReports extends javax.swing.JFrame implements View{
             }
         });
         jMenu1.add(jMenuItem7);
+
+        jMenuItem6.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jMenuItem6.setText("Full Report as .pdf");
+        jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem6MouseReleased(evt);
+            }
+        });
+        jMenu1.add(jMenuItem6);
 
         jMenuBar1.add(jMenu1);
 
@@ -285,7 +307,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
-        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_jMenuItem5MouseReleased
 
     private void jMenuItem7MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem7MouseReleased
@@ -318,6 +340,15 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         controller.ShowFrame(Controller.FrameType.Comment);
     }//GEN-LAST:event_jMenuItem2MouseReleased
 
+    private void jMenuItem4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseReleased
+        this.setVisible(false);
+        controller.ShowUserProfile(Controller.FrameType.Report);
+    }//GEN-LAST:event_jMenuItem4MouseReleased
+
+    private void jMenuItem6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem6MouseReleased
+    controller.SaveReport(this, Integer.parseInt(jComboBox1.getSelectedItem().toString()), Controller.FileType.PDF);
+    }//GEN-LAST:event_jMenuItem6MouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
@@ -333,7 +364,9 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
@@ -344,6 +377,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 

@@ -7,16 +7,17 @@ package Customer.view;
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
 import User.User;
+import java.util.ArrayList;
 
 public class CustomerTest {
     
 //This is a class to test the functions of Customer
     public static void main(String[] args) {
             // Login as John Doe using the actual database
-            User loggedInUser = User.login("jane_smith", "password456");
+            ArrayList<String> userRecord = User.login("jane_smith", "password456");            
             
-            if (loggedInUser instanceof Customer) {
-                Customer johnDoe = (Customer) loggedInUser;
+            if (!userRecord.isEmpty()) {
+                Customer johnDoe = new Customer(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
 
                 System.out.println("Successfully logged in as: " + johnDoe.getFullname());
                 System.out.println("Customer ID: " + johnDoe.getId());

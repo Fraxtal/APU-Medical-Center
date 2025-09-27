@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
@@ -17,25 +18,60 @@ import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 /**
  *
  * @author weiha
  */
 public class ReportGenerator extends ManagerModel {
     
+    public interface HasAppointmentAndIncome {
+        double income();
+        int appointment();
+        String label(String key);
+        String group();
+    }
+    
     public record DataDoctor(
         String name,
         int appointment,
-        double income) {}
+        double income) implements HasAppointmentAndIncome
+    {
+        @Override
+        public String label(String key){
+            return name;
+        }
+
+        @Override
+        public String group() {
+            return "Doctor";
+        }
+    }
     
     public record DataMonth(
         int appointment,
-        double income) {}
+        double income) implements HasAppointmentAndIncome
+    {
+        @Override
+        public String label(String key){
+            return key;
+        }
+        
+        @Override
+        public String group() {
+            return "Month";
+        }
+    }
     
-        public record DoctorReportData(
-        Map<String, DataDoctor> doctorData,
-        IntSummaryStatistics appointmentSummary,
-        DoubleSummaryStatistics incomeSummary
+    public record DoctorReportData(
+    Map<String, DataDoctor> doctorData,
+    IntSummaryStatistics appointmentSummary,
+    DoubleSummaryStatistics incomeSummary
     ) {}
         
     public record MonthlyReportData(
@@ -44,31 +80,12 @@ public class ReportGenerator extends ManagerModel {
         DoubleSummaryStatistics incomeSummary
     ) {}
     
+    private enum Alignment{Left, Right, Center};
+    
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
     private final DateTimeFormatter readFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
-    protected final String textTemplates = 
-            """
-            =======================================================================
-                                        %s
-            =======================================================================
-            
-            -----------------------------------------------------------------------
-            Staff Structures
-            -----------------------------------------------------------------------
-            - Number of Managers : %d
-            - Number of Staffs : %d
-            - Number of Doctors : %d
-            - Total Workforce : %d
-            
-            -----------------------------------------------------------------------
-            Appointment
-            -----------------------------------------------------------------------
-            - Appointment Completed : %d
-            - Appointment Cancelled : %d
-            
-            """;
-    
+    //--Getting Data--
     public DoctorReportData GetDoctorDetail(List<String[]> user, List<String[]> appointment, List<String[]> invoice, int year)
     {
         Map<String, DataDoctor> doctorData = new HashMap<>();
@@ -152,7 +169,6 @@ public class ReportGenerator extends ManagerModel {
     {
         Map<String, Integer> apptCount = appointment.stream()
                 .filter(row -> LocalDate.parse(row[1].trim(), readFormatter).getYear() == year)
-                .filter(row -> row[2].trim().equalsIgnoreCase("completed") || row[2].trim().equalsIgnoreCase("cancelled"))
                 .collect(Collectors.groupingBy(
                         row -> row[2].trim().toLowerCase(),
                         Collectors.summingInt(counts -> 1)
@@ -161,7 +177,7 @@ public class ReportGenerator extends ManagerModel {
         return apptCount;
     }
     
-    public int[] GetWorkforce(List<String[]> user)
+    public int[] GetWorkForce(List<String[]> user)
     {
         int[] output = new int[4];
         for (String[] row : user)
@@ -178,6 +194,7 @@ public class ReportGenerator extends ManagerModel {
         return output;
     }
     
+    //--TXT Report Helper--
     private String GenerateDoctorSection(List<String[]> user, List<String[]> appointment, List<String[]> invoice, int year)
     {
         DoctorReportData dataset = GetDoctorDetail(user, appointment, invoice, year);
@@ -220,6 +237,7 @@ public class ReportGenerator extends ManagerModel {
         
         return temp.toString();
     }
+    
     private String GenerateMonthlySection(List<String[]> appointment, List<String[]> invoice, int year)
     {
         MonthlyReportData dataset = GetMonthlyDetail(appointment, invoice, year);
@@ -235,7 +253,7 @@ public class ReportGenerator extends ManagerModel {
                 -----------------------------------------------------------------------
                 """); 
         
-        temp.append("Total Appointment Count: ").append(apptSummary.getSum()).append("\n");
+        temp.append("Total Appointment Completed: ").append(apptSummary.getSum()).append("\n");
         temp.append("Lowest Appointment Completed: ").append(apptSummary.getMin()).append("\n");
         temp.append("Average Appointment Completed: ").append(String.format("%.2f", apptSummary.getAverage())).append("\n");
         temp.append("Highest Appointment Completed: ").append(apptSummary.getMax()).append("\n");
@@ -262,13 +280,38 @@ public class ReportGenerator extends ManagerModel {
         return temp.toString();
     }
    
+    //--TXT Report Generator--
     private String GetReportText(int year)
     {
+        String textTemplates = 
+            """
+            =======================================================================
+                                        %s
+            =======================================================================
+            
+            -----------------------------------------------------------------------
+            Staff Structures
+            -----------------------------------------------------------------------
+            - Number of Managers : %d
+            - Number of Staffs : %d
+            - Number of Doctors : %d
+            - Total Workforce : %d
+            
+            -----------------------------------------------------------------------
+            Appointment
+            -----------------------------------------------------------------------
+            - Appointment Completed : %d
+            - Appointment Cancelled : %d
+            - Appointment Scheduled : %d
+            - Appointment Pending : %d
+            
+            """;
+
         List<String[]> user = ReadFile("users");
         List<String[]> appointment = ReadFile("appointments");
         List<String[]> invoice = ReadFile("invoices");
         
-        int[] workforce = GetWorkforce(user);
+        int[] workforce = GetWorkForce(user);
         Map<String, Integer> counts = GetAppointmentCount(year, appointment);
         
         return String.format(textTemplates, 
@@ -278,20 +321,278 @@ public class ReportGenerator extends ManagerModel {
                 workforce[2], 
                 workforce[3],
                 counts.getOrDefault("completed", 0),
-                counts.getOrDefault("cancelled", 0))+
+                counts.getOrDefault("cancelled", 0),
+                counts.getOrDefault("scheduled", 0),
+                counts.getOrDefault("pending", 0))+
                 GenerateDoctorSection(user, appointment, invoice, year)+
                 GenerateMonthlySection(appointment, invoice, year);
     }
     
-    public void GenerateTXTReport(File file, int year) throws IOException
+    //--PDF Helpers--
+    
+    private float Separator(PDPageContentStream cs, float margin, float y) throws Exception
     {
-        String filePath = file.getAbsolutePath();
-        if (!filePath.toLowerCase().endsWith(".txt")) {
-            file = new File(filePath + ".txt");
-        }
-
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(GetReportText(year));
-        }
+        y -= 20;
+        cs.moveTo(margin, y); 
+        cs.lineTo(550, y); 
+        cs.stroke();
+        return y - 30;
     }
+    
+    private float PrintLine(PDPageContentStream cs, PDFont font, float size,
+                           float x, float y, String text) throws Exception {
+        cs.beginText();
+        cs.setFont(font, size);
+        cs.newLineAtOffset(x, y);
+        cs.showText(text == null ? "" : text);
+        cs.endText();
+        return y;
+    }
+    
+    private float PrintLine(PDPageContentStream cs, PDFont font, float size,
+                           float pageWidth, float margin, float y, String text, Alignment align) throws Exception
+    {
+        float lineStart = margin + switch (align) 
+        {
+            case Alignment.Left -> 0;
+            case Alignment.Right -> pageWidth - (font.getStringWidth(text) / 1000 * size);
+            case Alignment.Center -> (pageWidth - (font.getStringWidth(text) / 1000 * size))/2;
+        };
+        cs.beginText();
+        cs.setFont(font, size);  
+        cs.newLineAtOffset(lineStart, y);
+        cs.showText(text == null ? "" : text);
+        cs.endText();
+        return y;
+    }
+    
+    private float PrintPairs(PDPageContentStream cs, PDFont bold, PDFont normal, float size,
+                           float margin, float y, String key, String value) throws Exception
+    {
+        PrintLine(cs, bold, size, margin, y, key);
+        PrintLine(cs, normal, size, margin + 200, y, value);
+        return y;
+    }
+    
+    private float PrintWrapped(PDPageContentStream cs, PDFont font, float size,
+                               float x, float y, String text,
+                               float maxWidth, float lineHeight) throws Exception 
+    {
+        if (text == null || text.isEmpty()) return y;
+        String[] words = text.split("\\s+");
+        StringBuilder line = new StringBuilder();
+        for (String word : words) {
+            String testLine = line + (line.isEmpty() ? "" : " ") + word;
+            float w = font.getStringWidth(testLine) / 1000 * size;
+            if (w > maxWidth) {
+                PrintLine(cs, font, size, x, y, line.toString());
+                y -= lineHeight;
+                line = new StringBuilder(word);
+            } else {
+                line = new StringBuilder(testLine);
+            }
+        }
+        if (!line.isEmpty()) {
+            PrintLine(cs, font, size, x, y, line.toString());
+            y -= lineHeight;
+        }
+        return y;
+    }
+    
+    private void PrintFooter(PDPageContentStream cs, PDFont font, float pageWidth, float margin, int pageCounter) throws Exception
+    {
+        PrintLine(cs, font, 8, pageWidth, margin, 50, String.valueOf(pageCounter), Alignment.Center);
+        PrintLine(cs, font, 8, pageWidth, margin, 50, "APU Medical Center", Alignment.Right);
+        PrintLine(cs, font, 8, pageWidth, margin, 50, "Computer-generated", Alignment.Left);
+    }
+    
+    private List<List<String>> SeparateToPages(List<String> sortedKeys)
+    {
+        List<List<String>> keyByPage = new ArrayList<>();
+        for (int i = 0; i < sortedKeys.size(); i++)
+        {
+            int pageNum = Math.floorDiv(i, 10);
+            if (keyByPage.size() <= pageNum) {
+                keyByPage.add(new ArrayList<>());
+            }
+            keyByPage.get(pageNum).add(sortedKeys.get(i));
+        }
+        return keyByPage;
+    }
+    
+    private float PrintSummary(PDPageContentStream cs, PDFont bold, PDFont normal,
+                           float margin, float y,
+                           IntSummaryStatistics apptSummary,
+                           DoubleSummaryStatistics incomeSummary,
+                           String group) throws Exception
+    {
+        y = Separator(cs, margin, y);
+            
+        //Summarized data of doctor
+        y = PrintLine(cs, bold, 12, margin, y, "Appointment and Income Summarized by "+group);
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 30, "Total Appointment Completed: ", String.valueOf(apptSummary.getSum()));
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Lowest Appointment Completed: ", String.valueOf(apptSummary.getMin()));
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Average Appointment Completed: ", String.format("%.2f", apptSummary.getAverage()));
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Highest Appointment Completed: ", String.valueOf(apptSummary.getMax()));
+
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Total Income:", "RM"+String.format("%.2f", incomeSummary.getSum()));
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Lowest Income Made:", "RM"+String.format("%.2f", incomeSummary.getMin()));
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Average Income Made:", "RM"+String.format("%.2f", incomeSummary.getAverage()));
+        y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Highest Income Made:", "RM"+String.format("%.2f", incomeSummary.getMax()));
+
+        return y;
+    }
+    
+    private int PrintSection(PDDocument document, PDFont bold, PDFont normal, 
+            List<String> sortedKeys,
+            Map<String, ? extends HasAppointmentAndIncome> data,
+            int pageCounter) throws Exception
+    {
+        List<List<String>> keyByPage = SeparateToPages(sortedKeys);
+        
+        String group = data.values().iterator().next().group();
+        
+        for (List<String> row : keyByPage)
+        {
+            PDPage page = new PDPage();
+            document.addPage(page);
+            try (PDPageContentStream cs = new PDPageContentStream(document, page)) 
+            {
+                float startX = 150, startY = 700, barHeight = 20, unitHeight = 45, gap = 15, y = 750, margin = 50;
+                float pageWidth = page.getMediaBox().getWidth() - 2 * margin;
+
+                PrintLine(cs, bold, 14, pageWidth, margin, y, "Appointment and Income by " + group, Alignment.Center);
+                
+                float chartHeight = row.size() * (unitHeight + gap) + 10;
+                cs.moveTo(startX + 400, startY - chartHeight);
+                cs.lineTo(startX, startY - chartHeight);
+                cs.lineTo(startX, startY);
+                cs.stroke();
+
+                for (int i = 0; i < row.size(); i++) {
+                    float yloc = startY - (i + 1) * (unitHeight + gap);
+                    
+                    var item = data.get(row.get(i));
+
+                    float income = (float) item.income();
+                    float incomeWidth = income / 2;
+                    float incomeLabelX = startX + 5 + incomeWidth;
+                    float incomeLabelY = yloc + 5;
+
+                    cs.addRect(startX, yloc, incomeWidth, barHeight);
+                    cs.fill();
+                    PrintLine(cs, normal, 8, incomeLabelX, incomeLabelY, "RM" + String.format("%.2f", income) + " Income");
+
+                    int appt = item.appointment();
+                    float apptWidth = appt * 10;
+                    float apptLabelX = startX + 5 + apptWidth;
+                    float apptLabelY = yloc + 30;
+
+                    cs.addRect(startX, yloc + 25, apptWidth, barHeight);
+                    cs.fill();
+                    PrintLine(cs, normal, 8, apptLabelX, apptLabelY, appt + " Appointments");
+                    
+                    PrintWrapped(cs, normal, 8, startX - 100, yloc + 25, item.label(row.get(i)), 80, 15);
+                }
+                PrintFooter(cs, normal, pageWidth, margin, pageCounter);
+                pageCounter++;
+            }  
+        }
+        return pageCounter;
+    }
+    
+    //--PDF Report Generator--
+    private void GetReportText(PDDocument document, int year) throws Exception
+    {
+        PDPage page = new PDPage();
+        document.addPage(page);
+        //initialize fonts, pointers and data
+        PDFont bold = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+        PDFont normal = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+        
+        int pageCounter = 1;
+
+        List<String[]> user = ReadFile("users");
+        List<String[]> appointment = ReadFile("appointments");
+        List<String[]> invoice = ReadFile("invoices");
+        
+        DoctorReportData datasetD = GetDoctorDetail(user, appointment, invoice, year);
+        Map<String, DataDoctor> dataD = datasetD.doctorData();
+        IntSummaryStatistics apptSummaryD = datasetD.appointmentSummary();
+        DoubleSummaryStatistics incomeSummaryD = datasetD.incomeSummary();
+        
+        MonthlyReportData datasetM = GetMonthlyDetail(appointment, invoice, year);
+        Map<String, DataMonth> dataM = datasetM.monthlyData();
+        IntSummaryStatistics apptSummaryM = datasetM.appointmentSummary();
+        DoubleSummaryStatistics incomeSummaryM = datasetM.incomeSummary();
+
+        try (PDPageContentStream cs = new PDPageContentStream(document, page))
+        {
+            float y = 750, margin = 50;
+            float pageWidth = page.getMediaBox().getWidth() - 2 * margin;
+            //Header
+            PrintLine(cs, bold, 16, pageWidth, margin, y, "Annual Report", Alignment.Center);
+            y = PrintLine(cs, normal, 8, pageWidth, margin, y - 20, "APU Medical Centre", Alignment.Center);
+            y = PrintLine(cs, normal, 8, pageWidth, margin, y - 30, "Generated by: " + ManagerModel.GetCurrentDateTime(), Alignment.Right);
+            
+            y = Separator(cs, margin, y);
+            
+            //Staff Structure
+            int[] workForce = GetWorkForce(user);
+            y = PrintLine(cs, bold, 12, margin, y, "Staff Structure");
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 30, "Number of Managers: ", String.valueOf(workForce[0]));
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Number of Staffs: ", String.valueOf(workForce[0]));
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Number of Doctors: ", String.valueOf(workForce[0]));
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Total Workforce: ", String.valueOf(workForce[0]));
+            
+            y = Separator(cs, margin, y);
+            
+            //Appointments Completed and Cancelled
+            Map<String, Integer> counts = GetAppointmentCount(year, appointment);
+            y = PrintLine(cs, bold, 12, margin, y, "Appointments Status");
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 30, "Appointments Completed: ", counts.getOrDefault("completed", 0).toString());
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Appointments Cancelled: ", counts.getOrDefault("cancelled", 0).toString());
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Appointments Scheduled: ", counts.getOrDefault("scheduled", 0).toString());
+            y = PrintPairs(cs, bold, normal, 10, margin, y - 15, "Appointments Pending: ", counts.getOrDefault("pending", 0).toString());
+            
+            y = PrintSummary(cs, bold, normal, margin, y, apptSummaryD, incomeSummaryD, "Doctor");
+            PrintSummary(cs, bold, normal, margin, y, apptSummaryM, incomeSummaryM, "Month");
+            
+            PrintFooter(cs, normal, pageWidth, margin, pageCounter);
+            pageCounter++;
+        }
+        
+        //--Doctor Section--
+        List<String> sortedKeys = dataD.keySet().stream().sorted().toList();
+        pageCounter = PrintSection(document, bold, normal, sortedKeys, dataD, pageCounter);
+        
+        //--Monthly Section--
+        sortedKeys = dataM.keySet().stream().sorted(Comparator.comparing(entry -> YearMonth.parse(entry, formatter))).toList();
+        PrintSection(document, bold, normal, sortedKeys, dataM, pageCounter);
+    }
+    
+    public boolean GenerateReport(File file, int year) throws Exception
+    {
+        String filePath = file.getAbsolutePath().toLowerCase();
+        if (filePath.endsWith(".txt")) 
+        {
+            try (FileWriter fileWriter = new FileWriter(file)) 
+            {
+                fileWriter.write(GetReportText(year));
+            }
+            return true;
+        }
+        else if (filePath.endsWith(".pdf"))
+        {
+            try (PDDocument document = new PDDocument())
+            {
+               GetReportText(document, year); 
+               document.save(file); 
+            }
+            return true;
+        }
+        return false;
+    }
+    
+   
 }

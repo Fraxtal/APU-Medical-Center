@@ -66,6 +66,8 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jMenuItem3 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,6 +146,16 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
             }
         });
         jMenu5.add(jMenuItem4);
+        jMenu5.add(jSeparator3);
+
+        jMenuItem2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jMenuItem2.setText("Edit Own Profile");
+        jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem2MouseReleased(evt);
+            }
+        });
+        jMenu5.add(jMenuItem2);
 
         jMenuBar1.add(jMenu5);
 
@@ -197,7 +209,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
-        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_jMenuItem5MouseReleased
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
@@ -221,6 +233,11 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         LoadDisplay(controller.SearchRow(jTextField1.getText()));
     }//GEN-LAST:event_jTextField1KeyReleased
 
+    private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
+        this.setVisible(false);
+        controller.ShowUserProfile(Controller.FrameType.Appointment);
+    }//GEN-LAST:event_jMenuItem2MouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -229,6 +246,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
@@ -236,6 +254,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;

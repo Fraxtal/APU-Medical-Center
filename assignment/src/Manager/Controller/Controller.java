@@ -4,6 +4,7 @@
  */
 package Manager.Controller;
 
+import Customer.ctrl.CustomerController;
 import Manager.Model.ManagerModel;
 import Manager.Model.ReportGenerator;
 import Manager.Model.ReportGenerator.DataDoctor;
@@ -15,8 +16,8 @@ import Manager.View.ManagerComment;
 import Manager.View.ManagerReports;
 import Manager.View.ManagerUserManagement;
 import Manager.View.View;
+import User.UserProfile;
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,7 @@ import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -38,8 +40,9 @@ public class Controller {
     private final ManagerModel model;
     private View view;
     private final DateTimeFormatter formatter;
-    public enum FrameType {UserManagement, Report, Appointment, Comment};
+    public enum FrameType {UserManagement, Report, Appointment, Comment, Profile};
     public enum FileType {TXT, PDF};
+    private static final Logger logger = Logger.getLogger(CustomerController.class.getName());
     
     public Controller(ManagerModel model)
     {
@@ -80,8 +83,20 @@ public class Controller {
                 FirstThreeUpdateDisplay("comments");
             }
             default -> {
+                logger.warning("Invalid selection of frame to show!");
             }
         }
+    }
+        
+    public void ShowUserProfile(FrameType frame) {
+        if (model == null) {
+            logger.warning("No customer logged in");
+            return;
+        }
+        UserProfile profile = new UserProfile();
+        profile.setCurrentUser(model);
+        profile.setNavigationCallback(() -> ShowFrame(frame));
+        profile.setVisible(true);
     }
     
     public String[] GetYearList(int colIndex, String file)
@@ -269,13 +284,13 @@ public class Controller {
             try
             {
                 ReportGenerator r = new ReportGenerator();
-                r.GenerateTXTReport(fileToSave, year);
+                r.GenerateReport(fileToSave, year);
                 JOptionPane.showMessageDialog(MR, "File saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(MR, "Error saving file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MR, "Error Log: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
