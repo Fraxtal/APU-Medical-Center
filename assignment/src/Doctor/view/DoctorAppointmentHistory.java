@@ -5,11 +5,8 @@
 package Doctor.view;
 
 import Doctor.controller.TableSearchHandler;
-import Doctor.view.DoctorMenu;
-import Doctor.model.Doctor;
-import javax.swing.JButton;
+import Doctor.controller.DoctorCtrl;
 import javax.swing.JTable;
-import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -21,19 +18,21 @@ import javax.swing.table.TableRowSorter;
  * @author Kingston Teoh
  */
 public class DoctorAppointmentHistory extends javax.swing.JFrame {
-        private Doctor viewdoctor;
-        private TableRowSorter<DefaultTableModel> sorter;
-        private TableSearchHandler searchHandler;
-        private DefaultTableModel model;        
+    private DoctorCtrl viewdoctor;
+    private TableRowSorter<DefaultTableModel> sorter;
+    private TableSearchHandler searchHandler;
+    private DefaultTableModel model;
+    private DoctorCtrl ctrl;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorAppointmentHistory.class.getName());
 
     /**
      * Creates new form DoctorAppointmentHistory
      */
-    public DoctorAppointmentHistory() {
+    public DoctorAppointmentHistory(DoctorCtrl ctrl) {
         initComponents();
         setupTable();
         loadAppointments();
+        this.ctrl = ctrl;
         searchHandler = new TableSearchHandler(AppointmentHistoryTable);
     }
     private void setupTable() {
@@ -48,7 +47,7 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         AppointmentHistoryTable.setModel(model);
         AppointmentHistoryTable.setAutoCreateRowSorter(true);
     
-        viewdoctor = new Doctor(model);
+        viewdoctor = new DoctorCtrl(model);
         sorter = viewdoctor.getSorter();
         AppointmentHistoryTable.setRowSorter(sorter);
     
@@ -187,7 +186,7 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
 
     private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
         this.dispose(); // Close current frame
-        DoctorMenu obj = new DoctorMenu();
+        DoctorMenu obj = new DoctorMenu(ctrl);
         obj.setVisible(true);      // TODO add your handling code here:
     }//GEN-LAST:event_backbtnActionPerformed
 
@@ -221,8 +220,6 @@ public class DoctorAppointmentHistory extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DoctorAppointmentHistory().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

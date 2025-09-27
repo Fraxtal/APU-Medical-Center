@@ -7,7 +7,7 @@ package Doctor.view;
 import Doctor.controller.FeedbackDoctor;
 import Doctor.controller.TableSearchHandler;
 import Doctor.view.DoctorMenu;
-import Doctor.model.Doctor;
+import Doctor.controller.DoctorCtrl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -29,20 +29,21 @@ import javax.swing.table.TableRowSorter;
  */
 public class DoctorFeedback extends javax.swing.JFrame {
     private FeedbackDoctor feedbackDoctor;
-    private Doctor viewdoctor; // Instance of viewDoctor
+    private DoctorCtrl ctrl; // Instance of viewDoctor
     private DefaultTableModel model;
     private TableRowSorter<DefaultTableModel> sorter;
     private TableSearchHandler searchHandler;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorFeedback.class.getName());
 
-    public DoctorFeedback() {
+    public DoctorFeedback(DoctorCtrl ctrl) {
         initComponents();
         setupTable();
         String filePath = "src\\database\\feedbacks.txt";
         feedbackDoctor = new FeedbackDoctor(model, filePath);
         loadFeedbacks();
         searchHandler = new TableSearchHandler(FeedbackTable);
+        this.ctrl = ctrl;
     }
     
     private void setupTable() {
@@ -59,8 +60,8 @@ public class DoctorFeedback extends javax.swing.JFrame {
         FeedbackTable.setAutoCreateRowSorter(true);
         
         // Initialize viewfeedback after model is created
-        viewdoctor = new Doctor(model);
-        sorter = viewdoctor.getSorter();
+        ctrl = new DoctorCtrl(model);
+        sorter = ctrl.getSorter();
         FeedbackTable.setRowSorter(sorter);
     
         TableColumnModel cm = FeedbackTable.getColumnModel();
@@ -80,7 +81,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
     
     private void loadFeedbacks() {
         String filePath = "src\\database\\appointments.txt"; // Load from appointments.txt
-        viewdoctor.loadFeedbacks(filePath);
+        ctrl.loadFeedbacks(filePath);
     }
     
 
@@ -218,7 +219,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
 
     private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
         this.setVisible(false); // Close current frame
-        DoctorMenu obj = new DoctorMenu();
+        DoctorMenu obj = new DoctorMenu(ctrl);
         obj.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_backbtnActionPerformed
 
@@ -275,8 +276,7 @@ public class DoctorFeedback extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DoctorFeedback().setVisible(true));
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
