@@ -1,4 +1,5 @@
 30000;john_doe;John Doe;john.doe@email.com;password123;123 Main St, City;0123456789;2024-01-15;Manager
+10000;john_dave;John Dave;john.dave@email.com;asd456;Mountain Ain, Town;0134467320;2024-01-16;Customer
 10001;jane_smith;Jane Smith;jane.smith@email.com;password456;456 Oak Ave, Town;0134567890;2024-01-16;Customer
 10002;mike_wilson;Mike Wilson;mike.wilson@email.com;password789;789 Pine Rd, Village;0145678901;2024-01-17;Customer
 10003;sarah_jones;Sarah Jones;sarah.jones@email.com;asdasa;101 Elm St, City;0166789012;2024-01-18;Customer

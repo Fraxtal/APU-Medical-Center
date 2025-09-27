@@ -10,11 +10,11 @@ import Doctor.view.DoctorMenu;
 import Doctor.controller.DoctorCtrl;
 import Doctor.model.Doctor;
 import Manager.Model.ManagerModel;
-import Staff.view.StaffDashboard;
 import java.util.ArrayList;
 import Staff.controller.StaffController;
 import Staff.model.Staff;
 import Staff.view.StaffDashboard;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -135,7 +135,9 @@ public class UserLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        ArrayList<String> userRecord = User.login(tbInput.getText(), tbPassword.getText());
+        try
+        {
+            ArrayList<String> userRecord = User.login(tbInput.getText(), tbPassword.getText());
         switch (userRecord.getLast().toLowerCase()) {
             case "customer" -> {
                 Customer d = new Customer(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
@@ -165,9 +167,12 @@ public class UserLogin extends javax.swing.JFrame {
                 DoctorMenu frame = new DoctorMenu(ctrl);
                 frame.setVisible(true);
             }
-            default -> System.err.println("Login failed or user is not a Customer");
+            default -> JOptionPane.showMessageDialog(this, "User not found, please try again!","Invalid User",JOptionPane.ERROR_MESSAGE);
         }
         this.dispose();
+        } catch (SecurityException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),"Invalid User",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
