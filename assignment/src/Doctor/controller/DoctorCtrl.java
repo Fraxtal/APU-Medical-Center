@@ -31,6 +31,9 @@ public class DoctorCtrl {
         loadAppointmentStatuses();
     }
     public DoctorCtrl() {
+        this.appointmentData = new ArrayList<>();
+        this.feedbackDataList = new ArrayList<>();
+        this.commentDataList = new ArrayList<>();
         loadAppointmentStatuses();
     }
 
