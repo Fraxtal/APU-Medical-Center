@@ -9,7 +9,7 @@ import java.time.format.*;
 import java.util.*;
 import java.util.logging.*;
 
-public class CustomerService implements FileService {
+public class CustomerService{
     
     private static final Logger logger = Logger.getLogger(CustomerService.class.getName());
     private static final String APPOINTMENTS_FILE = "src\\database\\appointments.txt";
