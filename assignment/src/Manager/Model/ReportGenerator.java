@@ -205,9 +205,9 @@ public class ReportGenerator extends ManagerModel {
         StringBuilder temp = new StringBuilder();
         temp.append(
                 """
-                -----------------------------------------------------------------------
+                -----------------------------------------------------------------------------
                 Doctors
-                -----------------------------------------------------------------------
+                -----------------------------------------------------------------------------
                 """); 
         
         temp.append("Total Appointment Completed: ").append(apptSummary.getSum()).append("\n");
@@ -220,9 +220,9 @@ public class ReportGenerator extends ManagerModel {
         temp.append("Average Income Made: RM").append(String.format("%.2f", incomeSummary.getAverage())).append("\n");
         temp.append("Highest Income Made: RM").append(String.format("%.2f", incomeSummary.getMax())).append("\n");
         
-        temp.append("|---------------------------------------------------------------------|\n");
-        temp.append(String.format("| %-9s | %-19s | %-15s | %-15s |\n", "ID", "Name", "Appointments", "Income Made"));
-        temp.append("|---------------------------------------------------------------------|\n");
+        temp.append("|---------------------------------------------------------------------------|\n");
+        temp.append(String.format("| %-9s | %-25s | %-15s | %-15s |\n", "ID", "Name", "Appointments", "Income Made"));
+        temp.append("|---------------------------------------------------------------------------|\n");
         
         data.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey())).forEach(entry -> {
             String id = entry.getKey();
@@ -230,9 +230,9 @@ public class ReportGenerator extends ManagerModel {
             int appointments = entry.getValue().appointment();
             double income = entry.getValue().income();
 
-            String row = String.format("| %-9s | %-19s | %-15d | %-15.2f |\n", id, name, appointments, income);
+            String row = String.format("| %-9s | %-25s | %-15d | %-15.2f |\n", id, name, appointments, income);
             temp.append(row);
-            temp.append("|---------------------------------------------------------------------|\n");
+            temp.append("|---------------------------------------------------------------------------|\n");
         });
         
         return temp.toString();
@@ -248,9 +248,9 @@ public class ReportGenerator extends ManagerModel {
         StringBuilder temp = new StringBuilder();
         temp.append(
                 """
-                -----------------------------------------------------------------------
+                -----------------------------------------------------------------------------
                 Month
-                -----------------------------------------------------------------------
+                -----------------------------------------------------------------------------
                 """); 
         
         temp.append("Total Appointment Completed: ").append(apptSummary.getSum()).append("\n");
@@ -285,21 +285,21 @@ public class ReportGenerator extends ManagerModel {
     {
         String textTemplates = 
             """
-            =======================================================================
-                                        %s
-            =======================================================================
+            =============================================================================
+                                            %s
+            =============================================================================
             
-            -----------------------------------------------------------------------
+            -----------------------------------------------------------------------------
             Staff Structures
-            -----------------------------------------------------------------------
+            -----------------------------------------------------------------------------
             - Number of Managers : %d
             - Number of Staffs : %d
             - Number of Doctors : %d
             - Total Workforce : %d
             
-            -----------------------------------------------------------------------
+            -----------------------------------------------------------------------------
             Appointment
-            -----------------------------------------------------------------------
+            -----------------------------------------------------------------------------
             - Appointment Completed : %d
             - Appointment Cancelled : %d
             - Appointment Scheduled : %d
