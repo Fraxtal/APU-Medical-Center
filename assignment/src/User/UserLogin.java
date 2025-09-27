@@ -140,14 +140,12 @@ public class UserLogin extends javax.swing.JFrame {
                 CustomerController controller = new CustomerController();
                 controller.setCurrentCustomer(d);
                 
-                this.setVisible(false);
                 controller.showCustomerDashboard();
             }
             case "manager" -> {
                 ManagerModel d = new ManagerModel(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
                 Manager.Controller.Controller controller = new Manager.Controller.Controller(d);
                 
-                this.setVisible(false);
                 controller.ShowFrame(Manager.Controller.Controller.FrameType.UserManagement);
             }
             case "staff" -> {
@@ -155,17 +153,16 @@ public class UserLogin extends javax.swing.JFrame {
                 StaffController controller = new StaffController(d);
                 
                 StaffDashboard frame = new StaffDashboard(controller);
-                this.setVisible(false);
                 frame.setVisible(true);
             }
             case "doctor" -> {
                 DoctorMenu frame = new DoctorMenu();
 
-                this.setVisible(false);
                 frame.setVisible(true);
             }
             default -> System.err.println("Login failed or user is not a Customer");
         }
+        this.dispose();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

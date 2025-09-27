@@ -18,8 +18,9 @@ public class UserProfile extends javax.swing.JFrame {
     private User currentUser;
     private NavigationCallback navigationCallback;
 
-    public void setCurrentUser(User user) {
+    public void setCurrentUser(User user, String[] data) {
         this.currentUser = user;
+        loadUserData(data);
     }
     
     public void setNavigationCallback(NavigationCallback callback) {
@@ -186,15 +187,15 @@ public class UserProfile extends javax.swing.JFrame {
         updateUserProfile();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    public void loadUserData(String username, String fullname, String email, String address, String contact, String password, String role, String creationDate) {
-        tbUsername.setText(username);
-        tbFullname.setText(fullname);
-        tbEmail.setText(email);
-        tbAddress.setText(address);
-        tbContact.setText(contact);
-        tbPassword.setText(password);
-        tbRole.setText(role);
-        tbDate.setText(creationDate);
+    public void loadUserData(String[] data) {
+        tbUsername.setText(data[0]);
+        tbFullname.setText(data[1]);
+        tbEmail.setText(data[2]);
+        tbAddress.setText(data[3]);
+        tbContact.setText(data[4]);
+        tbPassword.setText(data[5]);
+        tbRole.setText(data[6]);
+        tbDate.setText(data[7]);
     }
 
     private void updateUserProfile() {
@@ -225,6 +226,8 @@ public class UserProfile extends javax.swing.JFrame {
             } else {
                 javax.swing.JOptionPane.showMessageDialog(this, "No user logged in.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
+        } catch (InvalidProfileEditException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             logger.severe("Error updating user profile: " + e.getMessage());
             javax.swing.JOptionPane.showMessageDialog(this, "An error occurred while updating the profile.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);

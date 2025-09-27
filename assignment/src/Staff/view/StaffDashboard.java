@@ -2,7 +2,6 @@ package Staff.view;
 
 import Staff.controller.StaffController;
 import User.UserLogin;
-import User.UserProfile;
 
 public class StaffDashboard extends javax.swing.JFrame {
     
@@ -142,9 +141,8 @@ public class StaffDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAMActionPerformed
 
     private void btnProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfileActionPerformed
-        UserProfile up = new UserProfile();
-        up.setVisible(true);
-        dispose();
+        sc.showUserProfile();
+        this.dispose();
     }//GEN-LAST:event_btnProfileActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
