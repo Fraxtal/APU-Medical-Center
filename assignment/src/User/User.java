@@ -72,7 +72,7 @@ public class User {
                     || userRecord.get(3).equals(input.trim()); // email (assuming index 3)
 
             if (credentialMatches && userRecord.get(4).equals(password)) { // assuming password at index 4
-               return userRecord; 
+               return userRecord;
             }
         }
         throw new SecurityException("Invalid credentials");

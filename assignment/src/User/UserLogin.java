@@ -10,6 +10,9 @@ import Doctor.view.DoctorMenu;
 import Manager.Model.ManagerModel;
 import Staff.view.StaffDashboard;
 import java.util.ArrayList;
+import Staff.controller.StaffController;
+import Staff.model.Staff;
+import Staff.view.StaffDashboard;
 
 
 /**
@@ -146,7 +149,6 @@ public class UserLogin extends javax.swing.JFrame {
                 
                 this.setVisible(false);
                 controller.ShowFrame(Manager.Controller.Controller.FrameType.UserManagement);
-            }
             case "staff" -> {
                 StaffDashboard frame = new StaffDashboard();
                 this.setVisible(false);
