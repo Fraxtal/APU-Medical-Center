@@ -18,7 +18,7 @@ import javax.swing.table.TableRowSorter;
  * @author Kingston Teoh
  */
 public class Doctor {
-        private DefaultTableModel model;
+    private DefaultTableModel model;
     private TableRowSorter<DefaultTableModel> sorter;
     private List<String[]> appointmentData;
     private List<String[]> feedbackDataList;

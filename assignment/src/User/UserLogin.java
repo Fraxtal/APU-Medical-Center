@@ -6,7 +6,10 @@ package User;
 
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
+import Doctor.view.DoctorMenu;
 import Manager.Model.ManagerModel;
+import Staff.view.StaffDashboard;
+import java.util.ArrayList;
 import Staff.controller.StaffController;
 import Staff.model.Staff;
 import Staff.view.StaffDashboard;
@@ -130,36 +133,35 @@ public class UserLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        User loggedInUser = User.login(tbInput.getText(), tbPassword.getText());
-        
-        if (loggedInUser instanceof Customer) {
-            Customer d = (Customer) loggedInUser;
-            
-            CustomerController controller = new CustomerController();
-            controller.setCurrentCustomer(d);
-            
-            this.setVisible(false);
-            controller.showCustomerDashboard();
+        ArrayList<String> userRecord = User.login(tbInput.getText(), tbPassword.getText());
+        switch (userRecord.getLast().toLowerCase()) {
+            case "customer" -> {
+                Customer d = new Customer(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
+                CustomerController controller = new CustomerController();
+                controller.setCurrentCustomer(d);
+                
+                this.setVisible(false);
+                controller.showCustomerDashboard();
             }
-        else if (loggedInUser instanceof ManagerModel) {
-            ManagerModel d = (ManagerModel) loggedInUser;
-            Manager.Controller.Controller controller = new Manager.Controller.Controller(d);
-            
-            this.setVisible(false);
-            controller.ShowFrame(Manager.Controller.Controller.FrameType.UserManagement);
-        } 
-        else if (loggedInUser instanceof Staff) {
-            Staff d = (Staff) loggedInUser;
-            StaffController cont = new StaffController(d);
-            
-            this.setVisible(false);
-            StaffDashboard sd = new StaffDashboard(cont);
-            sd.setVisible(true);
-        } 
-        else {
-                System.err.println("Login failed or user is not a Customer");
+            case "manager" -> {
+                ManagerModel d = new ManagerModel(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
+                Manager.Controller.Controller controller = new Manager.Controller.Controller(d);
+                
+                this.setVisible(false);
+                controller.ShowFrame(Manager.Controller.Controller.FrameType.UserManagement);
+            case "staff" -> {
+                StaffDashboard frame = new StaffDashboard();
+                this.setVisible(false);
+                frame.setVisible(true);
             }
-        
+            case "doctor" -> {
+                DoctorMenu frame = new DoctorMenu();
+
+                this.setVisible(false);
+                frame.setVisible(true);
+            }
+            default -> System.err.println("Login failed or user is not a Customer");
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

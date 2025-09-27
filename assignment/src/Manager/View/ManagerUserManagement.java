@@ -88,6 +88,8 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jMenuItem2 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -362,6 +364,16 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
             }
         });
         jMenu5.add(jMenuItem4);
+        jMenu5.add(jSeparator2);
+
+        jMenuItem3.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jMenuItem3.setText("Edit Own Profile");
+        jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem3MouseReleased(evt);
+            }
+        });
+        jMenu5.add(jMenuItem3);
 
         jMenuBar1.add(jMenu5);
 
@@ -438,7 +450,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
-        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_jMenuItem5MouseReleased
 
     private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
@@ -470,6 +482,11 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         ClearFields();
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
+        this.setVisible(false);
+        controller.ShowUserProfile(Controller.FrameType.UserManagement);
+    }//GEN-LAST:event_jMenuItem3MouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -491,6 +508,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
@@ -498,6 +516,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;

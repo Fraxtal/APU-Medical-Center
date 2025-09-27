@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -52,7 +51,7 @@ public class ManagerModel extends User{
     public static String GetCurrentDateTime()
     {
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MMMM dd  hh.mm.ss a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMMM-dd  hh.mm.ss a");
         String formattedDate = now.format(formatter);
         return formattedDate;
     }
