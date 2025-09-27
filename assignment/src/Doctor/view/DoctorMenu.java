@@ -5,6 +5,8 @@
 package Doctor.view;
 
 import Doctor.controller.DoctorCtrl;
+import Doctor.model.Doctor;
+import User.UserProfile;
 
 /**
  *
@@ -15,6 +17,7 @@ public class DoctorMenu extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorMenu.class.getName());
     
     private DoctorCtrl ctrl;
+    private Doctor currentDoctor;
     
     /**
      * Creates new form DoctorMenu
@@ -22,6 +25,7 @@ public class DoctorMenu extends javax.swing.JFrame {
     public DoctorMenu(DoctorCtrl ctrl) {
         initComponents();
         this.ctrl = ctrl;
+        currentDoctor = ctrl.getCurrentDoctor();
         
     }
 
@@ -40,6 +44,7 @@ public class DoctorMenu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         Exitbtn = new javax.swing.JButton();
         Feedbackbtn = new javax.swing.JButton();
+        EditProfilebtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,19 +91,30 @@ public class DoctorMenu extends javax.swing.JFrame {
             }
         });
 
+        EditProfilebtn.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        EditProfilebtn.setText("Edit Profile");
+        EditProfilebtn.setActionCommand("");
+        EditProfilebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditProfilebtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(269, 269, 269)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Appointmentbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Chargesbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Historybtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Exitbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Feedbackbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(EditProfilebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(Appointmentbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Chargesbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Historybtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Exitbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Feedbackbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(279, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -112,11 +128,13 @@ public class DoctorMenu extends javax.swing.JFrame {
                 .addComponent(Chargesbtn)
                 .addGap(37, 37, 37)
                 .addComponent(Feedbackbtn)
-                .addGap(30, 30, 30)
+                .addGap(38, 38, 38)
                 .addComponent(Historybtn)
                 .addGap(37, 37, 37)
+                .addComponent(EditProfilebtn)
+                .addGap(40, 40, 40)
                 .addComponent(Exitbtn)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();
@@ -150,6 +168,17 @@ public class DoctorMenu extends javax.swing.JFrame {
         obj3.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_FeedbackbtnActionPerformed
 
+    private void EditProfilebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProfilebtnActionPerformed
+        // TODO add your handling code here:
+        UserProfile profile = new UserProfile();
+        profile.setCurrentUser(currentDoctor);
+        profile.setNavigationCallback(() -> {
+            this.setVisible(true); // Show doctor dashboard again
+        });
+        this.setVisible(false);
+        profile.setVisible(true);
+    }//GEN-LAST:event_EditProfilebtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -176,6 +205,7 @@ public class DoctorMenu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Appointmentbtn;
     private javax.swing.JButton Chargesbtn;
+    private javax.swing.JButton EditProfilebtn;
     private javax.swing.JButton Exitbtn;
     private javax.swing.JButton Feedbackbtn;
     private javax.swing.JButton Historybtn;

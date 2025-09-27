@@ -306,5 +306,10 @@ public class DoctorCtrl {
     public void setCurrentDoctor(Doctor user){
         this.info = user;
     }
+    
+    public Doctor getCurrentDoctor(){
+        return info;
+    }
+    
 }
 
