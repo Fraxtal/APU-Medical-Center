@@ -56,10 +56,17 @@ public class ChargesController {
 
     public void addCharge(String invoiceId, String item, int quantity, double pricePer, double total, String appointmentId) {
         String detailId = generateInvoiceDetailId();
-    
-    // Add to table
+        
+        // Add to table model first
+        model.addRow(new Object[]{
+            detailId, item, quantity, 
+            String.format("%.2f", pricePer), 
+            String.format("%.2f", total), 
+            invoiceId, appointmentId
+        });
+        
+        // Then save to file
         saveToInvoiceDetailsFile(detailId, item, quantity, pricePer, total, invoiceId, appointmentId);
-     
     }
 
     private void saveToInvoiceDetailsFile(String detailId, String item, int quantity, double pricePer, 
@@ -85,9 +92,11 @@ public class ChargesController {
         if (selectedRow != -1) {
             String detailId = model.getValueAt(selectedRow, 0).toString();
             
-            model.removeRow(selectedRow);
-                    
+            // Remove from file first
             removeFromInvoiceDetailsFile(detailId);
+            
+            // Then remove from table
+            model.removeRow(selectedRow);
         }
     }
 

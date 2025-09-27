@@ -381,27 +381,28 @@ public class DoctorCharges extends javax.swing.JFrame {
 
     private void AddbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddbtnActionPerformed
         if (validateInput()) {
-            String appointmentId = AppointmentIDtxt.getText().trim(); // New Appointment ID field
-            String invoiceId = InvoiceIDtxt.getText().trim(); // Invoice ID field
+            String appointmentId = AppointmentIDtxt.getText().trim();
+            String invoiceId = InvoiceIDtxt.getText().trim();
             String item = (String) Itemcmb.getSelectedItem();
-            int quantity = Integer.parseInt(Quantitytxt.getText()); // Quantity field
-            double pricePer = Double.parseDouble(PricePerItemtxt.getText()); // Price Per Item field
-            double total = Double.parseDouble(Totaltxt.getText()); // Total field
+            int quantity = Integer.parseInt(Quantitytxt.getText());
+            double pricePer = Double.parseDouble(PricePerItemtxt.getText());
+            double total = Double.parseDouble(Totaltxt.getText());
     
             controller.addCharge(invoiceId, item, quantity, pricePer, total, appointmentId);
             clearFields();
-            loadCharges();
-        }   // TODO add your handling code here:
+            // No need to reload - controller updates table directly
+        }
     }//GEN-LAST:event_AddbtnActionPerformed
 
     private void DeletebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeletebtnActionPerformed
-        int selectedRow = ChargesTable.getSelectedRow(); // Use jTable4
+        int selectedRow = ChargesTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, 
                 "Please select an item to delete.");
             return;
         }
         controller.deleteCharge(selectedRow);
+        JOptionPane.showMessageDialog(this, "Item deleted successfully.");
     }//GEN-LAST:event_DeletebtnActionPerformed
 
     private void SendbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendbtnActionPerformed
