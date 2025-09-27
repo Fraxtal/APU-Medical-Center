@@ -215,8 +215,9 @@ public class ChargesController {
                 }
             }
         } catch (IOException e) {
-            // Handle error - maybe show a message or use fallback
+            System.out.println(e);
         }
+        return String.format("%03d", maxId + 1);
     }
 
     private String getAppointmentIdForInvoice(String invoiceId) {
