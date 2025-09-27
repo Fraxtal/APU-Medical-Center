@@ -60,6 +60,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -76,7 +77,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jTable1.setDefaultEditor(Object.class, null);
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable2MouseClicked(evt);
+                TableClicked(evt);
             }
         });
         jScrollPane2.setViewportView(jTable2);
@@ -90,7 +91,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jTextField1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField1KeyReleased(evt);
+                SearchKeyReleased(evt);
             }
         });
 
@@ -108,10 +109,19 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jMenuItem5.setText("Quit Application");
         jMenuItem5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem5MouseReleased(evt);
+                QuitReleased(evt);
             }
         });
         jMenu2.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jMenuItem6.setText("Log Out");
+        jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                LogOutReleased(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
 
         jMenuBar1.add(jMenu2);
 
@@ -122,7 +132,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jMenuItem1.setText("View Comment");
         jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem1MouseReleased(evt);
+                ViewCommentReleased(evt);
             }
         });
         jMenu5.add(jMenuItem1);
@@ -132,7 +142,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jMenuItem3.setText("Manage Users");
         jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem3MouseReleased(evt);
+                ManageUserReleased(evt);
             }
         });
         jMenu5.add(jMenuItem3);
@@ -142,7 +152,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jMenuItem4.setText("Analysed Report");
         jMenuItem4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem4MouseReleased(evt);
+                ReportReleased(evt);
             }
         });
         jMenu5.add(jMenuItem4);
@@ -152,7 +162,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         jMenuItem2.setText("Edit Own Profile");
         jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem2MouseReleased(evt);
+                EditProfileReleased(evt);
             }
         });
         jMenu5.add(jMenuItem2);
@@ -208,35 +218,39 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
+    private void QuitReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QuitReleased
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem5MouseReleased
+    }//GEN-LAST:event_QuitReleased
 
-    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+    private void TableClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableClicked
         tableModelDetail.setColumnCount(0);
         tableModelDetail.addColumn("", (controller.GetFeedback(jTable2.getSelectedRow())));
-    }//GEN-LAST:event_jTable2MouseClicked
+    }//GEN-LAST:event_TableClicked
 
-    private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
+    private void ManageUserReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ManageUserReleased
         controller.ShowFrame(Controller.FrameType.UserManagement);
-    }//GEN-LAST:event_jMenuItem3MouseReleased
+    }//GEN-LAST:event_ManageUserReleased
 
-    private void jMenuItem4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseReleased
+    private void ReportReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportReleased
         controller.ShowFrame(Controller.FrameType.Report);
-    }//GEN-LAST:event_jMenuItem4MouseReleased
+    }//GEN-LAST:event_ReportReleased
 
-    private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
+    private void ViewCommentReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ViewCommentReleased
         controller.ShowFrame(Controller.FrameType.Comment);
-    }//GEN-LAST:event_jMenuItem1MouseReleased
+    }//GEN-LAST:event_ViewCommentReleased
 
-    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+    private void SearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchKeyReleased
         LoadDisplay(controller.SearchRow(jTextField1.getText()));
-    }//GEN-LAST:event_jTextField1KeyReleased
+    }//GEN-LAST:event_SearchKeyReleased
 
-    private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
+    private void EditProfileReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditProfileReleased
         this.setVisible(false);
         controller.ShowUserProfile(Controller.FrameType.Appointment);
-    }//GEN-LAST:event_jMenuItem2MouseReleased
+    }//GEN-LAST:event_EditProfileReleased
+
+    private void LogOutReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogOutReleased
+        controller.LogOut();
+    }//GEN-LAST:event_LogOutReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -250,6 +264,7 @@ public class ManagerAppointment extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
