@@ -72,6 +72,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -118,7 +119,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jRadioButton1.setText("Month");
         jRadioButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jRadioButton1MouseReleased(evt);
+                MonthRadioReleased(evt);
             }
         });
 
@@ -127,7 +128,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jRadioButton2.setText("Doctor");
         jRadioButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jRadioButton2MouseReleased(evt);
+                DoctorRadioReleased(evt);
             }
         });
 
@@ -207,10 +208,19 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem5.setText("Quit Application");
         jMenuItem5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem5MouseReleased(evt);
+                QuitReleased(evt);
             }
         });
         jMenu2.add(jMenuItem5);
+
+        jMenuItem8.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jMenuItem8.setText("Log Out");
+        jMenuItem8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                LogOutReleased(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
 
         jMenuBar1.add(jMenu2);
 
@@ -221,7 +231,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem1.setText("View Appointment");
         jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem1MouseReleased(evt);
+                ViewAppointmentReleased(evt);
             }
         });
         jMenu5.add(jMenuItem1);
@@ -230,7 +240,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem2.setText("View Comment");
         jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem2MouseReleased(evt);
+                ViewCommentReleased(evt);
             }
         });
         jMenu5.add(jMenuItem2);
@@ -240,7 +250,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem3.setText("Manage Users");
         jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem3MouseReleased(evt);
+                ManageUserReleased(evt);
             }
         });
         jMenu5.add(jMenuItem3);
@@ -250,7 +260,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem4.setText("Edit Own Profile");
         jMenuItem4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem4MouseReleased(evt);
+                EditProfile(evt);
             }
         });
         jMenu5.add(jMenuItem4);
@@ -264,7 +274,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem7.setText("Full Report as .txt");
         jMenuItem7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem7MouseReleased(evt);
+                ExportTXTReleased(evt);
             }
         });
         jMenu1.add(jMenuItem7);
@@ -273,7 +283,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         jMenuItem6.setText("Full Report as .pdf");
         jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem6MouseReleased(evt);
+                ExportPDFReleased(evt);
             }
         });
         jMenu1.add(jMenuItem6);
@@ -306,21 +316,21 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
+    private void QuitReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QuitReleased
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem5MouseReleased
+    }//GEN-LAST:event_QuitReleased
 
-    private void jMenuItem7MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem7MouseReleased
+    private void ExportTXTReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExportTXTReleased
         controller.SaveReport(this, Integer.parseInt(jComboBox1.getSelectedItem().toString()), Controller.FileType.TXT);
-    }//GEN-LAST:event_jMenuItem7MouseReleased
+    }//GEN-LAST:event_ExportTXTReleased
 
-    private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
+    private void ViewAppointmentReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ViewAppointmentReleased
         controller.ShowFrame(Controller.FrameType.Appointment);
-    }//GEN-LAST:event_jMenuItem1MouseReleased
+    }//GEN-LAST:event_ViewAppointmentReleased
 
-    private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
+    private void ManageUserReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ManageUserReleased
         controller.ShowFrame(Controller.FrameType.UserManagement);
-    }//GEN-LAST:event_jMenuItem3MouseReleased
+    }//GEN-LAST:event_ManageUserReleased
 
     private void jButton5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseReleased
         controller.DisplayReport(buttonGroup2.getSelection().getActionCommand(),
@@ -328,26 +338,30 @@ public class ManagerReports extends javax.swing.JFrame implements View{
                 buttonGroup3.getSelection().getActionCommand());
     }//GEN-LAST:event_jButton5MouseReleased
 
-    private void jRadioButton2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton2MouseReleased
+    private void DoctorRadioReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DoctorRadioReleased
         RadioButtonUpdate();
-    }//GEN-LAST:event_jRadioButton2MouseReleased
+    }//GEN-LAST:event_DoctorRadioReleased
 
-    private void jRadioButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton1MouseReleased
+    private void MonthRadioReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MonthRadioReleased
         RadioButtonUpdate();
-    }//GEN-LAST:event_jRadioButton1MouseReleased
+    }//GEN-LAST:event_MonthRadioReleased
 
-    private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
+    private void ViewCommentReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ViewCommentReleased
         controller.ShowFrame(Controller.FrameType.Comment);
-    }//GEN-LAST:event_jMenuItem2MouseReleased
+    }//GEN-LAST:event_ViewCommentReleased
 
-    private void jMenuItem4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseReleased
+    private void EditProfile(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditProfile
         this.setVisible(false);
         controller.ShowUserProfile(Controller.FrameType.Report);
-    }//GEN-LAST:event_jMenuItem4MouseReleased
+    }//GEN-LAST:event_EditProfile
 
-    private void jMenuItem6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem6MouseReleased
+    private void ExportPDFReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExportPDFReleased
     controller.SaveReport(this, Integer.parseInt(jComboBox1.getSelectedItem().toString()), Controller.FileType.PDF);
-    }//GEN-LAST:event_jMenuItem6MouseReleased
+    }//GEN-LAST:event_ExportPDFReleased
+
+    private void LogOutReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogOutReleased
+        controller.LogOut();
+    }//GEN-LAST:event_LogOutReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup2;
@@ -368,6 +382,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;

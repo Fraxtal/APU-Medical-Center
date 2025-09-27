@@ -11,11 +11,8 @@ import Manager.Model.ReportGenerator.DataDoctor;
 import Manager.Model.ReportGenerator.DataMonth;
 import Manager.Model.ReportGenerator.DoctorReportData;
 import Manager.Model.ReportGenerator.MonthlyReportData;
-import Manager.View.ManagerAppointment;
-import Manager.View.ManagerComment;
-import Manager.View.ManagerReports;
-import Manager.View.ManagerUserManagement;
-import Manager.View.View;
+import Manager.View.*;
+import User.UserLogin;
 import User.UserProfile;
 import java.io.File;
 import java.time.LocalDate;
@@ -88,7 +85,8 @@ public class Controller {
         }
     }
         
-    public void ShowUserProfile(FrameType frame) {
+    public void ShowUserProfile(FrameType frame) 
+    {
         if (model == null) {
             logger.warning("No customer logged in");
             return;
@@ -97,6 +95,13 @@ public class Controller {
         profile.setCurrentUser(model);
         profile.setNavigationCallback(() -> ShowFrame(frame));
         profile.setVisible(true);
+    }
+    
+    public void LogOut()
+    {
+        UserLogin frame = new UserLogin();
+        frame.setVisible(true);
+        view.Dispose();
     }
     
     public String[] GetYearList(int colIndex, String file)

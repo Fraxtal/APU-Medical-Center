@@ -5,8 +5,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
+
+class InvalidProfileEditException extends Exception {
+    public InvalidProfileEditException(String m) {
+        super(m);
+    }
+}
 
 public class User {
 
@@ -147,10 +154,24 @@ public class User {
     }
    
     
-    public boolean updateProfile(String username, String fullname, String email, String address, String contact, String password) {
+    public boolean updateProfile(String username, String fullname, String email, String address, String contact, String password) throws InvalidProfileEditException {
         try {
             ArrayList<ArrayList<String>> allData = loadUserDB();
             
+        List<String> conflicts = allData.stream()
+            .filter(record -> Integer.parseInt(record.get(0)) != this.id)
+            .flatMap(record -> {
+                List<String> issues = new ArrayList<>();
+                if (record.get(1).equals(username)) issues.add("username");
+                if (record.get(3).equals(email)) issues.add("email");
+                return issues.stream();
+            })
+            .toList();
+
+        if (!conflicts.isEmpty()) {
+            String message = "Repeated " + String.join(" and ", conflicts);
+            throw new InvalidProfileEditException(message);
+        }
             for (ArrayList<String> record : allData) {
                 if (record.size() >= 9 && Integer.parseInt(record.get(0)) == this.id) {
                     record.set(1, username);
@@ -173,7 +194,9 @@ public class User {
             this.fullname = fullname;
             this.email = email;
             return true;
-        } catch (Exception e) {
+        } catch (InvalidProfileEditException e) { 
+            throw e;
+        }catch (Exception e) {
             System.out.println("Error updating profile: " + e.getMessage());
             return false;
         }
@@ -182,5 +205,6 @@ public class User {
     public int getId() { return id; }
     public String getUsername() { return username; }
     public String getEmail() { return email; }
+    public String getFullname() { return fullname; }
 }
 

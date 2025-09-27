@@ -23,5 +23,5 @@
 30001;manager_ops;Operations Manager;ops@medical.com;manager456;Operations Office, Floor 1;0555001002;2024-01-06;Manager
 40000;staff_reception;Reception Staff;reception@medical.com;staff123;Reception Desk;0555002001;2024-01-08;Staff
 40001;staff_nurse;Nurse Staff;nurse@medical.com;staff456;Nursing Station;0555002002;2024-01-09;Staff
-40002;staff_admin;Admin Staff;admin.staff@medical.com;staff789;Admin Support;0555002003;2024-01-10;Staff
+40002;asdasd;asd;asdasd;asd;asd;asd;2024-01-10;Staff
 40005;asd;asd;asd;asd;asd;asd;2025-09-26;Manager

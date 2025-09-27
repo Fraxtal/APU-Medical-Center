@@ -4,10 +4,13 @@ import Staff.model.ManageAppointments;
 import Staff.model.ManageCustomerAccount;
 import Staff.model.ManagePayments;
 import Staff.model.Staff;
+import Staff.view.StaffDashboard;
+import User.UserProfile;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -299,4 +302,18 @@ public class StaffController {
         return 0;
     }
     
+        public void showUserProfile() {
+        if (st == null) {
+            Logger.getLogger(StaffController.class.getName()).warning("No customer logged in");
+            return;
+        }
+        
+        UserProfile profile = new UserProfile();
+        profile.setCurrentUser(st);
+        profile.setNavigationCallback(() -> {
+        StaffDashboard frame = new StaffDashboard(this);
+        frame.setVisible(true);
+        });
+        profile.setVisible(true);
+    }
 }

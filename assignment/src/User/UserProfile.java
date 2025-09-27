@@ -4,9 +4,12 @@
  */
 package User;
 
+import static User.UserRegister.VALID_EMAIL_ADDRESS_REGEX;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -18,6 +21,8 @@ public class UserProfile extends javax.swing.JFrame {
         void onBack();
     }
     
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
+        Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserProfile.class.getName());
     private User currentUser;
     private NavigationCallback navigationCallback;
@@ -257,6 +262,10 @@ public class UserProfile extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "Username, Full Name, and Email are required fields.", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            if (validateEmail(email)) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Invalid Email", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             if (currentUser != null) {
                 boolean success = currentUser.updateProfile(username, fullname, email, address, contact, password);
@@ -272,10 +281,17 @@ public class UserProfile extends javax.swing.JFrame {
             } else {
                 javax.swing.JOptionPane.showMessageDialog(this, "No user logged in.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
+        } catch (InvalidProfileEditException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             logger.severe("Error updating user profile: " + e.getMessage());
             javax.swing.JOptionPane.showMessageDialog(this, "An error occurred while updating the profile.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private boolean validateEmail(String email) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+        return matcher.matches();
     }
 
     /**

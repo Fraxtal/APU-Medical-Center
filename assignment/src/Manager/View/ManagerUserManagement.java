@@ -83,6 +83,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -99,7 +100,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                TableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -107,7 +108,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jTextPane1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         jTextPane1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextPane1KeyReleased(evt);
+                SearchBarKeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(jTextPane1);
@@ -155,7 +156,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jButton1.setText("Add");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                AddAction(evt);
             }
         });
 
@@ -163,7 +164,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jButton2.setText("Delete");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                DeleteAction(evt);
             }
         });
 
@@ -171,7 +172,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jButton3.setText("Edit");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                EditAction(evt);
             }
         });
 
@@ -194,7 +195,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jButton4.setText("Clear");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                ClearAction(evt);
             }
         });
 
@@ -327,10 +328,19 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jMenuItem5.setText("Quit Application");
         jMenuItem5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem5MouseReleased(evt);
+                QuitReleased(evt);
             }
         });
         jMenu2.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jMenuItem6.setText("Log Out");
+        jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                LogOutReleased(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
 
         jMenuBar1.add(jMenu2);
 
@@ -341,7 +351,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jMenuItem1.setText("View Appointment");
         jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem1MouseReleased(evt);
+                ViewAppointmentReleased(evt);
             }
         });
         jMenu5.add(jMenuItem1);
@@ -350,7 +360,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jMenuItem2.setText("View Comment");
         jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem2MouseReleased(evt);
+                ViewCommentReleased(evt);
             }
         });
         jMenu5.add(jMenuItem2);
@@ -360,7 +370,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jMenuItem4.setText("Analysed Report");
         jMenuItem4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem4MouseReleased(evt);
+                ReportReleased(evt);
             }
         });
         jMenu5.add(jMenuItem4);
@@ -370,7 +380,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         jMenuItem3.setText("Edit Own Profile");
         jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem3MouseReleased(evt);
+                EditProfileReleased(evt);
             }
         });
         jMenu5.add(jMenuItem3);
@@ -413,7 +423,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void AddAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddAction
         List<String> formData = new ArrayList<>();
 
         for (int i = 1; i < 7; i++) {
@@ -426,9 +436,9 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         controller.AddUser(formData);
         controller.UpdateDisplay("users");
         ClearFields();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_AddAction
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void EditAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditAction
         String[] formData = new String[textGroup.length + 1];
 
         for (int i = 0; i < textGroup.length; i++) {
@@ -441,51 +451,55 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
                 jTable1.getSelectedRow(),formData);
         controller.UpdateDisplay("users");
         ClearFields();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_EditAction
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void DeleteAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteAction
         controller.DeleteUser(jTable1.getSelectedRow());
         controller.UpdateDisplay("users");
         ClearFields();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_DeleteAction
 
-    private void jMenuItem5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseReleased
+    private void QuitReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QuitReleased
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem5MouseReleased
+    }//GEN-LAST:event_QuitReleased
 
-    private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
+    private void ViewAppointmentReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ViewAppointmentReleased
         controller.ShowFrame(Controller.FrameType.Appointment);
-    }//GEN-LAST:event_jMenuItem1MouseReleased
+    }//GEN-LAST:event_ViewAppointmentReleased
 
-    private void jMenuItem4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseReleased
+    private void ReportReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportReleased
         controller.ShowFrame(Controller.FrameType.Report);
-    }//GEN-LAST:event_jMenuItem4MouseReleased
+    }//GEN-LAST:event_ReportReleased
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+    private void TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableMouseClicked
         String[] rowData = controller.FillDetail(jTable1.getSelectedRow());
         for (int i = 0; i < textGroup.length; i++)
         {
             textGroup[i].setText(rowData[i]);
         }
         jComboBox1.setSelectedItem(rowData[8]);
-    }//GEN-LAST:event_jTable1MouseClicked
+    }//GEN-LAST:event_TableMouseClicked
 
-    private void jTextPane1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextPane1KeyReleased
+    private void SearchBarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchBarKeyReleased
         LoadDisplay(controller.SearchRow(jTextPane1.getText()));
-    }//GEN-LAST:event_jTextPane1KeyReleased
+    }//GEN-LAST:event_SearchBarKeyReleased
 
-    private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
+    private void ViewCommentReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ViewCommentReleased
         controller.ShowFrame(Controller.FrameType.Comment);
-    }//GEN-LAST:event_jMenuItem2MouseReleased
+    }//GEN-LAST:event_ViewCommentReleased
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void ClearAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearAction
         ClearFields();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_ClearAction
 
-    private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
+    private void EditProfileReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditProfileReleased
         this.setVisible(false);
         controller.ShowUserProfile(Controller.FrameType.UserManagement);
-    }//GEN-LAST:event_jMenuItem3MouseReleased
+    }//GEN-LAST:event_EditProfileReleased
+
+    private void LogOutReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogOutReleased
+        controller.LogOut();
+    }//GEN-LAST:event_LogOutReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -511,6 +525,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
