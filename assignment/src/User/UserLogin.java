@@ -149,8 +149,12 @@ public class UserLogin extends javax.swing.JFrame {
                 
                 this.setVisible(false);
                 controller.ShowFrame(Manager.Controller.Controller.FrameType.UserManagement);
+            }
             case "staff" -> {
-                StaffDashboard frame = new StaffDashboard();
+                Staff d = new Staff(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
+                StaffController controller = new StaffController(d);
+                
+                StaffDashboard frame = new StaffDashboard(controller);
                 this.setVisible(false);
                 frame.setVisible(true);
             }
