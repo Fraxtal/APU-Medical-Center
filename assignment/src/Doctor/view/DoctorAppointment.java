@@ -6,7 +6,7 @@ package Doctor.view;
 
 import Doctor.controller.TableSearchHandler;
 import Doctor.view.DoctorMenu;
-import Doctor.model.Doctor;
+import Doctor.controller.DoctorCtrl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,17 +28,18 @@ import javax.swing.table.TableRowSorter;
 public class DoctorAppointment extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorAppointment.class.getName());
-    private Doctor viewdoctor;
+    private DoctorCtrl ctrl;
     private TableRowSorter<DefaultTableModel> sorter;
     private TableSearchHandler searchHandler;
     private DefaultTableModel model; 
     /**
      * Creates new form DoctorAppointment
      */
-    public DoctorAppointment() {
+    public DoctorAppointment(DoctorCtrl ctrl) {
         initComponents();
         setupTable();
         loadAppointments();
+        this.ctrl = ctrl;
         searchHandler = new TableSearchHandler(AppointmentTable);
     }
    
@@ -53,8 +54,8 @@ public class DoctorAppointment extends javax.swing.JFrame {
         AppointmentTable.setModel(model);
         AppointmentTable.setAutoCreateRowSorter(true);
     
-        viewdoctor = new Doctor(model);
-        sorter = viewdoctor.getSorter();
+        ctrl = new DoctorCtrl(model);
+        sorter = ctrl.getSorter();
         AppointmentTable.setRowSorter(sorter);
 
         TableColumnModel cm = AppointmentTable.getColumnModel();
@@ -74,7 +75,7 @@ public class DoctorAppointment extends javax.swing.JFrame {
     private void loadAppointments()
     {
         String filePath ="src\\database\\appointments.txt";
-        viewdoctor.loadScheduledAppointments(filePath);
+        ctrl.loadScheduledAppointments(filePath);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -198,7 +199,7 @@ public class DoctorAppointment extends javax.swing.JFrame {
 
     private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
         this.setVisible(false);
-        DoctorMenu obj = new DoctorMenu();
+        DoctorMenu obj = new DoctorMenu(ctrl);
         obj.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_backbtnActionPerformed
 
@@ -223,8 +224,6 @@ public class DoctorAppointment extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DoctorAppointment().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

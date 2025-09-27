@@ -4,6 +4,8 @@
  */
 package Doctor.view;
 
+import Doctor.controller.DoctorCtrl;
+
 /**
  *
  * @author Kingston Teoh
@@ -11,12 +13,16 @@ package Doctor.view;
 public class DoctorMenu extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoctorMenu.class.getName());
-
+    
+    private DoctorCtrl ctrl;
+    
     /**
      * Creates new form DoctorMenu
      */
-    public DoctorMenu() {
+    public DoctorMenu(DoctorCtrl ctrl) {
         initComponents();
+        this.ctrl = ctrl;
+        
     }
 
     /**
@@ -118,19 +124,19 @@ public class DoctorMenu extends javax.swing.JFrame {
 
     private void AppointmentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AppointmentbtnActionPerformed
         this.setVisible(false);
-        DoctorAppointment obj = new DoctorAppointment();
+        DoctorAppointment obj = new DoctorAppointment(ctrl);
         obj.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_AppointmentbtnActionPerformed
 
     private void ChargesbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChargesbtnActionPerformed
         this.setVisible(false);
-        DoctorCharges obj1 = new DoctorCharges();
+        DoctorCharges obj1 = new DoctorCharges(ctrl);
         obj1.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_ChargesbtnActionPerformed
 
     private void HistorybtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistorybtnActionPerformed
         this.setVisible(false);
-        DoctorAppointmentHistory obj2 = new DoctorAppointmentHistory();
+        DoctorAppointmentHistory obj2 = new DoctorAppointmentHistory(ctrl);
         obj2.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_HistorybtnActionPerformed
 
@@ -140,7 +146,7 @@ public class DoctorMenu extends javax.swing.JFrame {
 
     private void FeedbackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FeedbackbtnActionPerformed
         this.setVisible(false);
-        DoctorFeedback obj3 = new DoctorFeedback();
+        DoctorFeedback obj3 = new DoctorFeedback(ctrl);
         obj3.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_FeedbackbtnActionPerformed
 
@@ -165,8 +171,6 @@ public class DoctorMenu extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DoctorMenu().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
