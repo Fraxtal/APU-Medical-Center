@@ -136,6 +136,7 @@ public class ReportGenerator extends ManagerModel {
         Map<String, String> appointmentDate = appointment.stream()
                 .filter(row -> row.length == 7)
                 .filter(row -> LocalDate.parse(row[1].trim(), readFormatter).getYear() == year)
+                .filter(row -> row[2].trim().equalsIgnoreCase("completed"))
                 .collect(Collectors.toMap(
                     row -> row[0],
                     row -> LocalDate.parse(row[1].trim(), readFormatter).format(formatter)
@@ -143,6 +144,7 @@ public class ReportGenerator extends ManagerModel {
         
         Map<String, DataMonth> monthlyData = invoice.stream()
                 .filter(row -> row.length == 4)
+                .filter(row -> appointmentDate.containsKey(row[3].trim()))
                 .collect(Collectors.groupingBy(
                     row -> {
                         String apptId = row[3].trim();

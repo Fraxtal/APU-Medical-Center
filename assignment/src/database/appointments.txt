@@ -12,5 +12,5 @@ A0011;2024-06-27;Completed;20010;Dr. Charles Martinez;10000;Chase
 A0012;2024-07-19;Completed;20011;Dr. Jennifer Anderson;10001;Alice
 A0013;2024-08-11;Cancelled;20012;Dr. Christopher Taylor;10002;Mike
 A0014;2024-09-05;Completed;20013;Dr. Elizabeth Thomas;10003;Sarah
-A0015;2024-12-05;Scheduled;20014;Dr. Matthew Hernandez;10004;David
-A0016;2024-12-18;Pending;20015;Dr. Susan Moore;10000;Chris
+A0015;2024-12-05;Pending;20014;Dr. Matthew Hernandez;10004;David
+A0016;2024-12-18;Scheduled;20015;Dr. Susan Moore;10000;Chris
