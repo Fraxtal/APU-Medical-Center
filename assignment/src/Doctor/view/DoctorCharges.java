@@ -6,7 +6,7 @@ package Doctor.view;
 
 import Doctor.controller.ChargesController;
 import Doctor.view.DoctorMenu;
-import Doctor.model.Doctor;
+import Doctor.controller.DoctorCtrl;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,6 +24,7 @@ import javax.swing.table.TableColumnModel;
  * @author Kingston Teoh
  */
 public class DoctorCharges extends javax.swing.JFrame {
+    private DoctorCtrl ctrl;
     private DefaultTableModel model;
     private ChargesController controller;
 
@@ -33,12 +34,13 @@ public class DoctorCharges extends javax.swing.JFrame {
     /**
      * Creates new form DoctorFeedbackandCharges
      */
-    public DoctorCharges() {
+    public DoctorCharges(DoctorCtrl ctrl) {
         initComponents();
         setupTable();
         controller = new ChargesController(model);
         setupItemComboBox();
         loadCharges();
+        this.ctrl = ctrl;
     }
     private void setupItemComboBox() {
         String[] items = controller.getItems();
@@ -58,7 +60,7 @@ public class DoctorCharges extends javax.swing.JFrame {
     }
     private void loadCharges() {
         String filePath = "src\\database\\InvoiceDetails.txt";
-        Doctor viewdoctor = new Doctor(model);
+        DoctorCtrl viewdoctor = new DoctorCtrl(model);
         viewdoctor.loadCharges(filePath);
     }
     private boolean validateInput() {
@@ -333,7 +335,7 @@ public class DoctorCharges extends javax.swing.JFrame {
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
         this.setVisible(false); // Close current frame
-        DoctorMenu obj = new DoctorMenu();
+        DoctorMenu obj = new DoctorMenu(ctrl);
         obj.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_BackbtnActionPerformed
 
@@ -471,8 +473,6 @@ public class DoctorCharges extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DoctorCharges().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

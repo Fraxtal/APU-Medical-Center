@@ -126,15 +126,7 @@ public class CustomerController {
         }
         
         UserProfile profile = new UserProfile();
-        profile.setCurrentUser(currentCustomer, new String[]{
-            currentCustomer.getUsername(),
-            currentCustomer.getFullname(),
-            currentCustomer.getEmail(),
-            currentCustomer.getAddress(),
-            currentCustomer.getContactNumber(),
-            currentCustomer.getPassword(),
-            "Manager",
-            currentCustomer.getDateCreated()});
+        profile.setCurrentUser(currentCustomer);
         profile.setNavigationCallback(() -> showCustomerDashboard());
         profile.setVisible(true);
     }

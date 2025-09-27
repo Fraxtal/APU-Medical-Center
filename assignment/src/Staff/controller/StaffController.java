@@ -309,15 +309,7 @@ public class StaffController {
         }
         
         UserProfile profile = new UserProfile();
-        profile.setCurrentUser(st, new String[]{
-            st.getUsername(),
-            st.getFullname(),
-            st.getEmail(),
-            st.getAddress(),
-            st.getContactNumber(),
-            st.getPassword(),
-            "Staff",
-            st.getDateCreated()});
+        profile.setCurrentUser(st);
         profile.setNavigationCallback(() -> {
         StaffDashboard frame = new StaffDashboard(this);
         frame.setVisible(true);

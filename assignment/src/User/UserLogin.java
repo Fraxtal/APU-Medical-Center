@@ -7,6 +7,8 @@ package User;
 import Customer.ctrl.CustomerController;
 import Customer.model.Customer;
 import Doctor.view.DoctorMenu;
+import Doctor.controller.DoctorCtrl;
+import Doctor.model.Doctor;
 import Manager.Model.ManagerModel;
 import Staff.view.StaffDashboard;
 import java.util.ArrayList;
@@ -156,8 +158,11 @@ public class UserLogin extends javax.swing.JFrame {
                 frame.setVisible(true);
             }
             case "doctor" -> {
-                DoctorMenu frame = new DoctorMenu();
-
+                Doctor d = new Doctor(Integer.parseInt(userRecord.get(0)), userRecord.get(1), userRecord.get(2), userRecord.get(3),userRecord.get(4),userRecord.get(5),userRecord.get(6),userRecord.get(7));
+                DoctorCtrl ctrl = new DoctorCtrl();
+                ctrl.setCurrentDoctor(d);
+                
+                DoctorMenu frame = new DoctorMenu(ctrl);
                 frame.setVisible(true);
             }
             default -> System.err.println("Login failed or user is not a Customer");

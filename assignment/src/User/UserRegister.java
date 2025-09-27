@@ -9,9 +9,13 @@ package User;
  * @author Nicholas
  */
 import javax.swing.JOptionPane;
+import java.util.regex.*;
 
 public class UserRegister extends javax.swing.JFrame {
     
+    
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
+        Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserRegister.class.getName());
     
     private User newUser = new User();
@@ -191,6 +195,10 @@ public class UserRegister extends javax.swing.JFrame {
         if (!tbPassword.getText().equals(tbCfmPassword.getText())){
             JOptionPane.showMessageDialog(this, "Warning: Passwords do not Match!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        else if(validate(tbEmail.getText())){
+            JOptionPane.showMessageDialog(this, "Warning: Invalid Email!", "Warning", JOptionPane.WARNING_MESSAGE);
+
+        }
         else if (newUser.register(tbUsername.getText(), tbFullName.getText(), tbEmail.getText(), tbPassword.getText(), tbAddress.getText(), tbContactNumber.getText())){
             this.setVisible(false);
             new Homepage().setVisible(true);
@@ -225,6 +233,12 @@ public class UserRegister extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new UserRegister().setVisible(true));
     }
+    
+    private boolean validate(String emailStr) {
+            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+            return matcher.matches();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;

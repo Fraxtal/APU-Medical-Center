@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 class InvalidProfileEditException extends Exception {
     public InvalidProfileEditException(String m) {
@@ -36,8 +37,8 @@ public class User {
         loadUserDB();
         
         // Check if username or email already exists
-        if (isUserExists(Username, Email)) {
-            System.out.println("Username or email already exists!");
+        if (isUserExists(Username, Fullname, Email)) {
+            JOptionPane.showMessageDialog(null,"Warning: Username or fullname or email already used in existing account!", "Warning", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         
@@ -111,13 +112,14 @@ public class User {
     /**
      * Check if username or email already exists in the database
      */
-    private boolean isUserExists(String username, String email) {
+    private boolean isUserExists(String username,String fullname, String email) {
         for (ArrayList<String> record : data) {
-            if (record.size() >= 9) { // Ensure record has enough fields
+            if (record.size() >= 9) {
                 String existingUsername = record.get(1);
+                String existingFullname = record.get(2);
                 String existingEmail = record.get(3);
                 
-                if (existingUsername.equalsIgnoreCase(username) || existingEmail.equalsIgnoreCase(email)) {
+                if (existingUsername.equalsIgnoreCase(username) || existingEmail.equalsIgnoreCase(email) || existingFullname.equalsIgnoreCase(fullname)) {
                     return true;
                 }
             }

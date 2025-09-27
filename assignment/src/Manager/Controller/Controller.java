@@ -92,15 +92,7 @@ public class Controller {
             return;
         }
         UserProfile profile = new UserProfile();
-        profile.setCurrentUser(model, new String[]{
-            model.getUsername(),
-            model.getFullname(),
-            model.getEmail(),
-            model.GetAddress(),
-            model.GetContact(),
-            model.GetPassword(),
-            "Manager",
-            model.GetDateCreated()});
+        profile.setCurrentUser(model);
         profile.setNavigationCallback(() -> ShowFrame(frame));
         profile.setVisible(true);
     }
