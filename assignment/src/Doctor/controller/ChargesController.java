@@ -22,46 +22,18 @@ public class ChargesController {
     private DefaultTableModel model;
     private String[] items;
     private double[] prices;
-    private String invoicesFilePath;
-    private String invoiceDetailsFilePath;
+    private String invoicesFilePath = "src\\database\\invoices.txt";
+    private String invoiceDetailsFilePath = "src\\database\\InvoiceDetails.txt";
 
     public ChargesController(DefaultTableModel model) {
         this.model = model;
-        this.invoicesFilePath = "src\\database\\invoices.txt";
-        this.invoiceDetailsFilePath = "src\\database\\InvoiceDetails.txt";
         loadItemPrices();
     }
 
     public void loadItemPrices() {
-        List<String> itemList = new ArrayList<>();
-        List<Double> priceList = new ArrayList<>();
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(invoiceDetailsFilePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(";");
-                if (data.length >= 4) {
-                    String item = data[1].trim();
-                    double price = Double.parseDouble(data[3].trim());
-                    
-                    // Add to lists if not already present
-                    if (!itemList.contains(item)) {
-                        itemList.add(item);
-                        priceList.add(price);
-                    }
-                }
-            }
-            
-            // Convert lists to arrays
-            items = itemList.toArray(new String[0]);
-            prices = new double[priceList.size()];
-            for (int i = 0; i < priceList.size(); i++) {
-                prices[i] = priceList.get(i);
-            }
-            
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error loading item prices: " + e.getMessage());
-        }
+        // Use predefined items and prices instead of reading from file
+        items = new String[]{"Paracetamol", "Vitamin C", "Blood Test", "Consultation", "X-ray", "Antibiotics", "Blood Pressure Test"};
+        prices = new double[]{5.00, 10.00, 50.00, 100.00, 200.00, 15.00, 25.00};
     }
 
     public double getItemPrice(String item) {
@@ -151,17 +123,23 @@ public class ChargesController {
     public double sendInvoice(String invoiceId) {
         double totalAmount = calculateTotalForInvoice(invoiceId);
         saveToInvoicesTxt(invoiceId, totalAmount);
-        saveInvoiceDetailsToTxt();
         return totalAmount;
     }
 
     private double calculateTotalForInvoice(String invoiceId) {
         double total = 0;
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String rowInvoiceId = model.getValueAt(i, 5).toString();
-            if (rowInvoiceId.equals(invoiceId)) {
-                total += Double.parseDouble(model.getValueAt(i, 4).toString());
+        // Read from file instead of just table model
+        try (BufferedReader br = new BufferedReader(new FileReader(invoiceDetailsFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] data = line.split(";");
+                if (data.length >= 7 && data[5].trim().equals(invoiceId)) {
+                    total += Double.parseDouble(data[4].trim());
+                }
             }
+        } catch (IOException e) {
+            System.out.println("Error reading invoice details: " + e.getMessage());
         }
         return total;
     }
@@ -178,23 +156,8 @@ public class ChargesController {
         }
     }
 
-    private void saveInvoiceDetailsToTxt() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(invoiceDetailsFilePath))) {
-            for (int i = 0; i < model.getRowCount(); i++) {
-                String line = model.getValueAt(i, 0) + ";" +
-                             model.getValueAt(i, 1) + ";" +
-                             model.getValueAt(i, 2) + ";" +
-                             model.getValueAt(i, 3) + ";" +
-                             model.getValueAt(i, 4) + ";" +
-                             model.getValueAt(i, 5) + ";" +
-                             model.getValueAt(i, 6);
-                bw.write(line);
-                bw.newLine();
-            }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error saving to InvoiceDetails.txt: " + ex.getMessage());
-        }
-    }
+    // Remove this method - it overwrites the entire file with just table data
+    // This is dangerous as it loses data not currently in the table
 
     private String generateInvoiceDetailId() {
         int maxId = 0;
@@ -221,7 +184,20 @@ public class ChargesController {
     }
 
     private String getAppointmentIdForInvoice(String invoiceId) {
-        return "001";
+        // Get actual appointment ID from invoice details
+        try (BufferedReader br = new BufferedReader(new FileReader(invoiceDetailsFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] data = line.split(";");
+                if (data.length >= 7 && data[5].trim().equals(invoiceId)) {
+                    return data[6].trim();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading appointment ID: " + e.getMessage());
+        }
+        return "";
     }
     
 }
