@@ -198,13 +198,24 @@ public class ChargesController {
 
     private String generateInvoiceDetailId() {
         int maxId = 0;
-        for (int i = 0; i < model.getRowCount(); i++) {
-            try {
-                int id = Integer.parseInt(model.getValueAt(i, 0).toString());
-                if (id > maxId) maxId = id;
-            } catch (NumberFormatException e) {
-                
+    
+        // Read from the actual file to get all existing IDs
+        try (BufferedReader br = new BufferedReader(new FileReader(invoiceDetailsFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] data = line.split(";");
+                if (data.length > 0) {
+                    try {
+                        int id = Integer.parseInt(data[0].trim());
+                        if (id > maxId) maxId = id;
+                    } catch (NumberFormatException e) {
+                        // Skip invalid IDs
+                    }
+                }
             }
+        } catch (IOException e) {
+            System.out.println(e);
         }
         return String.format("%03d", maxId + 1);
     }
