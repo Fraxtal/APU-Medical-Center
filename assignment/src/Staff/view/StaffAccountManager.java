@@ -444,7 +444,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-        
+        tblAccounts.setModel(controller.getCustomerTable());
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void txtCustomerSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCustomerSearchFocusGained
