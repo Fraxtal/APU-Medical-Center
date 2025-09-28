@@ -311,7 +311,7 @@ public class StaffPayments extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
-        tblInvoice.setModel(controller.getInvoiceTable());
+        updateTable();
     }//GEN-LAST:event_btnPayNFInalizeActionPerformed
 
     private void btnReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReceiptActionPerformed
@@ -364,6 +364,10 @@ public class StaffPayments extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtInvoiceSearchFocusLost
 
+    public void updateTable() {
+        tblInvoice.setModel(controller.getInvoiceTable());
+        tbs = new TableSearchHandler(tblInvoice);
+    }
 
     public static void main(String args[]) {
 //        java.awt.EventQueue.invokeLater(() -> new StaffPayments().setVisible(true));
