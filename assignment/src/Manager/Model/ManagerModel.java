@@ -22,6 +22,13 @@ import java.util.Map;
  * @author weiha
  */
 public class ManagerModel extends User{
+    
+    public class DatabaseOverflowException extends Exception {
+        public DatabaseOverflowException(String message) {
+            super(message);
+        }
+    }
+    
     private final Map<String, Path> files = 
             Map.of("users", Path.of("src/database/users.txt"),
                     "appointments",Path.of("src/database/appointments.txt"),
@@ -109,9 +116,17 @@ public class ManagerModel extends User{
         }
     }
     
-    public void AddUser(List<String> row)
+    public void AddUser(List<String> row) throws DatabaseOverflowException
     {
-        int id = Integer.parseInt(bufferData.getLast()[0]) + 1;
+        int id = Integer.parseInt(bufferData.getLast()[0].substring(1)) + 1;
+        if (id > 9999){throw new DatabaseOverflowException("The "+row.getLast().toLowerCase()+"amount is exceeding 9999 limit");}
+        id += switch (row.getLast())
+        {
+            case "Doctor" -> 20000;
+            case "Manager" -> 30000;
+            case "Staff" -> 40000;
+            default -> 10000;
+        };
         LocalDate date = LocalDate.now();
         row.addFirst(String.valueOf(id));
         row.add(7, date.toString());

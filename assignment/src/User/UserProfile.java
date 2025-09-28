@@ -4,7 +4,6 @@
  */
 package User;
 
-import static User.UserRegister.VALID_EMAIL_ADDRESS_REGEX;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
