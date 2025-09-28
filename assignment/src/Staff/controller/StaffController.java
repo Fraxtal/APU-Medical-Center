@@ -265,9 +265,9 @@ public class StaffController {
     
     //implemented in StaffPayments
     public String validateAppIdtoCustomerName(String appointmentId){
-//        if(!ma.checkAppointmentIdExists(appointmentId)){
-//            return null;
-//        }
+        if(!ma.checkAppointmentIdExists(appointmentId)){
+            return null;
+        }
         
         String customerId = ma.returnCustomerIDfromAppId(appointmentId);
         if(customerId != null){
