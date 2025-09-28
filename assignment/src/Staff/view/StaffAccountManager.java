@@ -342,7 +342,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ERROR.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
-
+        updateTable();
         tblAccounts.setModel(controller.getCustomerTable());
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -404,7 +404,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ERROR.", "Error", JOptionPane.ERROR_MESSAGE);  
                 break;
         }
-        tblAccounts.setModel(controller.getCustomerTable());
+        updateTable();
   
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -444,7 +444,7 @@ public class StaffAccountManager extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-        
+        updateTable();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void txtCustomerSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCustomerSearchFocusGained
@@ -474,6 +474,11 @@ public class StaffAccountManager extends javax.swing.JFrame {
             txtPassword.setText("");
             txtAddress.setText("");
             txtContact.setText("");
+    }
+    
+    public void updateTable() {
+        tblAccounts.setModel(controller.getCustomerTable());
+        tbs = new TableSearchHandler(tblAccounts);
     }
 
     public static void main(String args[]) {

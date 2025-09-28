@@ -341,7 +341,6 @@ public class StaffAppointments extends javax.swing.JFrame {
         switch (success) {
             case 0:
                 JOptionPane.showMessageDialog(this, "Appointment sucessfullly updated.", "Info", JOptionPane.INFORMATION_MESSAGE);
-                tblAppointments.setModel(controller.getAppointmentTable());
                 break;
             case 1:
                 JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -364,7 +363,7 @@ public class StaffAppointments extends javax.swing.JFrame {
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+        updateTable();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -418,7 +417,7 @@ public class StaffAppointments extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Invalid Customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
             case 4:
-                JOptionPane.showMessageDialog(this, "Time machine unavailable", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "You cannot book in the past.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;    
             case 5:
                 JOptionPane.showMessageDialog(this, "Error occured while creating appointment", "Error", JOptionPane.ERROR_MESSAGE);
@@ -426,7 +425,7 @@ public class StaffAppointments extends javax.swing.JFrame {
             default:
                 JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        tblAppointments.setModel(controller.getAppointmentTable());
+        updateTable();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void tblDoctorsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDoctorsMouseClicked
@@ -478,6 +477,12 @@ public class StaffAppointments extends javax.swing.JFrame {
         txtDoctorId.setText("");
         txtDoctorName.setText("");
     }
+    
+     public void updateTable() {
+        tblAppointments.setModel(controller.getAppointmentTable());
+        tbs = new TableSearchHandler(tblAppointments);
+    }
+    
     public static void main(String args[]) {
 //        java.awt.EventQueue.invokeLater(() -> new StaffAppointments().setVisible(true));
     }
