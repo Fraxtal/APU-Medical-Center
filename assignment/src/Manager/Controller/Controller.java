@@ -202,6 +202,10 @@ public class Controller {
                 frame.ShowSuccessDialog("The changes applied.");
             }
         }
+        catch (ManagerModel.DatabaseOverflowException ex)
+        {
+            view.ShowErrorDialog(ex.getMessage());
+        }
         catch (Exception ex)
         {
             view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
@@ -225,13 +229,17 @@ public class Controller {
                 view.ShowErrorDialog("Null selection! Please select a row before editing");
             }
         }
+        catch (ManagerModel.DatabaseOverflowException ex)
+        {
+            view.ShowErrorDialog(ex.getMessage());
+        }
         catch (Exception ex)
         {
             view.ShowErrorDialog(ex + "\nInvalid Input! Please try again");
         }
     }
     
-    public void DeleteUser(int index)
+    public void DeleteUser (int index)
     {        
         try
         {
@@ -247,6 +255,10 @@ public class Controller {
             {
                 view.ShowErrorDialog("Null selection! Please select a row before deleting");
             }
+        }
+        catch (ManagerModel.InvalidSelectionException ex)
+        {
+            view.ShowErrorDialog(ex.getMessage());
         }
         catch (Exception ex)
         {
