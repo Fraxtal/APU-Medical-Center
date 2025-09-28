@@ -10,13 +10,6 @@ import User.Homepage;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * Controller for Customer module
- * Demonstrates OOP concepts: Encapsulation, Abstraction, Polymorphism
- * Handles communication between Customer views and CustomerService
- * Implements proper MVC separation of concerns
- * Provides input validation and business logic coordination
- */
 public class CustomerController {
     
     private static final Logger logger = Logger.getLogger(CustomerController.class.getName());
