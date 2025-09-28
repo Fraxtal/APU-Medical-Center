@@ -67,7 +67,7 @@ public class UserLogin extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
-        jLabel3.setText("User Login");
+        jLabel3.setText("Login");
 
         btnRegister.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
         btnRegister.setText("Register");
@@ -81,10 +81,6 @@ public class UserLogin extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 314, Short.MAX_VALUE)
-                .addComponent(btnRegister)
-                .addGap(14, 14, 14))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -98,11 +94,17 @@ public class UserLogin extends javax.swing.JFrame {
                             .addComponent(tbPassword)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(163, 163, 163)
-                        .addComponent(btnLogin))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(jLabel3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnLogin)))
+                .addContainerGap(104, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnRegister)
+                        .addGap(14, 14, 14))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(176, 176, 176))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
