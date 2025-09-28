@@ -59,7 +59,7 @@ public class DoctorCharges extends javax.swing.JFrame {
         ChargesTable.setModel(model); 
     }
     private void loadCharges() {
-        String filePath = "src\\database\\InvoiceDetails.txt";
+        String filePath = "src\\database\\invoiceDetails.txt";
         DoctorCtrl viewdoctor = new DoctorCtrl(model);
         viewdoctor.loadCharges(filePath);
     }
