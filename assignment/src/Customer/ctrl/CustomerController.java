@@ -7,7 +7,6 @@ import Customer.services.CustomerService;
 import Customer.view.*;
 import User.UserProfile;
 import User.Homepage;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -139,24 +138,6 @@ public class CustomerController {
         Homepage homepage = new Homepage();
         homepage.setVisible(true);
     }
-    
-    private boolean validateAppointmentInput(int doctorId, String doctorName, LocalDate date) {
-        if (doctorId <= 0) {
-            logger.warning("Valid doctor ID is required");
-            return false;
-        }
-        
-        if (doctorName == null || doctorName.trim().isEmpty()) {
-            logger.warning("Doctor name is required");
-            return false;
-        }
-        
-        if (date == null || date.isBefore(LocalDate.now())) {
-            logger.warning("Invalid appointment date - cannot book in the past");
-            return false;
-        }
-        return true;
-    }
    
     public List<Appointment> getCustomerAppointments() {
         if (currentCustomer == null) {
@@ -174,69 +155,6 @@ public class CustomerController {
         }
         
         return currentCustomer.getAppointmentsByStatus(status);
-    }
-    
-    public boolean updateCustomerInfo(String username, String fullname, String email, 
-                                    String address, String contactNo) {
-        // Authentication check
-        if (currentCustomer == null) {
-            logger.warning("No customer logged in");
-            return false;
-        }
-        
-        // Input validation - demonstrates encapsulation
-        if (!validateCustomerInput(username, fullname, email)) {
-            return false;
-        }
-        
-        // Update customer object - demonstrates object state management
-        currentCustomer.setUsername(username);
-        currentCustomer.setFullname(fullname);
-        currentCustomer.setEmail(email);
-        currentCustomer.setAddress(address);
-        currentCustomer.setContactNo(contactNo);
-        
-        // Update through service layer
-        boolean success = customerService.updateCustomerInfo(currentCustomer);
-        
-        if (success) {
-            logger.info(() -> "Customer information updated successfully: " + currentCustomer.getId());
-        }
-        
-        return success;
-    }
-    
-    /**
-     * Validate customer input - demonstrates encapsulation and input validation
-     */
-    private boolean validateCustomerInput(String username, String fullname, String email) {
-        if (username == null || username.trim().isEmpty()) {
-            logger.warning("Username is required");
-            return false;
-        }
-        
-        if (username.length() < 3) {
-            logger.warning("Username must be at least 3 characters long");
-            return false;
-        }
-        
-        if (fullname == null || fullname.trim().isEmpty()) {
-            logger.warning("Full name is required");
-            return false;
-        }
-        
-        if (email == null || email.trim().isEmpty()) {
-            logger.warning("Email is required");
-            return false;
-        }
-        
-        // Email format validation
-        if (!email.contains("@") || !email.contains(".")) {
-            logger.warning("Invalid email format");
-            return false;
-        }
-        
-        return true;
     }
     
     public List<Invoice> getInvoicesForAppointment(String appointmentId) {

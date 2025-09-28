@@ -412,7 +412,7 @@ public class CustomerService{
             String newAppointmentId = generateAppointmentId();
             Appointment appt = new Appointment(newAppointmentId,
                                                dateOfAppointment,
-                                               "PENDING",
+                                               "Pending",
                                                customer.getId(),
                                                doctorId,
                                                customer.getFullname() != null ? customer.getFullname() : customer.getUsername(),
