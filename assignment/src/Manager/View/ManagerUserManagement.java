@@ -5,6 +5,7 @@
 package Manager.View;
 
 import Manager.Controller.Controller;
+import Manager.Model.ManagerModel.InvalidSelectionException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -430,7 +431,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         }
 
         formData.add(jComboBox1.getSelectedItem().toString());
-        
+
         controller.AddUser(formData);
         controller.UpdateDisplay("users");
         ClearFields();
@@ -445,8 +446,7 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
 
         formData[textGroup.length] = jComboBox1.getSelectedItem().toString();
         
-        controller.EditUser(
-                jTable1.getSelectedRow(),formData);
+        controller.EditUser(jTable1.getSelectedRow(),formData);
         controller.UpdateDisplay("users");
         ClearFields();
     }//GEN-LAST:event_EditAction

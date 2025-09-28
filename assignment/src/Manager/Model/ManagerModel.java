@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -25,6 +26,12 @@ public class ManagerModel extends User{
     
     public class DatabaseOverflowException extends Exception {
         public DatabaseOverflowException(String message) {
+            super(message);
+        }
+    }
+    
+    public class InvalidSelectionException extends Exception {
+        public InvalidSelectionException(String message) {
             super(message);
         }
     }
@@ -116,11 +123,32 @@ public class ManagerModel extends User{
         }
     }
     
+    //Helper for user management
+    private int GetNextID(List<String[]> filtered)
+    {
+        int ID = 0;
+        if (!filtered.isEmpty())
+        {
+            for (int i = 0; i< filtered.size() - 1; i++)
+            {
+                int curID = Integer.parseInt(filtered.get(i)[0].substring(1));
+                int nextID = Integer.parseInt(filtered.get(i+1)[0].substring(1));
+                if (nextID - curID > 1){return curID + 1;}  
+            }
+            int lastID = Integer.parseInt(filtered.get(filtered.size() - 1)[0].substring(1));
+            ID = lastID + 1;
+        }
+        return ID;
+    }
+    
     public void AddUser(List<String> row) throws DatabaseOverflowException
     {
-        int id = Integer.parseInt(bufferData.getLast()[0].substring(1)) + 1;
-        if (id > 9999){throw new DatabaseOverflowException("The "+row.getLast().toLowerCase()+"amount is exceeding 9999 limit");}
-        id += switch (row.getLast())
+        String role = row.getLast();
+        List<String[]> filtered = bufferData.stream().filter(i -> i[8].equalsIgnoreCase(role)).toList();
+        int ID = GetNextID(filtered);
+        
+        if (ID > 9999){throw new DatabaseOverflowException("The "+role.toLowerCase()+"amount is exceeding 9999 limit");}
+        ID += switch (role)
         {
             case "Doctor" -> 20000;
             case "Manager" -> 30000;
@@ -128,23 +156,45 @@ public class ManagerModel extends User{
             default -> 10000;
         };
         LocalDate date = LocalDate.now();
-        row.addFirst(String.valueOf(id));
+        row.addFirst(String.valueOf(ID));
         row.add(7, date.toString());
         bufferData.add(row.toArray(String[]::new));
         WriteFile("users");
     }
     
-    public void EditUser(int index, String[] row)
+    public void EditUser(int index, String[] row) throws DatabaseOverflowException
     {
+        String role = row[8];
+        List<String[]> filtered = bufferData.stream().filter(i -> i[8].equalsIgnoreCase(role)).sorted(Comparator.comparing(i -> i[0])).toList();
+        
+        if (!role.equalsIgnoreCase(bufferData.get(index)[8]))
+        {
+            int ID = GetNextID(filtered);
+        
+            if (ID > 9999){throw new DatabaseOverflowException("The "+role.toLowerCase()+"amount is exceeding 9999 limit");}
+            ID += switch (role)
+            {
+                case "Doctor" -> 20000;
+                case "Manager" -> 30000;
+                case "Staff" -> 40000;
+                default -> 10000;
+            };
+            row[0] = String.valueOf(ID);
+        }
+        
         if (index >= 0 && index < bufferData.size()) {
             bufferData.set(index, row);
             WriteFile("users");
         }
     }
     
-    public void DeleteUser(int index)
+    public void DeleteUser(int index) throws InvalidSelectionException
     {
         if (index >= 0 && index < bufferData.size()) {
+            if(bufferData.get(index)[0].equals(id))
+            {
+                throw new InvalidSelectionException("You cannot delete yourself!");
+            }
             bufferData.remove(index);
             WriteFile("users");
         }

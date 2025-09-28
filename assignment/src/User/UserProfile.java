@@ -301,7 +301,7 @@ public class UserProfile extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "Username, Full Name, and Email are required fields.", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if (validateEmail(email)) {
+            if (!validateEmail(email)) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Invalid Email", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 return;
             }
