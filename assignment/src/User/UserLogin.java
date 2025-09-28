@@ -51,14 +51,14 @@ public class UserLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel1.setText("Username/Email: ");
         jLabel1.setToolTipText("");
 
-        jLabel2.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel2.setText("Password: ");
 
-        btnLogin.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnLogin.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,7 +69,7 @@ public class UserLogin extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel3.setText("Login");
 
-        btnRegister.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        btnRegister.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnRegister.setText("Register");
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,7 +95,7 @@ public class UserLogin extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(163, 163, 163)
                         .addComponent(btnLogin)))
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
