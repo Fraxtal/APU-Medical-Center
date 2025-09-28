@@ -223,13 +223,19 @@ public class UserRegister extends javax.swing.JFrame {
         if (!tbPassword.getText().equals(tbCfmPassword.getText())){
             JOptionPane.showMessageDialog(this, "Warning: Passwords do not Match!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-        else if(validate(tbEmail.getText())){
+        else if(!validate(tbEmail.getText())){
             JOptionPane.showMessageDialog(this, "Warning: Invalid Email!", "Warning", JOptionPane.WARNING_MESSAGE);
+
+        }
+        else if (newUser.isUserExists(tbUsername.getText(), tbFullName.getText(), tbEmail.getText())) {
+            JOptionPane.showMessageDialog(this,"Warning: Username or fullname or email already used in existing account!", "Warning", JOptionPane.WARNING_MESSAGE);
 
         }
         else if (newUser.register(tbUsername.getText(), tbFullName.getText(), tbEmail.getText(), tbPassword.getText(), tbAddress.getText(), tbContactNumber.getText())){
             this.setVisible(false);
             new Homepage().setVisible(true);
+            JOptionPane.showMessageDialog(this,"Registration Successfull!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
         }
         else{
             JOptionPane.showMessageDialog(this, "Warning: Error has occured during registration, please make sure all the boxes are filled before pressing register!", "Warning", JOptionPane.WARNING_MESSAGE);

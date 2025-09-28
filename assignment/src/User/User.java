@@ -23,24 +23,21 @@ public class User {
     protected String fullname;
     protected ArrayList<ArrayList<String>> data;
 
-    public User(){}
+    public User(){
+        this.data = loadUserDB();
+    }
     
     public User(int id, String username, String fullname, String email) {
         this.id = id;
         this.username = username;
         this.fullname = fullname;
         this.email = email;
+        this.data = loadUserDB();
     }
     
     public boolean register(String Username, String Fullname, String Email, String Password, String Address, String ContactNo) {
         // Load existing user data
-        loadUserDB();
-        
-        // Check if username or email already exists
-        if (isUserExists(Username, Fullname, Email)) {
-            JOptionPane.showMessageDialog(null,"Warning: Username or fullname or email already used in existing account!", "Warning", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
+        this.data = loadUserDB();
         
         // Get next available customer ID starting from 10000
         id = getNextCustomerId();
@@ -112,7 +109,7 @@ public class User {
     /**
      * Check if username or email already exists in the database
      */
-    private boolean isUserExists(String username,String fullname, String email) {
+    public boolean isUserExists(String username,String fullname, String email) {
         for (ArrayList<String> record : data) {
             if (record.size() >= 9) {
                 String existingUsername = record.get(1);
