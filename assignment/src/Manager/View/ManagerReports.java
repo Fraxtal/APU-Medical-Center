@@ -33,6 +33,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
         Arrays.stream(controller.GetYearList(1, "appointments")).forEach(item -> jComboBox1.addItem(item));
         jComboBox1.setSelectedIndex(0);
         jRadioButton1.setSelected(true);
+        jRadioButton3.setSelected(true);
         jRadioButton6.setVisible(false);
         
         jRadioButton1.setActionCommand("month");
@@ -404,6 +405,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
             {
                 jRadioButton3.setActionCommand("month");
                 jRadioButton3.setText("Month");
+                jRadioButton3.setSelected(true);
                 jRadioButton4.setActionCommand("appointment");
                 jRadioButton4.setText("Appointment");
                 jRadioButton5.setActionCommand("income");
@@ -415,6 +417,7 @@ public class ManagerReports extends javax.swing.JFrame implements View{
             {
                 jRadioButton3.setActionCommand("id");
                 jRadioButton3.setText("Doctor ID");
+                jRadioButton3.setSelected(true);
                 jRadioButton4.setActionCommand("name");
                 jRadioButton4.setText("Doctor Name");
                 jRadioButton5.setActionCommand("appointment");
