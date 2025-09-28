@@ -43,27 +43,28 @@ public class UserRegister extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         tbFullName = new javax.swing.JTextField();
-        tbAddress = new javax.swing.JTextField();
         tbPassword = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         tbCfmPassword = new javax.swing.JTextField();
         btnLogin = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnRegister = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbAddress = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel2.setText("Password: ");
 
-        tbContactNumber.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        tbContactNumber.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
-        tbUsername.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        tbUsername.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel6.setText("Confirm Password: ");
 
-        tbEmail.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        tbEmail.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabel7.setText("Register");
@@ -79,17 +80,15 @@ public class UserRegister extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel4.setText("Address: ");
 
-        tbFullName.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        tbFullName.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
-        tbAddress.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
-
-        tbPassword.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        tbPassword.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         jLabel5.setText("Contact Number: ");
         jLabel5.setToolTipText("");
 
-        tbCfmPassword.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
+        tbCfmPassword.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
 
         btnLogin.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         btnLogin.setText("Login");
@@ -111,60 +110,66 @@ public class UserRegister extends javax.swing.JFrame {
             }
         });
 
+        tbAddress.setColumns(20);
+        tbAddress.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        tbAddress.setLineWrap(true);
+        tbAddress.setRows(5);
+        jScrollPane1.setViewportView(tbAddress);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnLogin)
-                .addGap(51, 51, 51))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tbUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tbEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tbAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tbContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(36, 36, 36)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tbFullName))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(110, 110, 110)
-                                .addComponent(jLabel6))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2)))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tbPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                            .addComponent(tbCfmPassword)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(249, 249, 249)
+                        .addGap(252, 252, 252)
                         .addComponent(btnRegister))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(253, 253, 253)
-                        .addComponent(jLabel7)))
-                .addGap(0, 200, Short.MAX_VALUE))
+                        .addComponent(jLabel7))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(143, 143, 143)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addGap(31, 31, 31)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(jLabel1)
+                                                        .addComponent(jLabel8)))
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel6)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tbFullName)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tbUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                                    .addComponent(tbEmail)
+                                    .addComponent(tbContactNumber)
+                                    .addComponent(tbPassword)
+                                    .addComponent(tbCfmPassword)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                .addContainerGap(193, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnLogin)
+                .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(44, Short.MAX_VALUE)
+                .addContainerGap(47, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -179,8 +184,8 @@ public class UserRegister extends javax.swing.JFrame {
                     .addComponent(tbEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tbAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -194,11 +199,11 @@ public class UserRegister extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tbCfmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGap(30, 30, 30)
+                .addGap(27, 27, 27)
                 .addComponent(btnRegister)
-                .addGap(17, 17, 17)
+                .addGap(18, 18, 18)
                 .addComponent(btnLogin)
-                .addGap(31, 31, 31))
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -274,7 +279,8 @@ public class UserRegister extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JTextField tbAddress;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea tbAddress;
     private javax.swing.JTextField tbCfmPassword;
     private javax.swing.JTextField tbContactNumber;
     private javax.swing.JTextField tbEmail;
