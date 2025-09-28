@@ -426,7 +426,6 @@ public class ManagerUserManagement extends javax.swing.JFrame implements View{
         List<String> formData = new ArrayList<>();
 
         for (int i = 1; i < 7; i++) {
-            System.out.println(i);
             formData.add(textGroup[i].getText());
         }
 
