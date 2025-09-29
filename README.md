@@ -68,18 +68,19 @@ java -cp dist/assignment.jar startup
 
 This project was developed through collaboration by the following team members:
 
-[Nicholas Pang Tze Shen][https://github.com/Fraxtal] – Project Lead, Customer and User Role Features, File Management, Debugging
+[Nicholas Pang Tze Shen](https://github.com/Fraxtal) – Project Lead, Customer and User Role Features, File Management, Debugging
 
-[Ng Wei Hao][https://github.com/02-is-02] – Ant Build Setup, Manager Role Features, Database Integration, File Management, Debugging
+[Ng Wei Hao](https://github.com/02-is-02) – Ant Build Setup, Manager Role Features, Database Integration, File Management, Debugging
 
-[Sean Ng Yi Da][https://github.com/SeanEYD] – Staff role features, Testing, Documentation
+[Sean Ng Yi Da](https://github.com/SeanEYD) – Staff role features, Testing, Documentation
 
-[Teoh Kai Chen][https://github.com/KingstonTeoh] – Doctor role features, Testing, Documentation
+[Teoh Kai Chen](https://github.com/KingstonTeoh) – Doctor role features, Testing, Documentation
 
 ---
 
 ## 📝 Notes
 
 * The program starts execution in startup.java.
+
 
 * If you modify the source code, always re-run ant compile before executing.
