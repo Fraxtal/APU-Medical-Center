@@ -453,6 +453,20 @@ public class ReportGenerator extends ManagerModel {
         List<List<String>> keyByPage = SeparateToPages(sortedKeys);
         
         String group = data.values().iterator().next().group();
+        float[] highest = { Integer.MIN_VALUE, Integer.MIN_VALUE }; 
+        // highest[0] = max of a, highest[1] = max of b
+
+        for (HasAppointmentAndIncome r : data.values()) {
+            if (r.appointment() > highest[0]) {
+                highest[0] = r.appointment();
+            }
+            if (r.income() > highest[1]) {
+                highest[1] = (float)Math.ceil(r.income());
+            }
+        }
+        float apptBarLengthMultiplier = 380/highest[0];
+        float incomeBarLengthMultiplier = 380/highest[1];
+        float startX = 130, startY = 700, barHeight = 20, unitHeight = 45, gap = 15, y = 750, margin = 50;
         
         for (List<String> row : keyByPage)
         {
@@ -460,13 +474,14 @@ public class ReportGenerator extends ManagerModel {
             document.addPage(page);
             try (PDPageContentStream cs = new PDPageContentStream(document, page)) 
             {
-                float startX = 150, startY = 700, barHeight = 20, unitHeight = 45, gap = 15, y = 750, margin = 50;
+                
                 float pageWidth = page.getMediaBox().getWidth() - 2 * margin;
+                
 
                 PrintLine(cs, bold, 14, pageWidth, margin, y, "Appointment and Income by " + group, Alignment.Center);
                 
                 float chartHeight = row.size() * (unitHeight + gap) + 10;
-                cs.moveTo(startX + 400, startY - chartHeight);
+                cs.moveTo(startX + 380, startY - chartHeight);
                 cs.lineTo(startX, startY - chartHeight);
                 cs.lineTo(startX, startY);
                 cs.stroke();
@@ -477,7 +492,7 @@ public class ReportGenerator extends ManagerModel {
                     var item = data.get(row.get(i));
 
                     float income = (float) item.income();
-                    float incomeWidth = income / 2;
+                    float incomeWidth = income * incomeBarLengthMultiplier;
                     float incomeLabelX = startX + 5 + incomeWidth;
                     float incomeLabelY = yloc + 5;
 
@@ -486,7 +501,7 @@ public class ReportGenerator extends ManagerModel {
                     PrintLine(cs, normal, 8, incomeLabelX, incomeLabelY, "RM" + String.format("%.2f", income) + " Income");
 
                     int appt = item.appointment();
-                    float apptWidth = appt * 10;
+                    float apptWidth = appt * apptBarLengthMultiplier;
                     float apptLabelX = startX + 5 + apptWidth;
                     float apptLabelY = yloc + 30;
 
