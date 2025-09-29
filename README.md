@@ -7,7 +7,7 @@
 ## 📂 Project Structure
 
 ```dir
-    /project-root
+    /assignment
     ├── build.xml # Ant build script
     ├── src/ # Java source files
     │ └── startup.java (main entry point)
@@ -84,3 +84,4 @@ This project was developed through collaboration by the following team members:
 
 
 * If you modify the source code, always re-run ant compile before executing.
+
