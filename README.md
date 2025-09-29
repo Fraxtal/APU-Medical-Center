@@ -24,9 +24,10 @@
 ---
 
 ## 🏗️ Build Instructions
-To compile the project, run the following in the project root:  
+To compile the project, run the following in the assignment directory:  
 
 ```bash
+cd assignment
 ant compile
 ```
 
@@ -84,4 +85,5 @@ This project was developed through collaboration by the following team members:
 
 
 * If you modify the source code, always re-run ant compile before executing.
+
 
