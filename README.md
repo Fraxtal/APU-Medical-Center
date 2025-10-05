@@ -1,6 +1,6 @@
 # APU Medical Center
 
-  An application that streamline the appointment booking and payment process by connecting different types of users such as managers, staff, doctors, and customers.
+  An application that streamline the appointment booking and payment process by connecting different types of users such as managers, staff, doctors and customers.
 
   ---
 
@@ -84,6 +84,7 @@ This project was developed through collaboration by the following team members:
 
 
 * If you modify the source code, always re-run ant compile before executing.
+
 
 
 
